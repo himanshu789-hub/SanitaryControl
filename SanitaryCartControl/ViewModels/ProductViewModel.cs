@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 namespace SanitaryCartControl.ViewModels
 {
-    class ProductViewModel
+    public class ProductViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
