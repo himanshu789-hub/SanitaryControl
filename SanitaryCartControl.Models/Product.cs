@@ -14,5 +14,7 @@ namespace SanitaryCartControl.Models
         public GSTRate GSTRate { get; set; }
         public DateTime DateAdded { get; set; }
         public DateTime DateUpdated { get; set; }
+        public int Brand_Id_FK { get; set; }
+        public int Category_Id_FK { get; set; }
      }
 }

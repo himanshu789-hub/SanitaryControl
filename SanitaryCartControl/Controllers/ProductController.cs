@@ -8,6 +8,10 @@ namespace SanitaryCartControl.Controllers
 {
     public class ProductController : Controller
     {
+        public JsonResult GetCategory(int CategoryId,int level)
+        {
+
+        }
         public IActionResult Add()
         {
             return View();
