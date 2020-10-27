@@ -3,9 +3,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Entities\**" />
+    <EmbeddedResource Remove="Entities\**" />
+    <None Remove="Entities\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Contracts\Services\" />
     <Folder Include="Contracts\Repositories\" />
-    <Folder Include="Entities\InputModels\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

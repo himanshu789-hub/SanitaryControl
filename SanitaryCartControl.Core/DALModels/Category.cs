@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SanitaryCartControl.DALModels
+namespace SanitaryCartControl.Core.DALModels
 {
     public class Category
     {

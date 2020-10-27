@@ -1,4 +1,4 @@
-namespace SanitaryContro.DALModels
+namespace SanitaryControl.Core.DALModels
 {
     public class BrandModel
     {
