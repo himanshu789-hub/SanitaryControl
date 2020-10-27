@@ -3,28 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SanitaryCartControl", "SanitaryCartControl\SanitaryCartControl.csproj", "{56AA8B2F-2848-43FF-B89B-0EE53CE7BF1F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SanitaryCartControl.Core", "SanitaryCartControl.Core\SanitaryCartControl.Core.csproj", "{8CA51220-AD29-481F-A36F-1DD3A4F4262F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanitaryCartControl.Infrastructure", "SanitaryCartControl.Infrastructure\SanitaryCartControl.Infrastructure.csproj", "{3DFE81A2-BED0-465A-B554-49E476725E26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{35F73B51-57C0-4F0F-B228-89C8C17F37E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35F73B51-57C0-4F0F-B228-89C8C17F37E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35F73B51-57C0-4F0F-B228-89C8C17F37E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35F73B51-57C0-4F0F-B228-89C8C17F37E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B84A5F2-6070-4DC2-871E-E38A0ECAC12D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B84A5F2-6070-4DC2-871E-E38A0ECAC12D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B84A5F2-6070-4DC2-871E-E38A0ECAC12D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B84A5F2-6070-4DC2-871E-E38A0ECAC12D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6D182EE-C1A0-4C12-B02E-2A0EA75D48EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6D182EE-C1A0-4C12-B02E-2A0EA75D48EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6D182EE-C1A0-4C12-B02E-2A0EA75D48EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6D182EE-C1A0-4C12-B02E-2A0EA75D48EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FBCE0C92-03DD-418D-B74A-DD3D8B08660B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBCE0C92-03DD-418D-B74A-DD3D8B08660B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBCE0C92-03DD-418D-B74A-DD3D8B08660B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBCE0C92-03DD-418D-B74A-DD3D8B08660B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56AA8B2F-2848-43FF-B89B-0EE53CE7BF1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56AA8B2F-2848-43FF-B89B-0EE53CE7BF1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56AA8B2F-2848-43FF-B89B-0EE53CE7BF1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56AA8B2F-2848-43FF-B89B-0EE53CE7BF1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CA51220-AD29-481F-A36F-1DD3A4F4262F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CA51220-AD29-481F-A36F-1DD3A4F4262F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CA51220-AD29-481F-A36F-1DD3A4F4262F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CA51220-AD29-481F-A36F-1DD3A4F4262F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DFE81A2-BED0-465A-B554-49E476725E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DFE81A2-BED0-465A-B554-49E476725E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DFE81A2-BED0-465A-B554-49E476725E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DFE81A2-BED0-465A-B554-49E476725E26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
