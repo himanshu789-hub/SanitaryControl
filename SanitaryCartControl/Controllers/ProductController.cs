@@ -10,7 +10,7 @@ namespace SanitaryCartControl.Controllers
     {
         public JsonResult GetCategory(int CategoryId,int level)
         {
-
+            throw new NotImplementedException();
         }
         public IActionResult Add()
         {

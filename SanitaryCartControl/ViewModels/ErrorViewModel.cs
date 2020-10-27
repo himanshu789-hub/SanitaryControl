@@ -1,6 +1,6 @@
 using System;
 
-namespace SanitaryCartControl.ViewModels
+namespace SanitaryCartControl.Entities.ViewModels
 {
     public class ErrorViewModel
     {
