@@ -2,5 +2,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Contracts\Services\" />
+    <Folder Include="Contracts\Repositories\" />
+    <Folder Include="Entities\InputModels\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
 
 </Project>
