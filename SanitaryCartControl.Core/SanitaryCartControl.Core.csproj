@@ -3,14 +3,15 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Entities\**" />
-    <EmbeddedResource Remove="Entities\**" />
-    <None Remove="Entities\**" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Contracts\Services\" />
     <Folder Include="Contracts\Repositories\" />
-    <Folder Include="Services\" />
+    <Folder Include="Entities\DALModels\" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
+  </ItemGroup>
 </Project>
