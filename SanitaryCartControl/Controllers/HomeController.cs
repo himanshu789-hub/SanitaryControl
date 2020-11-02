@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SanitaryCartControl.ViewModels;
-
+using Microsoft.AspNetCore.Diagnostics;
 namespace SanitaryCartControl.Controllers
 {
     public class HomeController : Controller
@@ -16,6 +16,7 @@ namespace SanitaryCartControl.Controllers
 
         public IActionResult Index()
         {
+          throw new System.Exception("Controller Throws Exception");
             return View();
         }
 
@@ -25,9 +26,20 @@ namespace SanitaryCartControl.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+       [HttpGet]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+             ErrorViewModel errorViewModel = new ErrorViewModel();
+             var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+             errorViewModel.Message = "A Unexpected Error Occured";
+             errorViewModel.StatusCode = 500;
+             if(ex!=null)
+             {
+                 errorViewModel.Message = ex.Error.Message;
+             }
+             return View(errorViewModel);
         }
+
     }
 }
