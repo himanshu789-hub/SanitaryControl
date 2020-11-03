@@ -1,0 +1,20 @@
+@model IEnumerable<BrandViewModel>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">S.No.</th>
+      <th scope="col">Name</th>
+      <th scope="col">Image</th>
+    </tr>
+  </thead>
+  <tbody>
+     @foreach (var item in Model)
+     { 
+       <tr>
+           <td>@item.Id</td>
+           <td>@item.Name</td>
+           <td><img src="@item.ImagePath" alt="@item.Name Logo" class="img-thumbnail"></td>
+       </tr>  
+     }
+  </tbody>
+</table>

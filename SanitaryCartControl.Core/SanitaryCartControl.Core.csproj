@@ -5,7 +5,8 @@
   <ItemGroup>
     <Folder Include="Contracts\Services\" />
     <Folder Include="Contracts\Repositories\" />
-    <Folder Include="Entities\DALModels\" />
+    <Folder Include="Entities\**" />
+    
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">

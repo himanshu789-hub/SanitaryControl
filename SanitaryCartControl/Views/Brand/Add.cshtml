@@ -1,0 +1,19 @@
+@model BrandDTO
+
+@Html.BeginForm("Add","Brand","",FormMethod.Post)
+{ 
+    @Html.ValidationSummary("",new {@class="text-danger bg-light rounded"});
+
+ <div class="form-group">
+    @Html.TextBoxFor(modelItem=>modelItem.Name);
+ </div>
+   <div class="input-group">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+  </div>
+  <div class="custom-file">
+    @Html.TextBoxFor(e=>e.Logo,new {@class="form-control",type="file"})
+    @Html.LabelFor(e=>e.Logo,"Choose File")
+  </div>
+</div>
+}
