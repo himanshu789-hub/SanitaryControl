@@ -29,8 +29,8 @@ namespace SanitaryCartControl.Controllers
        BrandBLL brandBLL = _brandService.GetById(Id);     
        if(brandBLL!=null)
         return View(new BrandViewModel(){
-          brand=new BrandDTO(){ Name=brandBLL.Name,Id=brandBLL.Id,ImagePath=brandBLL.ImagePath},
-          logo=null
+          Brand=new BrandDTO(){ Name=brandBLL.Name,Id=brandBLL.Id,ImagePath=brandBLL.ImagePath},
+          Logo=null
           });  
        else
         return Redirect("/Brand/GetAll");
@@ -55,13 +55,13 @@ namespace SanitaryCartControl.Controllers
                 ModelState.Remove("logo");
             if (ModelState.IsValid)
             {
-                if (brandView.logo != null)
+                if (brandView.Logo != null)
                 {
-                   this.RemoveFile(brandView.brand.ImagePath);
-                   string path = this.UploadFile(brandView.logo);
-                   brandView.brand.ImagePath = path;
+                   this.RemoveFile(brandView.Brand.ImagePath);
+                   string path = this.UploadFile(brandView.Logo);
+                   brandView.Brand.ImagePath = path;
                 }
-                _brandService.Update(new BrandBLL() { Id = brandView.brand.Id, ImagePath = brandView.brand.ImagePath, Name = brandView.brand.Name });
+                _brandService.Update(new BrandBLL() { Id = brandView.Brand.Id, ImagePath = brandView.Brand.ImagePath, Name = brandView.Brand.Name });
                 return Redirect("/Brand/GetAll");
             }
           return View(brandView);
@@ -112,15 +112,16 @@ namespace SanitaryCartControl.Controllers
       [HttpPost]
       public IActionResult Add(BrandViewModel brandView)
       {
-         if(ModelState.ContainsKey("Id"))
-           ModelState.Remove("Id");
-         if(ModelState.ContainsKey("ImagePath"))
-           ModelState.Remove("ImagePath");
-        
+         if(ModelState.ContainsKey("Brand.Id"))
+           ModelState.Remove("Brand.Id");
+         if(ModelState.ContainsKey("Brand.ImagePath"))
+           ModelState.Remove("Brand.ImagePath");
+         if(brandView.Logo==null)
+         ModelState.AddModelError("Logo","Logo Required");
         if(ModelState.IsValid)
         {
-           string path =   this.UploadFile(brandView.logo);
-           _brandService.Create(new BrandBLL(){ImagePath=path,Name=brandView.brand.Name});
+           string path =   this.UploadFile(brandView.Logo);
+           _brandService.Create(new BrandBLL(){ImagePath=path,Name=brandView.Brand.Name});
            return Redirect(@"\Brand\GetAll");
         }
         return View(brandView);

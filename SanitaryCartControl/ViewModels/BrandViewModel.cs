@@ -7,7 +7,7 @@ namespace SanitaryCartControl.ViewModels
 {
     public class BrandViewModel
     {
-           public BrandDTO brand{get;set;}
-           public IFormFile logo{get;set;}
+           public BrandDTO Brand{get;set;}
+           public IFormFile Logo{get;set;}
     }
 }

@@ -1,20 +1,40 @@
 @model BrandViewModel
 
-@using(Html.BeginForm("Add","Brand",null,FormMethod.Post,null,new {@enctype="multipart/form-data"}))
+<div class="d-flex justify-content-around p-5  border border-primary">
+@using(Html.BeginForm("Add","Brand",null,FormMethod.Post,null,new {@enctype="multipart/form-data",@class="flex-grow-1 pr-5 pl-5"}))
 { 
 @Html.ValidationSummary("",new {@class="alert alert-warning"});
  <div class="form-group">
-   @Html.LabelFor(e=>e.brand.Name)
-    @Html.TextBoxFor(modelItem=>modelItem.brand.Name,new {@class="form-control"})
+   @Html.LabelFor(e=>e.Brand.Name)
+    @Html.TextBoxFor(modelItem=>modelItem.Brand.Name,new {@class="form-control"})
  </div>
    <div class="form-group">
-       @Html.LabelFor(e=>e.logo)
-      @Html.TextBoxFor(e=>e.logo)
+       @Html.LabelFor(e=>e.Logo)
+        @Html.TextBoxFor(e=>e.Logo,new {@class="form-control",@type="file",@accept="image/jpg, image/jpeg, image/png"})
   </div>
-  <input type="submit" class="btn btn-success"/>
+  <input type="submit" class="btn btn-success w-25" />
 }
+
+<img src="" name="fileViewer" class="border rounded-lg img-thumbnail w-25"/>
+</div>
 <script>
   const form ={
-    filePicker:$('')
+    filePicker:$('[name="Logo"]'),
+    fileViewer:$('[name="fileViewer"]'),
+    init:function(){
+         this.filePicker.change(e=>{
+           const files = e.target.files;
+           if(files && files[0])
+           {
+             const reader = new FileReader();
+            reader.onload = function (e) {
+                $(fileViewer)
+                    .attr('src', e.target.result)
+                        };
+           reader.readAsDataURL(files[0]);
+           }
+         });
+    }
   }
+  form.init();
 </script>
