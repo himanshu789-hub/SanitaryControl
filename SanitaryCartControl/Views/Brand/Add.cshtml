@@ -1,19 +1,20 @@
-@model BrandDTO
+@model BrandViewModel
 
-@Html.BeginForm("Add","Brand","",FormMethod.Post)
+@using(Html.BeginForm("Add","Brand",null,FormMethod.Post,null,new {@enctype="multipart/form-data"}))
 { 
-    @Html.ValidationSummary("",new {@class="text-danger bg-light rounded"});
-
+@Html.ValidationSummary("",new {@class="alert alert-warning"});
  <div class="form-group">
-    @Html.TextBoxFor(modelItem=>modelItem.Name);
+   @Html.LabelFor(e=>e.brand.Name)
+    @Html.TextBoxFor(modelItem=>modelItem.brand.Name,new {@class="form-control"})
  </div>
-   <div class="input-group">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+   <div class="form-group">
+       @Html.LabelFor(e=>e.logo)
+      @Html.TextBoxFor(e=>e.logo)
   </div>
-  <div class="custom-file">
-    @Html.TextBoxFor(e=>e.Logo,new {@class="form-control",type="file"})
-    @Html.LabelFor(e=>e.Logo,"Choose File")
-  </div>
-</div>
+  <input type="submit" class="btn btn-success"/>
 }
+<script>
+  const form ={
+    filePicker:$('')
+  }
+</script>

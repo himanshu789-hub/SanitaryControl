@@ -26,6 +26,7 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public virtual Category Category { get; set; }
         public virtual ProductType TypeNavigation { get; set; }
         public virtual ColorProductQuantity ColorProductQuantity { get; set; }
+        public virtual KindProductQuantity KindProductQuantity { get; set; }
         public virtual SizeProductQuantity SizeProductQuantity { get; set; }
         public virtual ICollection<Image> Image { get; set; }
     }

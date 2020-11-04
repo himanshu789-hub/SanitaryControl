@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SanitaryCartControl.Extensions;
 using SanitaryCartControl.Core.Extensions;
-using Microsoft.Extensions.Logging;
 namespace SanitaryCartControl
 {
     public class Startup
@@ -25,7 +25,7 @@ namespace SanitaryCartControl
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-        
+              
             services.AddCoreExtensions();
             services.AddControllersWithViews();
         }
@@ -40,22 +40,20 @@ namespace SanitaryCartControl
             }
             else
             {
-             app.UseCustomExceptionHandler();
+                app.UseCustomExceptionHandler();
+                app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-             
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id:int?}");
+                    pattern: "{controller=Brand}/{action=GetAll}/{id:int?}");
             });
         }
     }

@@ -9,7 +9,6 @@ namespace SanitaryCartControl.Core.Context
     {
         public SanitaryCartContext()
         {
-        
         }
 
         public SanitaryCartContext(DbContextOptions<SanitaryCartContext> options)
@@ -23,10 +22,12 @@ namespace SanitaryCartControl.Core.Context
         public virtual DbSet<ColorProductQuantity> ColorProductQuantity { get; set; }
         public virtual DbSet<GstRate> GstRate { get; set; }
         public virtual DbSet<Image> Image { get; set; }
+        public virtual DbSet<Kind> Kind { get; set; }
+        public virtual DbSet<KindProductQuantity> KindProductQuantity { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductType> ProductType { get; set; }
-        public virtual DbSet<Properties> Properties { get; set; }
         public virtual DbSet<SeriesBrand> SeriesBrand { get; set; }
+        public virtual DbSet<Size> Size { get; set; }
         public virtual DbSet<SizeProductQuantity> SizeProductQuantity { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -34,7 +35,7 @@ namespace SanitaryCartControl.Core.Context
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=USER-PC;Database=sanitarycart;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=USER-PC;Database=sanitarycart;Trusted_Connection=True");
             }
         }
 
@@ -48,10 +49,6 @@ namespace SanitaryCartControl.Core.Context
                     .IsRequired()
                     .HasMaxLength(310)
                     .IsUnicode(false);
-
-                entity.Property(e => e.IsActive)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -140,6 +137,43 @@ namespace SanitaryCartControl.Core.Context
                     .HasConstraintName("FK_Image_Image");
             });
 
+            modelBuilder.Entity<Kind>(entity =>
+            {
+                entity.Property(e => e.CategoryIdFk).HasColumnName("Category_Id_FK");
+
+                entity.Property(e => e.Kind1)
+                    .IsRequired()
+                    .HasColumnName("Kind")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.CategoryIdFkNavigation)
+                    .WithMany(p => p.Kind)
+                    .HasForeignKey(d => d.CategoryIdFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Kind_Category");
+            });
+
+            modelBuilder.Entity<KindProductQuantity>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductIdFk, e.Type });
+
+                entity.ToTable("Kind.Product.Quantity");
+
+                entity.Property(e => e.ProductIdFk).HasColumnName("Product_Id_FK");
+
+                entity.Property(e => e.Kind)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Product)
+                    .WithOne(p => p.KindProductQuantity)
+                    .HasForeignKey<KindProductQuantity>(d => new { d.ProductIdFk, d.Type })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Kind.Product.Quantity_Product");
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Type });
@@ -198,16 +232,6 @@ namespace SanitaryCartControl.Core.Context
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Properties>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<SeriesBrand>(entity =>
             {
                 entity.ToTable("Series.Brand");
@@ -225,6 +249,24 @@ namespace SanitaryCartControl.Core.Context
                     .WithMany(p => p.SeriesBrand)
                     .HasForeignKey(d => d.CategoryIdFk)
                     .HasConstraintName("FK_Series.Brand_Category");
+            });
+
+            modelBuilder.Entity<Size>(entity =>
+            {
+                entity.Property(e => e.CategoryIdFk).HasColumnName("Category_Id_FK");
+
+                entity.Property(e => e.Size1)
+                    .IsRequired()
+                    .HasColumnName("Size")
+                    .HasMaxLength(4)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.HasOne(d => d.CategoryIdFkNavigation)
+                    .WithMany(p => p.Size)
+                    .HasForeignKey(d => d.CategoryIdFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Size_Category");
             });
 
             modelBuilder.Entity<SizeProductQuantity>(entity =>

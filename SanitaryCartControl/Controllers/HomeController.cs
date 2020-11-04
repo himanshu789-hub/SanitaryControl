@@ -7,7 +7,7 @@ namespace SanitaryCartControl.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger _logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -16,7 +16,6 @@ namespace SanitaryCartControl.Controllers
 
         public IActionResult Index()
         {
-          throw new System.Exception("Controller Throws Exception");
             return View();
         }
 
@@ -26,7 +25,6 @@ namespace SanitaryCartControl.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-       [HttpGet]
         public IActionResult Error()
         {
 

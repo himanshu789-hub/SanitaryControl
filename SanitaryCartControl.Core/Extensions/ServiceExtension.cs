@@ -4,7 +4,7 @@ using SanitaryCartControl.Core.Services;
 namespace SanitaryCartControl.Core.Extensions
 {
     public static class ApplicationCoreEntensions
-    {
+     {
              public static void AddCoreExtensions(this IServiceCollection services)
              {
                     services.AddScoped(typeof(SanitaryCartControl.Core.Context.SanitaryCartContext));

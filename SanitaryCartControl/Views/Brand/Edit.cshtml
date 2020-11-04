@@ -1,0 +1,16 @@
+@model BrandViewModel;
+@using(Html.BeginForm("Edit","Brand",FormMethod.Post,new {@enctype="multipart/form-data"})){
+@Html.ValidationSummary("",new {@class="alert alert-warning"})
+
+@Html.HiddenFor(modelItem=>modelItem.brand.Id)
+ <div class="form-group">
+    @Html.LabelFor(modelItem=>modelItem.brand.Name)
+    @Html.TextBoxFor(modelItem=>modelItem.brand.Name,new {@class="form-control"})
+ </div>
+ @Html.HiddenFor(e=>e.brand.ImagePath)
+   <div class="form-group">
+      @Html.LabelFor(e=>e.logo)
+      @Html.TextBoxFor(e=>e.logo,new {@class="form-control",@type="file"})
+   </div>
+<input type="submit" class="btn btn-success block"/>
+}

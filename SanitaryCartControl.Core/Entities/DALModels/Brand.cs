@@ -14,7 +14,6 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public byte Id { get; set; }
         public string Name { get; set; }
         public string ImagePath { get; set; }
-        public bool? IsActive { get; set; }
 
         public virtual ICollection<Product> Product { get; set; }
         public virtual ICollection<SeriesBrand> SeriesBrand { get; set; }
