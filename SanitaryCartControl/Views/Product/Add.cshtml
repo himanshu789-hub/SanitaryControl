@@ -1,58 +1,105 @@
-﻿@* @model SanitaryCartControl.
-
+﻿@model ProductViewModel
+@using Microsoft.AspNetCore.Mvc
 @{
-    ViewData["Title"] = "Add";
+    var brands = ViewBag.Brands as SelectList;
 }
-
-<h1>Add</h1>
-
-<h4>ProductViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Add">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
+<form>
+    <div class="panel panel-default">
+        <div class="panel-heading">Basic Information : </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-3 form-group">
+                    <label>Brand : </label>
+                    @Html.DropDownListFor(modelItem=>modelItem.Product.Brand_Id_FK,brands,"--Select Brand--",new
+                           {@class="form-control"})
+                    @Html.ValidationMessageFor(e=>e.Product.Brand_Id_FK,"",new {@class="text-danger small"},"span")
+                </div>
+                <div class="col-2 form-group">
+                    <label> Category : </label>
+                    @Html.TextBoxFor(e=>e.Product.Category_Id_FK,"",new {@class="d-none w-0 h-0"})
+                    <div>
+                        <ul id="menu"></ul>
+                    </div>
+                    @Html.ValidationMessageFor(e=>e.Product.Category_Id_FK,"",new {@class="text-danger small"},"span")
+                </div>
             </div>
+            <div class="row">
+                <div class="col-3 form-group">
+                    <label>Code : </label>
+                    @Html.TextBoxFor(e=>e.Product.Code,new {@class="form-control"})
+                    @Html.ValidationMessageFor(e=>e.Product.Code,"",new {@class="text-danger small"},"span")
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <div class="col-5 form-group">
+                    <label>Name : </label>
+                    @Html.TextBoxFor(e=>e.Product.Name,new {@class="form-control"})
+                    @Html.ValidationMessageFor(e=>e.Product.Name,"",new {@class="text-danger small"},"span")
+                </div>
             </div>
-
-
-
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+            <div class="quill-wrapper form-group">
+                <label>Description : </label>
+                <div id="quill"></div>
+                @Html.TextAreaFor(e=>e.Product.Description,0,0,new {@class="d-none"})
+                @Html.ValidationMessageFor(e=>e.Product.Description,"",new {@class="text=-danger small"},"span")
             </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+             <div id="attributes-wrapper">
+              
+             </div>
+        </div>
     </div>
-</div>
+</form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-} *@
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    var elements = {
+        menuId: "#menu",
+        textBoxId: "#Category_Id_FK",
+        textAreaId: "#Product_Description",
+        brandSelection:"#Product_Brand_Id_FK",
+        productAttriuttesSection:"#attributes"
+    };
+    $(elements.brandSelection).change(function (e) {
+        debugger;
+        const value = $(e.currentTarget).val()
+        if (!value)
+            return;
+        $(elements.menuId).empty();
+        $.ajax({
+            method: 'GET',
+            url: '/Product/GetCategory?brandId=' + value,
+            accepts: 'application/json',
+            success: function (data) {
+                buildMenu($(elements.menuId), data)
+            }
+        })
+    })
+    var quill = new Quill('#quill', {
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+            ]
+        },
+        theme: 'snow'
+    });
+    quill.root.setAttribute('spellcheck', false)
+    quill.on('text-change', function (delta, oldDelta, source) {
+        console.log(quill.container.firstChild.innerHTML)
+        $(elements.textAreaId).val(quill.container.firstChild.innerHTML);
+    });
+    function buildMenu(parent, items) {
+    $.each(items, function (item) {
+            var li = $('<li><a href="#">' + this.title + '</a></li>');
+            if (this.categories && this.categories.length > 0) {
+                li.addClass('parent').next('a').val(this.title + '<span class="expand">&raquo;</span>')
+                var ul = $('<ul></ul>').addClass('child');
+                ul.appendTo(li);
+                buildMenu(ul, this.categories);
+            }
+            else li.appendTo(parent).click(function (e) {
+                $(elements.textBoxId).val(item.Id);
+                e.preventDefault();
+            });
+        });
+    }
+  
+</script>

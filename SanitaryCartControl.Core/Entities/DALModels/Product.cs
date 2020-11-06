@@ -13,7 +13,6 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public decimal Price { get; set; }
         public string Description { get; set; }
         public DateTime DateAdded { get; set; }
         public bool IsActive { get; set; }
@@ -25,9 +24,7 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public virtual Brand BrandIdFkNavigation { get; set; }
         public virtual Category Category { get; set; }
         public virtual ProductType TypeNavigation { get; set; }
-        public virtual ColorProductQuantity ColorProductQuantity { get; set; }
-        public virtual KindProductQuantity KindProductQuantity { get; set; }
-        public virtual SizeProductQuantity SizeProductQuantity { get; set; }
+        public virtual TypeProductQuantity TypeProductQuantity { get; set; }
         public virtual ICollection<Image> Image { get; set; }
     }
 }

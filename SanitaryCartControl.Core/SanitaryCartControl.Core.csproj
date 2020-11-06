@@ -3,8 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Contracts\Services\" />
-    <Folder Include="Contracts\Repositories\" />
+    <Folder Include="Contracts\**" />
     <Folder Include="Entities\**" />
   </ItemGroup>
   <ItemGroup>

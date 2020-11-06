@@ -11,7 +11,6 @@ namespace SanitaryCartControl.Core.Entities.DALModels
             InverseParent = new HashSet<Category>();
             Kind = new HashSet<Kind>();
             Product = new HashSet<Product>();
-            SeriesBrand = new HashSet<SeriesBrand>();
             Size = new HashSet<Size>();
         }
 
@@ -21,11 +20,12 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public string ImagePath { get; set; }
 
         public virtual Category Parent { get; set; }
+        public virtual ProductType ProductType { get; set; }
+        public virtual SeriesBrand SeriesBrand { get; set; }
         public virtual ICollection<Color> Color { get; set; }
         public virtual ICollection<Category> InverseParent { get; set; }
         public virtual ICollection<Kind> Kind { get; set; }
         public virtual ICollection<Product> Product { get; set; }
-        public virtual ICollection<SeriesBrand> SeriesBrand { get; set; }
         public virtual ICollection<Size> Size { get; set; }
     }
 }

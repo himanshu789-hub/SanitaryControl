@@ -19,16 +19,14 @@ namespace SanitaryCartControl.Core.Context
         public virtual DbSet<Brand> Brand { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Color> Color { get; set; }
-        public virtual DbSet<ColorProductQuantity> ColorProductQuantity { get; set; }
         public virtual DbSet<GstRate> GstRate { get; set; }
         public virtual DbSet<Image> Image { get; set; }
         public virtual DbSet<Kind> Kind { get; set; }
-        public virtual DbSet<KindProductQuantity> KindProductQuantity { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductType> ProductType { get; set; }
         public virtual DbSet<SeriesBrand> SeriesBrand { get; set; }
         public virtual DbSet<Size> Size { get; set; }
-        public virtual DbSet<SizeProductQuantity> SizeProductQuantity { get; set; }
+        public virtual DbSet<TypeProductQuantity> TypeProductQuantity { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -91,29 +89,6 @@ namespace SanitaryCartControl.Core.Context
                     .HasConstraintName("FK_Color_Category");
             });
 
-            modelBuilder.Entity<ColorProductQuantity>(entity =>
-            {
-                entity.HasKey(e => new { e.ProductIdFk, e.Type })
-                    .HasName("PK_Color.Product.Quantity_1");
-
-                entity.ToTable("Color.Product.Quantity");
-
-                entity.Property(e => e.ProductIdFk)
-                    .HasColumnName("Product_Id_FK")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Color)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Product)
-                    .WithOne(p => p.ColorProductQuantity)
-                    .HasForeignKey<ColorProductQuantity>(d => new { d.ProductIdFk, d.Type })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Color.Product.Quantity_Product.Type");
-            });
-
             modelBuilder.Entity<GstRate>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
@@ -154,26 +129,6 @@ namespace SanitaryCartControl.Core.Context
                     .HasConstraintName("FK_Kind_Category");
             });
 
-            modelBuilder.Entity<KindProductQuantity>(entity =>
-            {
-                entity.HasKey(e => new { e.ProductIdFk, e.Type });
-
-                entity.ToTable("Kind.Product.Quantity");
-
-                entity.Property(e => e.ProductIdFk).HasColumnName("Product_Id_FK");
-
-                entity.Property(e => e.Kind)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Product)
-                    .WithOne(p => p.KindProductQuantity)
-                    .HasForeignKey<KindProductQuantity>(d => new { d.ProductIdFk, d.Type })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Kind.Product.Quantity_Product");
-            });
-
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Type });
@@ -201,8 +156,6 @@ namespace SanitaryCartControl.Core.Context
                     .HasMaxLength(80)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Price).HasColumnType("decimal(7, 2)");
-
                 entity.HasOne(d => d.BrandIdFkNavigation)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.BrandIdFk)
@@ -224,17 +177,33 @@ namespace SanitaryCartControl.Core.Context
 
             modelBuilder.Entity<ProductType>(entity =>
             {
+                entity.HasIndex(e => e.CategoryIdFk)
+                    .HasName("Unique_Category_Type")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.CategoryIdFk).HasColumnName("Category_Id_FK");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(30)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.CategoryIdFkNavigation)
+                    .WithOne(p => p.ProductType)
+                    .HasForeignKey<ProductType>(d => d.CategoryIdFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductType_Category");
             });
 
             modelBuilder.Entity<SeriesBrand>(entity =>
             {
                 entity.ToTable("Series.Brand");
+
+                entity.HasIndex(e => e.CategoryIdFk)
+                    .HasName("IX_Series.Brand")
+                    .IsUnique();
 
                 entity.Property(e => e.BrandIdFk).HasColumnName("Brand_Id_FK");
 
@@ -246,8 +215,8 @@ namespace SanitaryCartControl.Core.Context
                     .HasConstraintName("FK_Series_Brand");
 
                 entity.HasOne(d => d.CategoryIdFkNavigation)
-                    .WithMany(p => p.SeriesBrand)
-                    .HasForeignKey(d => d.CategoryIdFk)
+                    .WithOne(p => p.SeriesBrand)
+                    .HasForeignKey<SeriesBrand>(d => d.CategoryIdFk)
                     .HasConstraintName("FK_Series.Brand_Category");
             });
 
@@ -269,25 +238,36 @@ namespace SanitaryCartControl.Core.Context
                     .HasConstraintName("FK_Size_Category");
             });
 
-            modelBuilder.Entity<SizeProductQuantity>(entity =>
+            modelBuilder.Entity<TypeProductQuantity>(entity =>
             {
                 entity.HasKey(e => new { e.ProductIdFk, e.Type })
-                    .HasName("PK_Size.Product_Type");
+                    .HasName("PK_Color.Product.Quantity_1");
 
-                entity.ToTable("Size.Product.Quantity");
+                entity.ToTable("Type.Product.Quantity");
 
-                entity.Property(e => e.ProductIdFk).HasColumnName("Product_Id_FK");
+                entity.Property(e => e.ProductIdFk)
+                    .HasColumnName("Product_Id_FK")
+                    .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Size)
-                    .IsRequired()
+                entity.Property(e => e.Color)
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Kind)
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.Size)
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.Product)
-                    .WithOne(p => p.SizeProductQuantity)
-                    .HasForeignKey<SizeProductQuantity>(d => new { d.ProductIdFk, d.Type })
+                    .WithOne(p => p.TypeProductQuantity)
+                    .HasForeignKey<TypeProductQuantity>(d => new { d.ProductIdFk, d.Type })
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Size.Product.Quantity_Product");
+                    .HasConstraintName("FK_Color.Product.Quantity_Product.Type");
             });
 
             OnModelCreatingPartial(modelBuilder);

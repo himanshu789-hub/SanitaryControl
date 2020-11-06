@@ -7,6 +7,7 @@ namespace SanitaryCartControl.Core.Extensions
      {
              public static void AddCoreExtensions(this IServiceCollection services)
              {
+                    services.AddSingleton<IProductService,ProductService>();
                     services.AddScoped(typeof(SanitaryCartControl.Core.Context.SanitaryCartContext));
                     services.AddSingleton(typeof(IBrandService),typeof(BrandService));
              }

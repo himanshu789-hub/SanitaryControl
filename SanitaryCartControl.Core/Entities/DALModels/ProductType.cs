@@ -12,7 +12,9 @@ namespace SanitaryCartControl.Core.Entities.DALModels
 
         public byte Id { get; set; }
         public string Title { get; set; }
+        public int CategoryIdFk { get; set; }
 
+        public virtual Category CategoryIdFkNavigation { get; set; }
         public virtual ICollection<Product> Product { get; set; }
     }
 }
