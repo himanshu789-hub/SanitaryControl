@@ -10,5 +10,7 @@ namespace SanitaryCartControl.Core.Contracts.Services
     int GetProductType(int CategoryId);
     IEnumerable<KeyValuePair<int,string>> GetAttrinuteValues(ProductType type,int categoryId);
     int GetRootId(int categoryId); 
+    ProductBLL GetProduct(int Id);
+    ProductBLL Update(ProductBLL product);
     }
 }

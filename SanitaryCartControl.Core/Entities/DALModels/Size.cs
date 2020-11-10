@@ -6,7 +6,7 @@ namespace SanitaryCartControl.Core.Entities.DALModels
     public partial class Size
     {
         public byte Id { get; set; }
-        public string Size1 { get; set; }
+        public string Title { get; set; }
         public int CategoryIdFk { get; set; }
 
         public virtual Category CategoryIdFkNavigation { get; set; }

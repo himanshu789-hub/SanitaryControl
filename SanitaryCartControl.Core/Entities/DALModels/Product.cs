@@ -23,7 +23,6 @@ namespace SanitaryCartControl.Core.Entities.DALModels
 
         public virtual Brand BrandIdFkNavigation { get; set; }
         public virtual Category Category { get; set; }
-        public virtual ProductType TypeNavigation { get; set; }
         public virtual TypeProductQuantity TypeProductQuantity { get; set; }
         public virtual ICollection<Image> Image { get; set; }
     }

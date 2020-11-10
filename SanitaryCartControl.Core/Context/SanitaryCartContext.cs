@@ -16,6 +16,7 @@ namespace SanitaryCartControl.Core.Context
         {
         }
 
+        public virtual DbSet<AttributeType> AttributeType { get; set; }
         public virtual DbSet<Brand> Brand { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Color> Color { get; set; }
@@ -39,6 +40,17 @@ namespace SanitaryCartControl.Core.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AttributeType>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
             modelBuilder.Entity<Brand>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
@@ -116,7 +128,7 @@ namespace SanitaryCartControl.Core.Context
             {
                 entity.Property(e => e.CategoryIdFk).HasColumnName("Category_Id_FK");
 
-                entity.Property(e => e.Kind1)
+                entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnName("Kind")
                     .HasMaxLength(10)
@@ -167,28 +179,25 @@ namespace SanitaryCartControl.Core.Context
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_Category");
-
-                entity.HasOne(d => d.TypeNavigation)
-                    .WithMany(p => p.Product)
-                    .HasForeignKey(d => d.Type)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Product_ProductType");
             });
 
             modelBuilder.Entity<ProductType>(entity =>
             {
+                entity.HasKey(e => new { e.AttributeIdFk, e.CategoryIdFk });
+
                 entity.HasIndex(e => e.CategoryIdFk)
                     .HasName("Unique_Category_Type")
                     .IsUnique();
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.AttributeIdFk).HasColumnName("Attribute_Id_FK");
 
                 entity.Property(e => e.CategoryIdFk).HasColumnName("Category_Id_FK");
 
-                entity.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
+                entity.HasOne(d => d.AttributeIdFkNavigation)
+                    .WithMany(p => p.ProductType)
+                    .HasForeignKey(d => d.AttributeIdFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductType_AttributeType");
 
                 entity.HasOne(d => d.CategoryIdFkNavigation)
                     .WithOne(p => p.ProductType)
@@ -224,7 +233,7 @@ namespace SanitaryCartControl.Core.Context
             {
                 entity.Property(e => e.CategoryIdFk).HasColumnName("Category_Id_FK");
 
-                entity.Property(e => e.Size1)
+                entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnName("Size")
                     .HasMaxLength(4)
@@ -249,19 +258,18 @@ namespace SanitaryCartControl.Core.Context
                     .HasColumnName("Product_Id_FK")
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Color)
+                entity.Property(e => e.Price).HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.Value)
+                    .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Kind)
-                    .HasMaxLength(15)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Price).HasColumnType("decimal(8, 2)");
-
-                entity.Property(e => e.Size)
-                    .HasMaxLength(5)
-                    .IsUnicode(false);
+                entity.HasOne(d => d.AtributeTypeNavigation)
+                    .WithMany(p => p.TypeProductQuantity)
+                    .HasForeignKey(d => d.AtributeType)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Type.Product.Quantity_Table_1");
 
                 entity.HasOne(d => d.Product)
                     .WithOne(p => p.TypeProductQuantity)

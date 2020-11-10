@@ -53,7 +53,7 @@ namespace SanitaryCartControl
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Brand}/{action=Add}/{id:int?}");
+                    pattern: "{controller=Product}/{action=Add}/{id:int?}");
             });
         }
     }

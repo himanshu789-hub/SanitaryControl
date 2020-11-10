@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SanitaryCartControl.Core.Entities.Enums;
+using SanitaryCartControl.DTOModels;
 using SanitaryCartControl.ViewModels;
 using SanitaryCartControl.Core.Contracts.Services;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-
+using SanitaryCartControl.Extensions;
 namespace SanitaryCartControl.Controllers
 {
     public class ProductController : Controller
@@ -29,11 +30,33 @@ namespace SanitaryCartControl.Controllers
         }
         public IActionResult GetProductType([FromQuery][BindRequired] int CategoryId)
         {
-          return new OkObjectResult(_productService.GetProductType(CategoryId));
+          return Json(_productService.GetProductType(CategoryId));
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ProductViewModel productViewModel)
+        {
+              
+            return View();
+        }
+        [HttpGet]
+        public IActionResult Edit()
+        {
+            
+         return View();
         }
         public IActionResult GetValues([BindRequired]ProductType type,[BindRequired]int categoryId)
         {
-         _productService.GetAttrinuteValues(type,categoryId) 
+        return Json(_productService.GetAttrinuteValues(type,categoryId)); 
+        }
+        
+        [HttpPost]
+        public IActionResult Add(ProductViewModel productViewModel)
+        {
+         ModelState.RemoveIfPresent("Product.Id");
+         
+         ModelState.Remove<AttributeDTO>(e=>e.Id.ToString());
+         return Json("Success");   
         }
         public IActionResult Add()
         {

@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/SanitaryCartControl/SanitaryCartControl.csproj",
+                "${workspaceFolder}/SanitaryCartControl/SanitaryCartControl/SanitaryCartControl.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/SanitaryCartControl/SanitaryCartControl.csproj",
+                "${workspaceFolder}/SanitaryCartControl/SanitaryCartControl/SanitaryCartControl.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/SanitaryCartControl/SanitaryCartControl.csproj",
+                "${workspaceFolder}/SanitaryCartControl/SanitaryCartControl/SanitaryCartControl.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

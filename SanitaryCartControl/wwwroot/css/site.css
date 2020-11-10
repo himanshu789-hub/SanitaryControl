@@ -75,9 +75,16 @@ body {
 }
 .quill-wrapper {
 	width: 600px;
-	min-height: 300px;
+	min-height: 100px;
 }
 
+#menu li
+{
+	background-color: #4fa0d8;
+	border-right: #ccc 1px solid;
+color: white;
+width: 100%;
+}
 .parent {
   width: 100%;
 	display: block;
@@ -88,7 +95,6 @@ body {
 	border-right: #ccc 1px solid;
 }
 .parent a {
-  
   width: 100%;
 	margin: 10px;
 	color: #ffffff;
@@ -135,7 +141,6 @@ ul ul ul {
 }
 li:hover {
 	background-color: #95b4ca;
-
 }
 .parent li:hover {
 	background-color: #f0f0f0;

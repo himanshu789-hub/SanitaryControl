@@ -1,9 +1,10 @@
-﻿@model ProductViewModel
-@using Microsoft.AspNetCore.Mvc
+﻿@model ProductViewModel;
+@using Microsoft.AspNetCore.Mvc;
 @{
     var brands = ViewBag.Brands as SelectList;
 }
-<form>
+@using (Html.BeginForm("Add", "Product", FormMethod.Post, new { @class = "" }))
+{
     <div class="panel panel-default">
         <div class="panel-heading">Basic Information : </div>
         <div class="panel-body">
@@ -11,7 +12,7 @@
                 <div class="col-3 form-group">
                     <label>Brand : </label>
                     @Html.DropDownListFor(modelItem=>modelItem.Product.Brand_Id_FK,brands,"--Select Brand--",new
-                           {@class="form-control"})
+                {@class="form-control"})
                     @Html.ValidationMessageFor(e=>e.Product.Brand_Id_FK,"",new {@class="text-danger small"},"span")
                 </div>
                 <div class="col-2 form-group">
@@ -39,24 +40,33 @@
             <div class="quill-wrapper form-group">
                 <label>Description : </label>
                 <div id="quill"></div>
-                @Html.TextAreaFor(e=>e.Product.Description,0,0,new {@class="d-none"})
-                @Html.ValidationMessageFor(e=>e.Product.Description,"",new {@class="text=-danger small"},"span")
+                @Html.TextAreaFor(e=>e.Product.Description,new {@class="invisible",@style="width:0px;height:0px"})
+                @Html.ValidationMessageFor(e=>e.Product.Description,"",new {@class="text-danger small"},"span")
             </div>
-             <div id="attributes-wrapper">
-              
-             </div>
+            <div id="attributes-wrapper">
+                <label asp-validation-for="Attributes"></label>
+                <div id="attributes" name="Attributes" id="Attributes" data-val-required="Please Enter Specific Details">
+
+                </div>
+            </div>
         </div>
     </div>
-</form>
-
+    <div class="form-group">
+      <label for="@Model.Images">Upload Images</label>
+      @Html.TextBoxFor(e=>e.Images,null,new {@class="form-control",@type="file",@multiple="true"})
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+}
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
     var elements = {
         menuId: "#menu",
         textBoxId: "#Category_Id_FK",
         textAreaId: "#Product_Description",
-        brandSelection:"#Product_Brand_Id_FK",
-        productAttriuttesSection:"#attributes"
+        brandSelection: "#Product_Brand_Id_FK",
+        categoryTextBox: "#Product_Category_Id_FK",
+        productAttriuttesSection: "#attributes",
+        productAttriuttesWrapper: "#attributes-wrapper"
     };
     $(elements.brandSelection).change(function (e) {
         debugger;
@@ -69,6 +79,7 @@
             url: '/Product/GetCategory?brandId=' + value,
             accepts: 'application/json',
             success: function (data) {
+                debugger;
                 buildMenu($(elements.menuId), data)
             }
         })
@@ -87,19 +98,254 @@
         $(elements.textAreaId).val(quill.container.firstChild.innerHTML);
     });
     function buildMenu(parent, items) {
-    $.each(items, function (item) {
-            var li = $('<li><a href="#">' + this.title + '</a></li>');
+        $.each(items, function (index, item) {
+            var li = $('<li class="parent"><a href="#">' + this.title + '</a></li>');
+            li.appendTo(parent);
             if (this.categories && this.categories.length > 0) {
-                li.addClass('parent').next('a').val(this.title + '<span class="expand">&raquo;</span>')
+                let a = li.find('a');
+                a.text(this.title);
+                a.append('<span class="expand">&raquo;</span>');
                 var ul = $('<ul></ul>').addClass('child');
                 ul.appendTo(li);
                 buildMenu(ul, this.categories);
             }
-            else li.appendTo(parent).click(function (e) {
-                $(elements.textBoxId).val(item.Id);
-                e.preventDefault();
-            });
+            else
+                li.click(function (e) {
+                    $(elements.textBoxId).val(item.id);
+                    state.categoryId = item.id;
+                    state.IsSelected = false;
+                    $.ajax({
+                        method: 'GET',
+                        async: false,
+                        url: '/Product/GetProductType?CategoryId=' + state.categoryId,
+                        success: function (data) {
+                            if (Number.isInteger(data))
+                                state.typeSelected = data;
+                        }
+                    });
+                    data = new Array();
+                    $(elements.productAttriuttesSection).children().remove()
+                    $(elements.categoryTextBox).val(state.categoryId);
+                    buildAttribute(state.typeSelected, state.categoryId, 0)
+                    ResetFormValidation();
+                    e.preventDefault();
+                });
         });
     }
-  
+</script>
+<script>
+    const types = {
+        'Size_Variable': 2,
+        'Color_Variable': 1,
+        'None_Variable': 3,
+        'Type_Variable': 4,
+    };
+    function GetTypeName(Id) {
+        let result;
+        switch (Id) {
+            case types.Size_Variable:
+                result = 'Size';
+                break;
+            case types.Type_Variable:
+                result = 'Type';
+                break;
+            case types.Color_Variable:
+                result = 'Color';
+                break;
+            default:
+                result = "";
+                break;
+
+        }
+        return result;
+    }
+    var item = {
+        'AttributeId': null,
+        'Value': null,
+        'Quantity': null,
+        'Price': null
+    };
+
+    const itemNameandProperties = {
+        'ModelName': "Attributes",
+        'AttributeIdProperty': "AttributeId",
+        'ValueProperty': "Value",
+        'QunatityProperty': "Quantity",
+        'PriceProperty': "Price"
+    };
+
+    var state = {
+        count: 0,
+        remoteValues: null,
+        typeSelected: null,
+        categoryId: null,
+        IsSelected: false
+    };
+
+    const validationMesage = {
+        Price: {
+            Required: "Please Enter Price",
+            Number:"Please Enter Valid Price",
+            Min:"Must be atleast 1"
+        },
+        Quantity:{
+             Required:"Please Enter Quantity",
+             Max:"Must be atmost 255",
+             Min:"Must be atleast 1",
+             Digits:"Please Enter Valid Quantity"
+        },
+        'Dropdown': 'Please Select a ',
+        getDropdownMessage: function (name) {
+            return this.Dropdown.concat(name)
+        }
+    };
+    const ResetFormValidation = function () {
+
+        $('form')
+            .removeData("validator") /* added by the raw jquery.validate plugin */
+            .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+
+        $.validator.unobtrusive.parse($('form'));
+    }
+    var data = new Array();
+    function getNameByProperty(index, propertyName) {
+        let result = itemNameandProperties.ModelName + `[${index}]` + '.';
+        result = result.concat(propertyName);
+        return result;
+    }
+
+    function buildAttribute(type, categoryId, index) {
+        state.count++;
+        if (!data[index])
+            data.push(jQuery.extend({}, item))
+        data[index][itemNameandProperties.AttributeIdProperty] = type;
+        let attributeWrapper = $('<div>').addClass("row");
+        let dropdownWrapper = $('<div class="col-2 form-group"></div>');
+        let label = $('<label></label>').text(GetTypeName(type));
+        let hiddenType = $('<input type="text" class="form-control"/>')
+            .hide()
+            .attr("name", getNameByProperty(index, itemNameandProperties.AttributeIdProperty))
+            .attr("value", (data[index][itemNameandProperties.AttributeIdProperty] + "").toString());
+
+        const dropdownName = getNameByProperty(index, itemNameandProperties.ValueProperty);
+        let dropdown = $('<select class="form-control"></select>')
+            .attr("data-val", type != types.None_Variable)
+            .attr("name", dropdownName)
+            .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.ValueProperty}`)
+            .attr("data-val-required", validationMesage.getDropdownMessage(GetTypeName(state.typeSelected).toLowerCase()))
+            .change(function () {
+                data[index][itemNameandProperties.ValueProperty] = $(dropdown).val()
+            }).click(function(){
+                dropdown.children().remove();
+                setValues(state.remoteValues);
+                dropdown.val(data[index][itemNameandProperties.ValueProperty]);
+            })
+            .prop('disabled', type === types.None_Variable);
+        const setValues = function (remoteValues) {
+            data.forEach((e, eIndex) => {
+                if (eIndex != index) {
+                    const value = e[itemNameandProperties.ValueProperty];
+                    remoteValues = remoteValues.filter(e => e.Key != value);
+                }
+            });
+            Array.from(remoteValues).forEach(e => dropdown.append($('<option></option>').val(e.Key).text(e.Value)));
+        }.bind(index);
+        let dropdownErrorMsg = $('<span data-valmsg-replace="true"><span>')
+            .attr("data-valmsg-for", dropdownName)
+            .addClass("small text-danger");
+
+        if (!state.IsSelected)
+            $.ajax({
+                method: 'GET',
+                async: false,
+                url: '@Url.Action("GetValues")' + `?type=${type}&categoryId=${categoryId}`,
+                success: function (data) {
+                    state.IsSelected = true;
+                    state.remoteValues = data;
+                    setValues(state.remoteValues);
+                }
+            });
+        else {
+            setValues(state.remoteValues);
+        }
+        dropdown.val(data[index][itemNameandProperties.ValueProperty]);
+
+        dropdownWrapper.append([label, hiddenType, dropdown, dropdownErrorMsg]);
+
+        let quantityWrapper = $('<div class="col-2 form-group"><label>Quantity : </label></div>');
+        const quantityName = getNameByProperty(index, itemNameandProperties.QunatityProperty);
+        const quantityValidator = $('<span data-valmsg-replace="true">')
+            .attr("data-valmsg-for", quantityName).addClass("small text-danger");
+        let quantity = $('<input type="text" class="form-control" data-val="true"/>')
+            .val(data[index][itemNameandProperties.QunatityProperty])
+            .attr("name", quantityName)
+            .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.QunatityProperty}`)
+            .attr("data-val-required", validationMesage.Quantity.Required)
+            .attr("data-rule-digits",validationMesage.Quantity.Digits)
+            .attr("data-msg-digits",validationMesage.Quantity.Digits)
+            .attr("data-msg-min",validationMesage.Quantity.Min)
+            .attr("data-msg-max",validationMesage.Quantity.Max)
+            .attr("data-rule-min",1)
+            .attr("data-rule-max", 255)
+
+            .focusout(function () {
+                data[index][itemNameandProperties.QunatityProperty] = $(quantity).val();
+            }.bind(index));
+        quantityWrapper.append([quantity, quantityValidator]);
+
+        let priceWrapper = $('<div class="col-2 form-group"><label>Price : </label></div>');
+        const priceName = getNameByProperty(index, itemNameandProperties.PriceProperty);
+        let priceErrorMsg = $('<span data-valmsg-replace="true">').addClass("small text-danger")
+            .attr("data-valmsg-for", priceName);
+        let price = $('<input type="text" class="form-control"  data-val="true"/>')
+            .val(data[index][itemNameandProperties.PriceProperty])
+            .attr("name", priceName)
+            .attr("data-val-required", validationMesage.Price.Required)
+            .attr("data-rule-numer",true)
+            .attr("data-rule-min",1)
+            .attr("data-msg-min",validationMesage.Price.Min)
+            .attr("data-msg-numer",validationMesage.Price.Number)
+            .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.PriceProperty}`)
+            .focusout(function () {
+                data[index][itemNameandProperties.PriceProperty] = $(price).val();
+            }.bind(index));
+        priceWrapper.append([price, priceErrorMsg]);
+        const editWrapper = $('<div class="col-1" id="edit-wrapper"></div>')
+        const plusSign = $('<label class="display-1 text-success plusSign"><i class="fa fa-plus-circle"></i></label>')
+            .attr("id", "plus-sign")
+            .click(function () {
+                buildAttribute(state.typeSelected, state.categoryId, index + 1);
+                ResetFormValidation();
+            }.bind(index));
+
+        if (type != types.None_Variable)
+            attributeWrapper.append(dropdownWrapper);
+        attributeWrapper.append([quantityWrapper, priceWrapper]);
+        const minusSign = $('<label class="display-1 text-danger"><i class="fa fa-minus-circle"></i></label>')
+            .attr("id", "minus-sign")
+            .click(function (e) {
+                data = data.filter((e, eIndex) => eIndex != index);
+                $(elements.productAttriuttesSection).children().remove();
+                const loop = --state.count;
+                state.count = 0;
+                for (let i = 0; i < loop; i++) {
+                    buildAttribute(state.typeSelected, state.categoryId, i);
+                }
+                ResetFormValidation();
+            }.bind(index));
+
+        $('.plusSign').remove()
+        if(index!=state.remoteValues.length-1)
+        editWrapper.append(plusSign)
+        if (index != 0) {
+            editWrapper.prepend(minusSign)
+        }
+        if (type && type != types.None_Variable)
+            attributeWrapper.append(editWrapper);
+        $(elements.productAttriuttesSection).append(attributeWrapper);
+    }
+</script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
 </script>
