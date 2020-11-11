@@ -150,3 +150,10 @@ li:hover {
 	float: right;
 	margin-right: 5px;
 }
+#image-viewer{
+	min-height:150px;
+}
+#attributes-wrapper
+{
+	min-height: 200px;
+}

@@ -9,9 +9,9 @@ namespace SanitaryCartControl.DTOModels
 
         public int Id { get; set; }
         [Required]
-        [RegularExpression("^[A-Z][a-z]+$",ErrorMessage="Name is not valid")]
         public string Name { get; set; }
         [Required]
+        [RegularExpression("^[A-Z][-A-Z0-9]+[A-Z0-9]$",ErrorMessage="Please Enter Valid Code")]
         public string Code { get; set; }
         [Required]
         public string Description { get; set; }

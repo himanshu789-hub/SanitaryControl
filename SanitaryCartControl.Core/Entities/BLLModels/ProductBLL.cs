@@ -1,4 +1,5 @@
 using System;
+
 namespace SanitaryCartControl.Core.Entities.BLLModels
 {
     public class ProductBLL 
@@ -11,6 +12,7 @@ namespace SanitaryCartControl.Core.Entities.BLLModels
         public BrandBLL Brand{get;set;}
         public DateTime DateAdded{get;set;}
         public DateTime DateUpdated{get;set;}
+        public
 
         public AncestorCategoryBLL RootPath{get;set;}
 

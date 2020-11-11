@@ -3,11 +3,11 @@
 @{
     var brands = ViewBag.Brands as SelectList;
 }
-@using (Html.BeginForm("Add", "Product", FormMethod.Post, new { @class = "" }))
+@using (Html.BeginForm("Add", "Product", FormMethod.Post, new { @class = "",@enctype="multipart/form-data" }))
 {
-    <div class="panel panel-default">
-        <div class="panel-heading">Basic Information : </div>
-        <div class="panel-body">
+    <div class="card m-2">
+        <div class="card-header font-weight-bold">Basic Information : </div>
+        <div class="card-body">
             <div class="row">
                 <div class="col-3 form-group">
                     <label>Brand : </label>
@@ -43,22 +43,45 @@
                 @Html.TextAreaFor(e=>e.Product.Description,new {@class="invisible",@style="width:0px;height:0px"})
                 @Html.ValidationMessageFor(e=>e.Product.Description,"",new {@class="text-danger small"},"span")
             </div>
+        </div>
+    </div>
+    <div class="card m-2">
+        <div class="card-header font-weight-bold">Specific Information : </div>
+        <div class="card-body">
             <div id="attributes-wrapper">
-                <label asp-validation-for="Attributes"></label>
-                <div id="attributes" name="Attributes" id="Attributes" data-val-required="Please Enter Specific Details">
+                @Html.ValidationMessageFor(e=>e.Attributes,null,new {@class="text-danger small"},"span")
+                <div id="attributes" name="Attributes" id="Attributes" data-val-required="Please, First Select A Category">
 
                 </div>
             </div>
         </div>
     </div>
-    <div class="form-group">
-      <label for="@Model.Images">Upload Images</label>
-      @Html.TextBoxFor(e=>e.Images,null,new {@class="form-control",@type="file",@multiple="true"})
+    <div class="card m-2">
+        <div class="card-header font-weight-bold">Select Images : </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-2 form-group">
+                    @Html.TextBoxFor(e=>e.Images,null,new {@class="form-control invisible",@type="file",@multiple="true",@accept="image/jpg, image/jpeg, image/png"})
+                    <label for="Images" class="btn btn-outline-success">
+                        <span>Browse</span>
+                    </label>
+                    @Html.ValidationMessageFor(e=>e.Images,null,new {@class="text-danger small"},"label")
+
+                </div>
+                <div class="col-* w-75 border border-primary rounded d-flex flex-wrap justify-content-center p-4"
+                    id="image-viewer">
+
+                </div>
+            </div>
+
+        </div>
     </div>
-    <button type="submit" class="btn btn-success">Submit</button>
+    <button type="submit" class="btn btn-success invisible">Submit</button>
 }
+<noscript>Please, Enable Javascript</noscript>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+    $(['[type="submit"]']).addClass("visible");
     var elements = {
         menuId: "#menu",
         textBoxId: "#Category_Id_FK",
@@ -66,8 +89,37 @@
         brandSelection: "#Product_Brand_Id_FK",
         categoryTextBox: "#Product_Category_Id_FK",
         productAttriuttesSection: "#attributes",
-        productAttriuttesWrapper: "#attributes-wrapper"
+        productAttriuttesWrapper: "#attributes-wrapper",
+        codeInput: '#Product_Code',
+        nameInput: '#Product_Name',
+        imageUpload: '#Images',
+        imageViewer: '#image-viewer'
     };
+    $(elements.imageUpload).change(function (e) {
+        const files = e.target.files;
+        debugger;
+        if (files && files.length > 0) {
+            $(elements.imageViewer).children().remove();
+            Array.from(files).forEach(e => {
+                const reader = new FileReader();
+                reader.readAsDataURL(e);
+                reader.onload = function (e) {
+                    $(elements.imageViewer).append(`<img src='${e.target.result}' class="border rounded m-3 p-1" width='170px' height='170px'/>`)
+                };
+            });
+        }
+    })
+    $(elements.nameInput).keyup(function (e) {
+        e.preventDefault();
+        $(this).val($(this).val().charAt(0).toUpperCase() + $(this).val().slice(1));
+    });
+    $(elements.codeInput).keyup(function (e) {
+        if (e.keyCode >= 65 && e.keyCode <= 90 || e.keyCode == 189)
+            $(this).val($(this).val().toUpperCase());
+        else
+            $(this).val($(this).val().subString(0, $(this).val().length - 1));
+    })
+
     $(elements.brandSelection).change(function (e) {
         debugger;
         const value = $(e.currentTarget).val()
@@ -185,14 +237,15 @@
     const validationMesage = {
         Price: {
             Required: "Please Enter Price",
-            Number:"Please Enter Valid Price",
-            Min:"Must be atleast 1"
+            Number: "Please Enter Valid Price",
+            Min: "Must be atleast 1",
+            Max: "Must be smaller than 1,00,000"
         },
-        Quantity:{
-             Required:"Please Enter Quantity",
-             Max:"Must be atmost 255",
-             Min:"Must be atleast 1",
-             Digits:"Please Enter Valid Quantity"
+        Quantity: {
+            Required: "Please Enter Quantity",
+            Max: "Must be atmost 255",
+            Min: "Must be atleast 1",
+            Digits: "Please Enter Valid Quantity"
         },
         'Dropdown': 'Please Select a ',
         getDropdownMessage: function (name) {
@@ -235,7 +288,7 @@
             .attr("data-val-required", validationMesage.getDropdownMessage(GetTypeName(state.typeSelected).toLowerCase()))
             .change(function () {
                 data[index][itemNameandProperties.ValueProperty] = $(dropdown).val()
-            }).click(function(){
+            }).click(function () {
                 dropdown.children().remove();
                 setValues(state.remoteValues);
                 dropdown.val(data[index][itemNameandProperties.ValueProperty]);
@@ -281,11 +334,11 @@
             .attr("name", quantityName)
             .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.QunatityProperty}`)
             .attr("data-val-required", validationMesage.Quantity.Required)
-            .attr("data-rule-digits",validationMesage.Quantity.Digits)
-            .attr("data-msg-digits",validationMesage.Quantity.Digits)
-            .attr("data-msg-min",validationMesage.Quantity.Min)
-            .attr("data-msg-max",validationMesage.Quantity.Max)
-            .attr("data-rule-min",1)
+            .attr("data-rule-digits", validationMesage.Quantity.Digits)
+            .attr("data-msg-digits", validationMesage.Quantity.Digits)
+            .attr("data-msg-min", validationMesage.Quantity.Min)
+            .attr("data-msg-max", validationMesage.Quantity.Max)
+            .attr("data-rule-min", 1)
             .attr("data-rule-max", 255)
 
             .focusout(function () {
@@ -301,10 +354,12 @@
             .val(data[index][itemNameandProperties.PriceProperty])
             .attr("name", priceName)
             .attr("data-val-required", validationMesage.Price.Required)
-            .attr("data-rule-numer",true)
-            .attr("data-rule-min",1)
-            .attr("data-msg-min",validationMesage.Price.Min)
-            .attr("data-msg-numer",validationMesage.Price.Number)
+            .attr("data-rule-numer", true)
+            .attr("data-rule-min", 1)
+            .attr("data-msg-min", validationMesage.Price.Min)
+            .attr("data-rule-max", 99999.9999)
+            .attr("data-max-msg", validationMesage.Price.Max)
+            .attr("data-msg-numer", validationMesage.Price.Number)
             .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.PriceProperty}`)
             .focusout(function () {
                 data[index][itemNameandProperties.PriceProperty] = $(price).val();
@@ -335,8 +390,8 @@
             }.bind(index));
 
         $('.plusSign').remove()
-        if(index!=state.remoteValues.length-1)
-        editWrapper.append(plusSign)
+        if (index != state.remoteValues.length - 1)
+            editWrapper.append(plusSign)
         if (index != 0) {
             editWrapper.prepend(minusSign)
         }

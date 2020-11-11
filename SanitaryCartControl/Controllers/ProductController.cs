@@ -42,7 +42,7 @@ namespace SanitaryCartControl.Controllers
         [HttpGet]
         public IActionResult Edit()
         {
-            
+          
          return View();
         }
         public IActionResult GetValues([BindRequired]ProductType type,[BindRequired]int categoryId)
@@ -54,9 +54,13 @@ namespace SanitaryCartControl.Controllers
         public IActionResult Add(ProductViewModel productViewModel)
         {
          ModelState.RemoveIfPresent("Product.Id");
-         
-         ModelState.Remove<AttributeDTO>(e=>e.Id.ToString());
-         return Json("Success");   
+         for(int i=0;i<productViewModel.Attributes.Count();i++)
+         ModelState.RemoveIfPresent($"Attributes[{i}].Id");
+         if(ModelState.IsValid)
+         {
+              return Json("Success");
+         }
+         throw new Exception("Error While Adding Product");   
         }
         public IActionResult Add()
         {
