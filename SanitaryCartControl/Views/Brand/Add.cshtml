@@ -1,5 +1,7 @@
 @model BrandViewModel
-
+@{
+  ViewData["Head"] = "Add Brand";
+}
 <div class="d-flex justify-content-around p-5  border border-primary">
 @using(Html.BeginForm("Add","Brand",null,FormMethod.Post,null,new {@enctype="multipart/form-data",@class="flex-grow-1 pr-5 pl-5"}))
 { 

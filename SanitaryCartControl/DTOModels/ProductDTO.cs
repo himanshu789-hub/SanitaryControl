@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 namespace SanitaryCartControl.DTOModels
 {
@@ -20,6 +20,10 @@ namespace SanitaryCartControl.DTOModels
         public int Category_Id_FK { get; set; }
         [Required(ErrorMessage = "Please Select A Brand")]
         public int Brand_Id_FK { get; set; }
+        [BindNever]
+        public DateTime DateAdded{get;set;}
+        [BindNever]
+        public DateTime DateUpdated{get;set;}
         
     }
 }

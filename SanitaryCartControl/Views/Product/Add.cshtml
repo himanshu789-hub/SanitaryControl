@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc;
 @{
     var brands = ViewBag.Brands as SelectList;
+    ViewData["Head"] = "Add Product";
 }
 @using (Html.BeginForm("Add", "Product", FormMethod.Post, new { @class = "",@enctype="multipart/form-data" }))
 {
@@ -16,7 +17,8 @@
                     @Html.ValidationMessageFor(e=>e.Product.Brand_Id_FK,"",new {@class="text-danger small"},"span")
                 </div>
                 <div class="col-2 form-group">
-                    <label> Category : </label>
+                    <label> Category : <span class="loading d-none"><i class="fa fa-spinner fa-pulse fa-fw"></i>
+<span class="sr-only">Loading...</span></span></label>
                     @Html.TextBoxFor(e=>e.Product.Category_Id_FK,"",new {@class="d-none w-0 h-0"})
                     <div>
                         <ul id="menu"></ul>
@@ -37,11 +39,13 @@
                     @Html.ValidationMessageFor(e=>e.Product.Name,"",new {@class="text-danger small"},"span")
                 </div>
             </div>
-            <div class="quill-wrapper form-group">
+            <div class="row">
+            <div class="col-md-12 col-lg-6 quill-wrapper form-group">
                 <label>Description : </label>
                 <div id="quill"></div>
                 @Html.TextAreaFor(e=>e.Product.Description,new {@class="invisible",@style="width:0px;height:0px"})
                 @Html.ValidationMessageFor(e=>e.Product.Description,"",new {@class="text-danger small"},"span")
+            </div>
             </div>
         </div>
     </div>
@@ -76,12 +80,12 @@
 
         </div>
     </div>
-    <button type="submit" class="btn btn-success invisible">Submit</button>
+    <button type="submit" class="btn btn-success float-right invisible m-3">Submit</button>
 }
 <noscript>Please, Enable Javascript</noscript>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    $(['[type="submit"]']).addClass("visible");
+    $('[type="submit"]').removeClass("invisible");
     var elements = {
         menuId: "#menu",
         textBoxId: "#Category_Id_FK",
@@ -126,13 +130,16 @@
         if (!value)
             return;
         $(elements.menuId).empty();
+        $('.loading').removeClass("d-none")
         $.ajax({
             method: 'GET',
             url: '/Product/GetCategory?brandId=' + value,
             accepts: 'application/json',
+            
             success: function (data) {
                 debugger;
                 buildMenu($(elements.menuId), data)
+                $('.loading').addClass("d-none")
             }
         })
     })

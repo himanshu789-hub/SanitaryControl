@@ -10,7 +10,6 @@ namespace SanitaryCartControl.ViewModels
         
         [Required(ErrorMessage="Please Select Files")]
         public IFormFileCollection Images { get; set; }
-        
         public IList<AttributeDTO> Attributes { get; set; }
     }
 }
