@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SanitaryCartControl.Core.Entities.BLLModels
 {
@@ -12,9 +13,8 @@ namespace SanitaryCartControl.Core.Entities.BLLModels
         public BrandBLL Brand{get;set;}
         public DateTime DateAdded{get;set;}
         public DateTime DateUpdated{get;set;}
-        public
-
+        public string[] Images{get;set;}
+        public IEnumerable<AttributeBLL> AttributeBLLs{get;set;} 
         public AncestorCategoryBLL RootPath{get;set;}
-
     }
 }

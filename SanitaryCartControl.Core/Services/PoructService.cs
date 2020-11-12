@@ -70,7 +70,7 @@ namespace SanitaryCartControl.Core.Services
             }
          throw new System.NotImplementedException();
         }
-        public ProductBLL GetProduct(int Id)
+        public ProductBLL GetById(int Id)
         {
             var Ancestors = this.GetAllAncestors(Id);
             using(var context = new SanitaryCartContext())
