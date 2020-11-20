@@ -6,10 +6,11 @@ namespace SanitaryCartControl.DTOModels
 {
     public class ProductEditDTO
     {
-        [BindRequired]
-        public int Id{get;set;}
-        public string Desription{get;set;}
+        public ProductDTO Product{get;set;}
+      
+        [Required]
         public IEnumerable<AttributeDTO> Attributes{get;set;}
+        
         public IFormCollection Images{get;set;}
     }
 }

@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SanitaryCartControl.Extensions;
 using SanitaryCartControl.Core.Extensions;
+using Microsoft.AspNetCore.Identity;
+
 namespace SanitaryCartControl
 {
     public class Startup
@@ -46,9 +48,10 @@ namespace SanitaryCartControl
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+           
             app.UseRouting();
             app.UseAuthorization();
-
+           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

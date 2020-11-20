@@ -86,7 +86,6 @@ namespace SanitaryCartControl.Controllers
 
       [NonAction]
       string  UploadFile(IFormFile logo)
-
       {
       
         var getRelativePath = Path.Combine(brandPath, System.Guid.NewGuid().ToString()+Path.GetExtension(logo.FileName));

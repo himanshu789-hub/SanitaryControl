@@ -10,8 +10,8 @@ namespace SanitaryCartControl.ViewModels
         public ProductDTO Product { get; set; }
         public string[] Images { get; set; }
         public string BreadCrumps{get;set;}
-        public IEnumerable<AttributeBLL> Attributes { get; set; }
-        public string Type{get;set;}
-
+        public BrandBLL Brand{get;set;}
+        public AttributeDTO[] Attributes { get; set; }
+        
     }
 }

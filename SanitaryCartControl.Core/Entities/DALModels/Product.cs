@@ -8,6 +8,7 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public Product()
         {
             Image = new HashSet<Image>();
+            TypeProductQuantity = new HashSet<TypeProductQuantity>();
         }
 
         public int Id { get; set; }
@@ -23,7 +24,8 @@ namespace SanitaryCartControl.Core.Entities.DALModels
 
         public virtual Brand BrandIdFkNavigation { get; set; }
         public virtual Category Category { get; set; }
-        public virtual TypeProductQuantity TypeProductQuantity { get; set; }
+        public virtual AttributeType TypeNavigation { get; set; }
         public virtual ICollection<Image> Image { get; set; }
+        public virtual ICollection<TypeProductQuantity> TypeProductQuantity { get; set; }
     }
 }

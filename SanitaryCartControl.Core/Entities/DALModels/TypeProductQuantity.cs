@@ -11,8 +11,10 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public decimal Price { get; set; }
         public byte AtributeType { get; set; }
         public string Value { get; set; }
+        public int Id { get; set; }
+        public bool IsActive{get;set;}
 
         public virtual AttributeType AtributeTypeNavigation { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual Product ProductIdFkNavigation { get; set; }
     }
 }

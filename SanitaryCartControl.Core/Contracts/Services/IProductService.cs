@@ -12,5 +12,8 @@ namespace SanitaryCartControl.Core.Contracts.Services
     int GetRootId(int categoryId); 
     ProductBLL GetById(int Id);
     ProductBLL Update(ProductBLL product);
+    int Add(ProductBLL product);
+    IEnumerable<ProductBLL> Search(string value);
+
     }
 }

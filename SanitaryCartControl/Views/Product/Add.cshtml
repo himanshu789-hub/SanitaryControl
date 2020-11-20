@@ -74,12 +74,12 @@
                 </div>
                 <div class="col-* w-75 border border-primary rounded d-flex flex-wrap justify-content-center p-4"
                     id="image-viewer">
-
                 </div>
             </div>
 
         </div>
     </div>
+    @Html.TextBoxFor(e=>e.Product.DateAdded,new {@class="invisible"})
     <button type="submit" class="btn btn-success float-right invisible m-3">Submit</button>
 }
 <noscript>Please, Enable Javascript</noscript>
@@ -97,7 +97,8 @@
         codeInput: '#Product_Code',
         nameInput: '#Product_Name',
         imageUpload: '#Images',
-        imageViewer: '#image-viewer'
+        imageViewer: '#image-viewer',
+        dateField:'#Product_DateAdded'
     };
     $(elements.imageUpload).change(function (e) {
         const files = e.target.files;
@@ -305,10 +306,10 @@
             data.forEach((e, eIndex) => {
                 if (eIndex != index) {
                     const value = e[itemNameandProperties.ValueProperty];
-                    remoteValues = remoteValues.filter(e => e.Key != value);
+                    remoteValues = remoteValues.filter(e => e.Value != value);
                 }
             });
-            Array.from(remoteValues).forEach(e => dropdown.append($('<option></option>').val(e.Key).text(e.Value)));
+            Array.from(remoteValues).forEach(e => dropdown.append($('<option></option>').val(e.Value).text(e.Value)));
         }.bind(index);
         let dropdownErrorMsg = $('<span data-valmsg-replace="true"><span>')
             .attr("data-valmsg-for", dropdownName)
@@ -410,4 +411,9 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
+    $(elements.dateField).removeAttr('data-val-required')
+    $('[type="submit"]').click(function(e){
+    $(elements.dateField).val(new Date().toISOString());
+    $(this).submit();
+    });
 </script>

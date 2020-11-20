@@ -57,7 +57,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext())
             {
-                var Brands = context.Brand.AsNoTracking<Brand>().ToList();
+                var Brands = context.Brand.AsNoTracking().ToList();
                 var Result = new List<BrandBLL>();
                 foreach (var item in Brands)
                 {

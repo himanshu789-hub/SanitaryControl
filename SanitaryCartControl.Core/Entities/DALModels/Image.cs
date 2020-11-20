@@ -10,6 +10,7 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public int ProductIdFk { get; set; }
         public byte Type { get; set; }
 
-        public virtual Product Product { get; set; }
+        public virtual Product ProductIdFkNavigation { get; set; }
+        public virtual AttributeType TypeNavigation { get; set; }
     }
 }

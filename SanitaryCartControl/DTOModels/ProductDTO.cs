@@ -19,11 +19,14 @@ namespace SanitaryCartControl.DTOModels
         [Required(ErrorMessage="Please Select A Category")]
         public int Category_Id_FK { get; set; }
         [Required(ErrorMessage = "Please Select A Brand")]
-        public int Brand_Id_FK { get; set; }
-        [BindNever]
+        public byte Brand_Id_FK { get; set; }
+        
+        [BindRequired]
         public DateTime DateAdded{get;set;}
         [BindNever]
         public DateTime DateUpdated{get;set;}
+        [BindNever]
+        public byte Type{get;set;}
         
     }
 }

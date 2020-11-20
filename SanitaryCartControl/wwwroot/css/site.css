@@ -153,6 +153,10 @@ li:hover {
 #image-viewer{
 	min-height:150px;
 }
+#quill
+{
+	height:60%;
+}
 #attributes-wrapper
 {
 	min-height: 200px;
