@@ -26,6 +26,7 @@ namespace SanitaryCartControl.Core.Context
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductType> ProductType { get; set; }
         public virtual DbSet<SeriesBrand> SeriesBrand { get; set; }
+        public virtual DbSet<SeriesHolderCategory> SeriesHolderCategory { get; set; }
         public virtual DbSet<Size> Size { get; set; }
         public virtual DbSet<TypeProductQuantity> TypeProductQuantity { get; set; }
 
@@ -110,7 +111,7 @@ namespace SanitaryCartControl.Core.Context
             {
                 entity.Property(e => e.Path)
                     .IsRequired()
-                    .HasMaxLength(110)
+                    .HasMaxLength(330)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ProductIdFk).HasColumnName("Product_Id_FK");
@@ -226,6 +227,10 @@ namespace SanitaryCartControl.Core.Context
 
                 entity.Property(e => e.CategoryIdFk).HasColumnName("Category_Id_FK");
 
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
                 entity.HasOne(d => d.BrandIdFkNavigation)
                     .WithMany(p => p.SeriesBrand)
                     .HasForeignKey(d => d.BrandIdFk)
@@ -235,6 +240,19 @@ namespace SanitaryCartControl.Core.Context
                     .WithOne(p => p.SeriesBrand)
                     .HasForeignKey<SeriesBrand>(d => d.CategoryIdFk)
                     .HasConstraintName("FK_Series.Brand_Category");
+            });
+
+            modelBuilder.Entity<SeriesHolderCategory>(entity =>
+            {
+                entity.ToTable("SeriesHolder.Category");
+
+                entity.Property(e => e.CategoryIdFk).HasColumnName("CategoryId_Fk");
+
+                entity.HasOne(d => d.CategoryIdFkNavigation)
+                    .WithMany(p => p.SeriesHolderCategory)
+                    .HasForeignKey(d => d.CategoryIdFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SeriesHolder.Category_Category");
             });
 
             modelBuilder.Entity<Size>(entity =>
@@ -259,6 +277,10 @@ namespace SanitaryCartControl.Core.Context
             {
                 entity.ToTable("Type.Product.Quantity");
 
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Price).HasColumnType("decimal(7, 2)");
 
                 entity.Property(e => e.ProductIdFk).HasColumnName("Product_Id_FK");
@@ -267,11 +289,7 @@ namespace SanitaryCartControl.Core.Context
                     .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
-                    
-                entity.Property(e=>e.IsActive)
-                .IsRequired()
-                .HasDefaultValue(true);
-                
+
                 entity.HasOne(d => d.AtributeTypeNavigation)
                     .WithMany(p => p.TypeProductQuantity)
                     .HasForeignKey(d => d.AtributeType)

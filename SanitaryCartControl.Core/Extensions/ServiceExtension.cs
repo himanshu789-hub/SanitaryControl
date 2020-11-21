@@ -10,6 +10,7 @@ namespace SanitaryCartControl.Core.Extensions
                     services.AddSingleton<IProductService,ProductService>();
                     services.AddScoped(typeof(SanitaryCartControl.Core.Context.SanitaryCartContext));
                     services.AddSingleton(typeof(IBrandService),typeof(BrandService));
+                    services.AddSingleton<ICategoryService,CategoryService>();
              }
              
     }

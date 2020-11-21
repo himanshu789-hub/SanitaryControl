@@ -19,23 +19,25 @@ using PagedList.Mvc;
 using PagedList;
 namespace SanitaryCartControl.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         readonly IProductService _productService;
         readonly IBrandService _brandService;
+        readonly ICategoryService _categoryService;
         readonly IHostEnvironment _env;
         string imagesPath = @"/images/products";
-        public ProductController(IProductService productService, IBrandService brandService, IHostEnvironment env)
+        public ProductController(IProductService productService, IBrandService brandService,ICategoryService categoryService, IHostEnvironment env):base(env)
         {
             _brandService = brandService;
             _env = env;
+            _categoryService = categoryService;
             _productService = productService;
         }
 
         [HttpGet]
         public IActionResult GetCategory([FromQuery][BindRequired] int brandId)
         {
-            return Json(_productService.GetCategoryList(brandId));
+            return Json(_categoryService.GetCategoryList(brandId));
         }
         public IActionResult GetProductType([FromQuery][BindRequired] int CategoryId)
         {
@@ -68,26 +70,7 @@ namespace SanitaryCartControl.Controllers
             return Json(_productService.GetAttrinuteValues(type, categoryId));
         }
 
-        [NonAction]
-        string[] AddImages(IFormFileCollection files)
-        {
-            string[] images = new string[files.Count];
-            int i = 0;
-            foreach (var file in files)
-            {
-
-                var getRelativePath = Path.Combine(imagesPath,
-                System.Guid.NewGuid().ToString() + Path.GetExtension(file.FileName));
-                var FilePath = Path.Join(_env.ContentRootPath, "wwwroot", getRelativePath);
-
-                using (var stream = new FileStream(FilePath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-                images[i++] = FilePath;
-            }
-            return images;
-        }
+        
         [HttpPost]
         public IActionResult Add(ProductViewModel productViewModel)
         {
@@ -102,7 +85,7 @@ namespace SanitaryCartControl.Controllers
                 int productId = _productService
                 .Add(Converters.ToProductBLL(productViewModel.Product,
                 productViewModel.Attributes,
-                this.AddImages(productViewModel.Images)));
+                this.AddImages(productViewModel.Images,imagesPath)));
                 return Redirect(@"/Product/Edit/" + productId);
             }
             throw new Exception("Error While Adding Product");

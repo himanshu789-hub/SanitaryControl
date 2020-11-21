@@ -11,6 +11,7 @@ namespace SanitaryCartControl.Core.Entities.DALModels
             InverseParent = new HashSet<Category>();
             Kind = new HashSet<Kind>();
             Product = new HashSet<Product>();
+            SeriesHolderCategory = new HashSet<SeriesHolderCategory>();
             Size = new HashSet<Size>();
         }
 
@@ -26,6 +27,7 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public virtual ICollection<Category> InverseParent { get; set; }
         public virtual ICollection<Kind> Kind { get; set; }
         public virtual ICollection<Product> Product { get; set; }
+        public virtual ICollection<SeriesHolderCategory> SeriesHolderCategory { get; set; }
         public virtual ICollection<Size> Size { get; set; }
     }
 }

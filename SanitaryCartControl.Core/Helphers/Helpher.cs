@@ -94,7 +94,7 @@ namespace SanitaryCartControl.Core.Helpher
                  Price=item.Price,
                  Quantity=item.Quantity,
                  Value=item.Value,
-                 IsActive = item.IsActive
+                 IsActive =(bool) item.IsActive
             });
         }
         return attributeBLLs;
