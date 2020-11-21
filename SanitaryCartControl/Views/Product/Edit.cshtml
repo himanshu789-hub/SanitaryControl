@@ -1,14 +1,17 @@
+@using System.Text.Json;
+
 @model ProductEditViewModel
 @{
     ViewData["Head"] = "Edit Product : " + Model.Product.Code;
 }
 @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { @enctype = "multipart-form-data" }))
 {
-    @Html.HiddenFor(e=>e.Product.Category_Id_FK)
-    @Html.HiddenFor(e=>e.Product.Brand_Id_FK)
-    @Html.HiddenFor(e=>e.Product.Type)
     @Html.HiddenFor(e=>e.Product.Id)
     @Html.HiddenFor(e=>e.Product.Type)
+    @Html.HiddenFor(e=>e.Product.Brand_Id_FK)
+    @Html.HiddenFor(e=>e.Product.Category_Id_FK)
+    
+    
 <div class="card">
     <div class="card-header font-weight-bold">Basic Information : </div>
     <div class="card-body">
@@ -108,7 +111,7 @@
                  @Html.CheckBoxFor(e=>e.Attributes[i].IsActive,
                  new {@data_on="Visible",@data_off="Hidden",@data_toggle="toggle", @data_onstyle="info" ,@data_offstyle="danger"})
                 <script type="text/javascript">
-                    $('head').append('<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"/>');
+                    $('head').append('<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"/>');            
                 </script>
                 <style>
                     .toggle-handle
@@ -120,11 +123,40 @@
                 </div>
               }
             </div>
+                <label class="text-white btn btn-primary" id="plusSign"><i class="fa fa-plus"></i>Add More Item</label>
+            <div id="attributes-wrapper">
+            <div id="attributes">
+
+            </div>
+            <style>
+                #attributes-wrapper{
+                    min-height: 0;
+                }
+            </style>
+            </div>
+            <script>
+               $('#plusSign').click(function(){
+                     $(this).addClass('invisible')
+                         $.ajax({
+                method: 'GET',
+                async: false,
+                url: '@Url.Action("GetValues")' + `?type=${state.typeSelected}&categoryId=${state.categoryId}`,
+                success: function (result) {
+                    state.IsSelected = true;
+                    state.remoteValues = result;
+                    if(state.remoteValues.length==data.length)
+                       alert('No More Item To Add')     
+                    else
+                    buildAttribute(state.typeSelected,state.categoryId,data.length);
+                }
+            });
+               });
+            </script>
             <div>
     <p class="p-2 m-0">
-  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+  <button id="uploadButton" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         Upload Images <span class="small text-light">Optional</span>
-  </a>
+  </button>
 </p>
     <div class="collapse shadow p-3 mb-5 bg-white rounded" id="collapseExample">
   <div class="card card-body">
@@ -140,8 +172,7 @@
                 {
                     <img src="@item" class="border rounded m-3 p-1" width="170px" height="170px" />
                 }
-            </div>
-            
+            </div>            
     </div>
     </div>
     </div>
@@ -260,13 +291,15 @@ $(".input-number").keydown(function (e) {
         nameInput: '#Product_Name',
         imageUpload: '#Images',
         imageViewer: '#image-viewer',
-        dateField:'#Product_DateAdded'
+        dateField:'#Product_DateAdded',
+        uploadButtonLabel:'#uploadButton'
     };
     $(elements.imageUpload).change(function (e) {
         const files = e.target.files;
         debugger;
         if (files && files.length > 0) {
             $(elements.imageViewer).children().remove();
+            $(elements.uploadButtonLabel).removeAttr("data-toggle")
             Array.from(files).forEach(e => {
                 const reader = new FileReader();
                 reader.readAsDataURL(e);
@@ -286,62 +319,7 @@ $(".input-number").keydown(function (e) {
         else
             $(this).val($(this).val().subString(0, $(this).val().length - 1));
     })
-
-    $(elements.brandSelection).change(function (e) {
-        debugger;
-        const value = $(e.currentTarget).val()
-        if (!value)
-            return;
-        $(elements.menuId).empty();
-        $('.loading').removeClass("d-none")
-        $.ajax({
-            method: 'GET',
-            url: '/Product/GetCategory?brandId=' + value,
-            accepts: 'application/json',
-            
-            success: function (data) {
-                debugger;
-                buildMenu($(elements.menuId), data)
-                $('.loading').addClass("d-none")
-            }
-        })
-    });
-    function buildMenu(parent, items) {
-        $.each(items, function (index, item) {
-            var li = $('<li class="parent"><a href="#">' + this.title + '</a></li>');
-            li.appendTo(parent);
-            if (this.categories && this.categories.length > 0) {
-                let a = li.find('a');
-                a.text(this.title);
-                a.append('<span class="expand">&raquo;</span>');
-                var ul = $('<ul></ul>').addClass('child');
-                ul.appendTo(li);
-                buildMenu(ul, this.categories);
-            }
-            else
-                li.click(function (e) {
-                    $(elements.textBoxId).val(item.id);
-                    state.categoryId = item.id;
-                    state.IsSelected = false;
-                    $.ajax({
-                        method: 'GET',
-                        async: false,
-                        url: '/Product/GetProductType?CategoryId=' + state.categoryId,
-                        success: function (data) {
-                            if (Number.isInteger(data))
-                                state.typeSelected = data;
-                        }
-                    });
-                    data = new Array();
-                    $(elements.productAttriuttesSection).children().remove()
-                    $(elements.categoryTextBox).val(state.categoryId);
-                    buildAttribute(state.typeSelected, state.categoryId, 0)
-                    ResetFormValidation();
-                    e.preventDefault();
-                });
-        });
-    }
-</script>
+    </script>
 <script>
     const types = {
         'Size_Variable': 2,
@@ -350,7 +328,9 @@ $(".input-number").keydown(function (e) {
         'Type_Variable': 4,
     };
     function GetTypeName(Id) {
+        debugger;
         let result;
+        
         switch (Id) {
             case types.Size_Variable:
                 result = 'Size';
@@ -384,14 +364,14 @@ $(".input-number").keydown(function (e) {
         'PriceProperty': "Price",
         'IsActiveProperty':"IsActive"
     };
-
-    var data =Array.from(JSON.parse('@Json.Serialize(@Model.Attributes)'));
+    var data =Array.from(JSON.parse('@Html.Raw( @Newtonsoft.Json.JsonConvert.SerializeObject(@Model.Attributes,Newtonsoft.Json.Formatting.None))'));
     var state = {
         count:data.length,
         remoteValues: null,
-        typeSelected: null,
-        categoryId: null,
-        IsSelected: false
+        typeSelected: @Model.Product.Type,
+        categoryId: @Model.Product.Category_Id_FK,
+        IsSelected: false,
+        previousCount:data.length
     };
 
     const validationMesage = {
@@ -448,6 +428,7 @@ $(".input-number").keydown(function (e) {
             .change(function () {
                 data[index][itemNameandProperties.ValueProperty] = $(dropdown).val()
             }).click(function () {
+                debugger;
                 dropdown.children().remove();
                 setValues(state.remoteValues);
                 dropdown.val(data[index][itemNameandProperties.ValueProperty]);
@@ -541,19 +522,21 @@ $(".input-number").keydown(function (e) {
                 data = data.filter((e, eIndex) => eIndex != index);
                 $(elements.productAttriuttesSection).children().remove();
                 const loop = --state.count;
-                state.count = 0;
-                for (let i = 0; i < loop; i++) {
+                state.count = state.previousCount;
+                for (let i = state.previousCount; i < loop; i++) {
                     buildAttribute(state.typeSelected, state.categoryId, i);
                 }
+                if(data.length==state.previousCount)
+                $('#plusSign').removeClass('invisible')
                 ResetFormValidation();
             }.bind(index));
 
         $('.plusSign').remove()
         if (index != state.remoteValues.length - 1)
             editWrapper.append(plusSign)
-        if (index != 0) {
-            editWrapper.prepend(minusSign)
-        }
+        
+        editWrapper.prepend(minusSign)
+        
         if (type && type != types.None_Variable)
             attributeWrapper.append(editWrapper);
         $(elements.productAttriuttesSection).append(attributeWrapper);
