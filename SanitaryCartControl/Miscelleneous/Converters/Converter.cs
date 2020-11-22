@@ -75,7 +75,7 @@ namespace SanitaryCartControl.Helphers.Converters
         public static SeriesBLL ToSeriesBLL(SeriesDTO series)
         {
             return new SeriesBLL(){
-                BrandId=series.Brand_Id_Fk,
+                BrandId=(byte)series.Brand_Id_Fk,
                 CategoryId=series.Category_Id_FK,
                 Id=series.Id,
                 ImagPath=series.ImagePath,

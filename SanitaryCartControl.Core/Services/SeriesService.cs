@@ -25,6 +25,25 @@ namespace SanitaryCartControl.Core.Services
             }
         }
 
+        public IEnumerable<SeriesBLL> GetByParentId(int Id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<KeyValuePair<int, string>> GetCategory()
+        {
+            using(var context = new SanitaryCartContext())
+            {
+                int[] SeriesHolderId = context.SeriesHolderCategory.Distinct().Select(e=>e.CategoryIdFk).ToArray();
+                var categories = context.Category.Where(e=>SeriesHolderId.Contains(e.Id)).ToList();
+                ICollection<KeyValuePair<int,string>> result = new List<KeyValuePair<int,string>>();
+                categories.ForEach(e=>result.Add(
+                    new KeyValuePair<int, string>(e.Id,e.Titlle)
+                ));
+                return result;
+            }
+        }
+
         public KeyValuePair<int, string> GetDistinctCategory()
         {
             throw new System.NotImplementedException();

@@ -1,0 +1,69 @@
+@model SeriesViewModel
+
+@{
+  var brandName = @Model.Brands.First(e=>e.Id==Model.Series.Brand_Id_Fk);
+}
+<fieldset disabled>
+<div>
+  <div class="row">
+    <div class="col d-flex align-items-center form-group">
+      <label>Brand</label>
+      <input type="text" class="form-control" value="@brandName.Name">
+      <img src="@brandName.ImagePath" width="90px" height="70px"/>
+    </div>
+    <div class="col form-group">
+      <label>Category Name : </label>
+      <label class="form-control">@ViewBag.Name</label>
+    </div>
+  </div>
+</div>
+</fieldset>
+@using (Html.BeginForm("Edit", "Series", FormMethod.Post))
+{
+  @Html.HiddenFor(e=>e.Series.Brand_Id_Fk)
+  @Html.HiddenFor(e=>e.Series.Category_Id_FK)
+  @Html.HiddenFor(e=>e.Series.ParentId)
+  @Html.HiddenFor(e=>e.Series.Id)
+  <h1>Edit A Series</h1>
+  @Html.ValidationSummary("",new {@class="alert alert-warning"});
+  <div class="d-flex justify-content-around p-5  border border-primary">
+    <div class="form-group row">
+      @Html.LabelFor(e=>e.Series.Name,"Name",new {@class="col-sm-2 col-form-label",@for="Series_Name"})
+      <div class="col-sm-10">
+        @Html.TextBoxFor(modelItem=>modelItem.Series.Name,new {@class="form-control"})
+      </div>
+    </div>
+    <div class="form-group row">
+      @Html.LabelFor(e=>e.Image)
+      <div class="custom-file">
+        @Html.TextBoxFor(e=>e.Image,new {@class="form-control",@type="file",@accept="image/jpg, image/jpeg, image/png"})
+        <label class="custom-file-label" for="Image">Choose Image file<small class="font-italic">(Optional)</small></label>
+      </div>
+    </div>
+    <div>
+      <input type="submit" class="btn btn-success w-25" />
+      <button role="button" onclick="history.back()">Cancel</button>
+    </div>
+  </div>
+  <img src="@Model.Series.ImagePath" name="fileViewer" class="border rounded-lg img-thumbnail w-25" />
+}
+<script>
+  const form = {
+    filePicker: $('[name="Image"]'),
+    fileViewer: $('[name="fileViewer"]'),
+    init: function () {
+      this.filePicker.change(e => {
+        const files = e.target.files;
+        if (files && files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            $(fileViewer)
+              .attr('src', e.target.result)
+          };
+          reader.readAsDataURL(files[0]);
+        }
+      });
+    }
+  };
+  form.init();
+</script>

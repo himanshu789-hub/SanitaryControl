@@ -9,124 +9,123 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations;
+using SanitaryCartControl.Extensions;
 namespace SanitaryCartControl.Controllers
 {
-  public class BrandController:Controller
-  {
-      IBrandService _brandService;
-      IHostEnvironment _host;
-      ILogger _logger;
-      public BrandController(IBrandService brandService,ILogger<BrandController> logger,IHostEnvironment host)
-      {
-        _brandService = brandService;
-        _logger = logger;
-        _host = host;
-      }
-      [HttpGet]
-      public IActionResult Edit(int Id)
-      {
-       BrandBLL brandBLL = _brandService.GetById(Id);     
-       if(brandBLL!=null)
-        return View(new BrandViewModel(){
-          Brand=new BrandDTO(){ Name=brandBLL.Name,Id=brandBLL.Id,ImagePath=brandBLL.ImagePath},
-          Logo=null
-          });  
-       else
-        return Redirect("/Brand/GetAll");
-      }
-      
-      const string brandPath = @"/images/brand";
-      [NonAction]
-      public bool RemoveFile(string filePath)
-      {
-        string absoluetPath = Path.Join(_host.ContentRootPath,"wwwroot",filePath);
-           if(System.IO.File.Exists(absoluetPath))
-           {
-             System.IO.File.Delete(absoluetPath);
-             return true;
-           }
-           return false;
-      } 
-      [HttpPost]
-      public IActionResult Edit(BrandViewModel brandView)
-      {
+    public class BrandController : Controller
+    {
+        IBrandService _brandService;
+        IHostEnvironment _host;
+        ILogger _logger;
+        public BrandController(IBrandService brandService, ILogger<BrandController> logger, IHostEnvironment host)
+        {
+            _brandService = brandService;
+            _logger = logger;
+            _host = host;
+        }
+        [HttpGet]
+        public IActionResult Edit(int Id)
+        {
+            BrandBLL brandBLL = _brandService.GetById(Id);
+            if (brandBLL != null)
+                return View(new BrandViewModel()
+                {
+                    Brand = new BrandDTO() { Name = brandBLL.Name, Id = brandBLL.Id, ImagePath = brandBLL.ImagePath },
+                    Logo = null
+                });
+            else
+                return Redirect("/Brand/GetAll");
+        }
+
+        const string brandPath = @"/images/brand";
+        [NonAction]
+        public bool RemoveFile(string filePath)
+        {
+            string absoluetPath = Path.Join(_host.ContentRootPath, "wwwroot", filePath);
+            if (System.IO.File.Exists(absoluetPath))
+            {
+                System.IO.File.Delete(absoluetPath);
+                return true;
+            }
+            return false;
+        }
+        [HttpPost]
+        public IActionResult Edit(BrandViewModel brandView)
+        {
             if (ModelState.ContainsKey("logo"))
                 ModelState.Remove("logo");
             if (ModelState.IsValid)
             {
                 if (brandView.Logo != null)
                 {
-                   this.RemoveFile(brandView.Brand.ImagePath);
-                   string path = this.UploadFile(brandView.Logo);
-                   brandView.Brand.ImagePath = path;
+                    this.RemoveFile(brandView.Brand.ImagePath);
+                    string path = this.UploadFile(brandView.Logo);
+                    brandView.Brand.ImagePath = path;
                 }
                 _brandService.Update(new BrandBLL() { Id = brandView.Brand.Id, ImagePath = brandView.Brand.ImagePath, Name = brandView.Brand.Name });
                 return Redirect("/Brand/GetAll");
             }
-          return View(brandView);
-      }
-      [HttpGet]
-      public IActionResult GetAll()
-      {      
-        var Brands = _brandService.GetBrands();
-        var Result = new List<BrandDTO>();
-        foreach (var item in Brands)
-        {
-             Result.Add(new BrandDTO(){Id = item.Id,ImagePath=item.ImagePath,Name=item.Name});
+            return View(brandView);
         }
-        return View(Result);
-      }
-      [HttpPost]
-      public JsonResult CheckName(string name)
-      {
-       var result =  _brandService.IsNameExists(name);
-       return Json(!result);
-      }
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var Brands = _brandService.GetBrands();
+            var Result = new List<BrandDTO>();
+            foreach (var item in Brands)
+            {
+                Result.Add(new BrandDTO() { Id = item.Id, ImagePath = item.ImagePath, Name = item.Name });
+            }
+            return View(Result);
+        }
+        [HttpPost]
+        public JsonResult CheckName(string name)
+        {
+            var result = _brandService.IsNameExists(name);
+            return Json(!result);
+        }
 
-      [NonAction]
-      string  UploadFile(IFormFile logo)
-      {
-      
-        var getRelativePath = Path.Combine(brandPath, System.Guid.NewGuid().ToString()+Path.GetExtension(logo.FileName));
-        var FilePath = Path.Join(_host.ContentRootPath,"wwwroot",getRelativePath);
-           try
-           {
+        [NonAction]
+        string UploadFile(IFormFile logo)
+        {
+
+            var getRelativePath = Path.Combine(brandPath, System.Guid.NewGuid().ToString() + Path.GetExtension(logo.FileName));
+            var FilePath = Path.Join(_host.ContentRootPath, "wwwroot", getRelativePath);
+            try
+            {
                 using (var stream = new FileStream(FilePath, FileMode.Create))
                 {
                     logo.CopyTo(stream);
                 }
             }
-           catch (System.Exception e)
-           {
-             throw new System.Exception("There was error while uploading file",e);
-           }
-          return getRelativePath;
-      }
-      [HttpGet]
-      public IActionResult Add()
-      {
-           return View(new BrandViewModel());
-      }
-      [HttpPost]
-      public IActionResult Add(BrandViewModel brandView)
-      {
-         if(ModelState.ContainsKey("Brand.Id"))
-           ModelState.Remove("Brand.Id");
-         if(ModelState.ContainsKey("Brand.ImagePath"))
-           ModelState.Remove("Brand.ImagePath");
-         if(brandView.Logo==null)
-         ModelState.AddModelError("Logo","Logo Required");
-        if(ModelState.IsValid)
-        {
-           string path =   this.UploadFile(brandView.Logo);
-           _brandService.Create(new BrandBLL(){ImagePath=path,Name=brandView.Brand.Name});
-           return Redirect(@"\Brand\GetAll");
+            catch (System.Exception e)
+            {
+                throw new System.Exception("There was error while uploading file", e);
+            }
+            return getRelativePath;
         }
-        return View(brandView);
-      }
-      
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View(new BrandViewModel());
+        }
+        [HttpPost]
+        public IActionResult Add(BrandViewModel brandView)
+        {
+            ModelState.RemoveIfPresent("Brand.Id");
+            ModelState.RemoveIfPresent("Brand.ImagePath");
+            if (brandView.Logo == null)
+                ModelState.AddModelError("Logo", "Logo Required");
+            if (ModelState.IsValid)
+            {
+                string path = this.UploadFile(brandView.Logo);
+                _brandService.Create(new BrandBLL() { ImagePath = path, Name = brandView.Brand.Name });
+                return Redirect(@"\Brand\GetAll");
+            }
+            return View(brandView);
+        }
 
-      
-  }
+
+
+    }
 }

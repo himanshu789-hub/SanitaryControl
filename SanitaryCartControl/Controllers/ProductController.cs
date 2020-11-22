@@ -15,8 +15,8 @@ using SanitaryCartControl.Core.Contracts.Services;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SanitaryCartControl.Extensions;
 using Microsoft.Extensions.Hosting;
-using PagedList.Mvc;
-using PagedList;
+using X.PagedList;
+using X.PagedList.Mvc;
 namespace SanitaryCartControl.Controllers
 {
     public class ProductController : BaseController
@@ -104,7 +104,8 @@ namespace SanitaryCartControl.Controllers
             {
                 return View(null);
             }
-            return View(_productService.Search(search).ToPagedList(page ?? 1, 40));
+            var products = _productService.Search(search);
+            return View(products.ToPagedList(page ?? 1, 1));
         }
 
     }

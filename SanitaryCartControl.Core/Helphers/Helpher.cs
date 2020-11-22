@@ -75,7 +75,8 @@ namespace SanitaryCartControl.Core.Helpher
                         Title=element.Titlle
                     });
                     element = element.Parent;
-                }   
+                }
+                productBLLs.Add(productBLL);   
            }
            return productBLLs;
        }

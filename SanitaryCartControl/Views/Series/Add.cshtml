@@ -1,8 +1,121 @@
 @model SeriesViewModel
+@{
+    ICollection<SelectListItem> brandLists = new List<SelectListItem>();
+    foreach(var item in Model.Brands)
+      brandLists.Add(new SelectListItem{Value=item.Id.ToString(),Text=item.Name});
 
-@using(Html.BeginForm("Add","Series",FormMethod.Post))
+    ICollection<SelectListItem> categoryLists =  new List<SelectListItem>();
+      foreach (var item in Model.Category)
+       categoryLists.Add(new SelectListItem(){Text=item.Value,Value=item.Key.ToString()});
+}
+@using(Html.BeginForm("Add","Series",FormMethod.Post,new {@enctype="multipart/form-data"}))
 {
-  <div class="fom-group">
-      
+<div class="form-group row">
+    @Html.LabelFor(e=>e.Series.Brand_Id_Fk,"Brand",new {@class="col-sm-2 col-form-label",@for="Series_Brand__Id__Fk"})
+    <div class="col-sm-10">
+    @Html.DropDownListFor(e=>e.Series.Brand_Id_Fk,brandLists,"-- Choose A Brand --",new {@class="form-control"})
+    @Html.ValidationMessageFor(e=>e.Series.Brand_Id_Fk,"",new {@class="text-danger small"})
+    </div>
+</div>
+<div class="form-group row">
+    @Html.LabelFor(e=>e.Series.ParentId,"Category",new {@class="col-sm-2 col-form-label",@for="Series_Brand__Id__Fk"})
+    <div class="col-sm-10">
+    @Html.DropDownListFor(e=>e.Series.ParentId,categoryLists,"-- Choose A Category --",new {@class="form-control col-sm-5"})
+    @Html.ValidationMessageFor(e=>e.Series.ParentId,"",new {@class="text-danger small"})
+ </div>
+</div>
+   <div class="card">
+<div class="card-head  bg-info text-white">
+       <h4 class="font-weight-normal text-center">Add A Series</h4>
+</div>
+<div class="card-body">
+<div class="d-flex justify-content-around p-2">
+ <div>
+ <div class="form-group">
+   @Html.LabelFor(e=>e.Series.Name,"Name",new {@class="",@for="Series_Name"})
+  <div>
+    @Html.TextBoxFor(modelItem=>modelItem.Series.Name,new {@class="form-control"})
+    @Html.ValidationMessageFor(e=>e.Series.Name,"",new {@class="text-danger small"})
+  </div>
+ </div>
+   <div class="form-group">
+        @Html.LabelFor(e=>e.Image)
+       <div class="custom-file">
+        @Html.TextBoxFor(e=>e.Image,new {@class="form-control invisible",@type="file",@accept="image/jpg, image/jpeg, image/png"})
+       <label class="custom-file-label" id="custom-file-label" for="Image">Choose Image file . . .</label>
+       @Html.ValidationMessageFor(e=>e.Image,"",new {@class="text-danger small"})
+  </div>
+  </div>
+  <input type="submit" class="btn btn-success w-25" />
+</div>
+    <img src="" name="fileViewer" class="border rounded-lg img-thumbnail w-25"/>
+</div>
+</div>
   </div>
 }
+<script>
+  const form ={
+    filePicker:$('[name="Image"]'),
+    fileViewer:$('[name="fileViewer"]'),
+    init:function(){
+         this.filePicker.change(e=>{
+           const files = e.target.files;
+          
+           if(files && files[0])
+           {
+             const reader = new FileReader();
+            $(subElements.custom_file_label).text(files[0].name);
+             reader.onload = function (e) {
+                $(fileViewer)
+                    .attr('src', e.target.result);
+            
+            };
+           reader.readAsDataURL(files[0]);
+           }
+         });
+    }
+  }
+  form.init();
+</script>    
+<script>
+    var subElements = {
+        dropdown:'#Series_ParentId',
+        addButton:'#addButton',
+        addForm:'#formSeries',
+        custom_file_label:'#custom-file-label'
+    };
+
+@{
+  string value = ViewBag.Name +"";
+}
+    var subState = {
+       parentId:null,
+       brandId:null,
+       categoryName:@Json.Serialize(value),
+       remoteValues:null,
+       IsMeetError:false
+    };
+
+    $(document).ready(function(){
+        if(subState.brandId && subState.parentId)
+        {
+            $(subElements.dropdown).val(subState.parentId);
+        }  
+    });
+     $(subElements.dropdown).change(function(e){
+         if(!status.remoteValues)
+         return;
+               const category =  Array.from(state.remoteValues).find((value,index)=>
+                    value.Key===(Number.parseInt($(e.target).val()))
+                 );
+              if(category)
+              {
+                  subState.parentId = category.Key;
+                  subState.categoryName = category.Value;
+              }   
+    });
+</script>
+
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

@@ -1,0 +1,59 @@
+@using System.Collections.Generic;
+@model ShowSeriesViewModel;
+
+@{
+    ICollection<SelectListItem> selectListItems = new List<SelectListItem>();
+    foreach (var item in Model.Brands)
+        selectListItems.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+
+    ICollection<SelectListItem> categories = new List<SelectListItem>();
+    foreach (var item in Model.Category)
+        categories.Add(new SelectListItem() { Value = item.Key.ToString(), Text = item.Value });
+}
+
+<div class="form-inline">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="Brands">Select Brand</label>
+        </div>
+        @Html.DropDownListFor(e=>e.Brands,selectListItems,new {@class="custom-select"})
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="Brands">Select Category</label>
+        </div>
+        @Html.DropDownListFor(e=>e.Category,categories,new {@class="custom-select"})
+    </div>
+    <button type="submit" id="submitButton" class="btn btn-success p-2">Go</button>
+</div>
+<div class="viewItems">
+    <table>
+        <thead>
+            <th>Id</th>
+            <th>Name</th>
+<th></th>
+        </thead>
+    </table>
+</div>
+<script type="text/javascript">
+    var elements = {
+        brandDropdown: '#Category',
+        categoryDropDown: '#Brands',
+        submitButton: '#submitButton',
+        viewItem: '#viewItems'
+    };
+    $(elements.submitButton).click(function (e) {
+        $.ajax({
+            url: ''
+        });
+    })
+    let item = {
+        Id: 0,
+        Title: "",
+        BrandId: 0,
+        CategoryId: 0
+        ImagPath: ""
+    };
+
+</script>
