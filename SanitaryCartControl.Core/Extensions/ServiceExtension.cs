@@ -1,6 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using SanitaryCartControl.Core.Contracts.Services;
 using SanitaryCartControl.Core.Services;
+using SanitaryCartControl.Core.Context;
+using SanitaryCartControl.Core.Entities.DALModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace SanitaryCartControl.Core.Extensions
 {
     public static class ApplicationCoreEntensions
@@ -8,10 +14,33 @@ namespace SanitaryCartControl.Core.Extensions
         public static void AddCoreExtensions(this IServiceCollection services)
         {
             services.AddSingleton<IProductService, ProductService>();
-            services.AddScoped(typeof(SanitaryCartControl.Core.Context.SanitaryCartContext));
+
             services.AddSingleton(typeof(IBrandService), typeof(BrandService));
             services.AddSingleton<ICategoryService, CategoryService>();
             services.AddSingleton<ISeriesService, SeriesService>();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>{
+              options.Password.RequireDigit = true;
+              options.Password.RequiredUniqueChars = 0;
+              options.Password.RequireLowercase = false;
+              options.Password.RequireUppercase = false;
+              options.Password.RequireNonAlphanumeric = false;
+
+          }).AddEntityFrameworkStores<SanitaryCartIdentityContext>()
+           .AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options =>
+               {
+                   options.LoginPath = "/Account/LogIn";
+                   options.LogoutPath = "/Account/Logut";
+                   options.AccessDeniedPath = "/Account/AccessDenied";
+                   options.SlidingExpiration = true;
+                   options.Cookie = new Microsoft.AspNetCore.Http.CookieBuilder
+                   {
+                       Path = "/",
+                       SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax,
+                       SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest
+                   };
+               });
 
         }
 

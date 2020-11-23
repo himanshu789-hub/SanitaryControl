@@ -2,13 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using SanitaryCartControl.Core.Entities.DALModels;
-
+using System.Configuration;
 namespace SanitaryCartControl.Core.Context
 {
     public partial class SanitaryCartContext : DbContext
     {
         public SanitaryCartContext()
         {
+            
         }
 
         public SanitaryCartContext(DbContextOptions<SanitaryCartContext> options)
@@ -32,8 +33,10 @@ namespace SanitaryCartControl.Core.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            
             if (!optionsBuilder.IsConfigured)
             {
+    
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=USER-PC;Database=sanitarycart;Trusted_Connection=True");
             }

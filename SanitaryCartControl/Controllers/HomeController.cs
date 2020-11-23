@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SanitaryCartControl.ViewModels;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
+using SanitaryCartControl.Core.Entities.Enums;
 namespace SanitaryCartControl.Controllers
 {
+    [Authorize(Roles = ApplicationRoles.Administration)]
     public class HomeController : Controller
     {
         private readonly ILogger _logger;
@@ -13,7 +16,7 @@ namespace SanitaryCartControl.Controllers
         {
             _logger = logger;
         }
-
+       
         public IActionResult Index()
         {
             return View();

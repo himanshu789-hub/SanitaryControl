@@ -17,8 +17,10 @@ using SanitaryCartControl.Extensions;
 using Microsoft.Extensions.Hosting;
 using X.PagedList;
 using X.PagedList.Mvc;
+using Microsoft.AspNetCore.Authorization;
 namespace SanitaryCartControl.Controllers
 {
+    [Authorize(Roles= ApplicationRoles.Administration)]
     public class ProductController : BaseController
     {
         readonly IProductService _productService;
