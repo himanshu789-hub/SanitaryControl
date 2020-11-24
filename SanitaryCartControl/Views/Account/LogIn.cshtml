@@ -4,27 +4,40 @@
     Layout = "_Initial";
 }
 
-@using (Html.BeginForm("LogIn", "Account", FormMethod.Post, new { @class = "d-flex justify-content-center" }))
+<h2 class="font-italic w-100 text-center font-weight-light">     <i class="fa fa-sign-in" aria-hidden="true"></i></i> </h2>
+
+<h2 class="font-italic w-100 text-center font-weight-light">LogIn To Gokul Enterprise Portal</h2>
+
+@using (Html.BeginForm("LogIn", "Account", FormMethod.Post, new { @class = "d-flex justify-content-center",@spellcheck="false" }))
 {
-    <div class="border rounded w-25 p-2">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>@Html.ValidationSummary()</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
 
-        <div class="form-group">
-            <label>Enter Username</label>
-            @Html.TextBoxFor(e=>e.UserName,new {@class="form-control"})
-        </div>
+    <div class="w-25">
+        @if (ViewData.ModelState.ErrorCount > 0)
+        {
+            <div class="alert alert-danger alert-dismissible fade show small" role="alert">
+                <strong>@Html.ValidationSummary()</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true ">&times;</span>
+                </button>
+            </div>
+        }
+        <div class="border rounded   p-3 pt-4" style="background-color: aliceblue">
 
-        <div class="form-group">
-            <label>Enter Password</label>
-            @Html.TextBoxFor(e=>e.Password,new {@class="form-control"})
-        </div>
-        <div>
-            <button class="btn btn-success" type="submit">LogIn</button>
+            <div class="form-group">
+                <label>Username</label>
+                @Html.TextBoxFor(e=>e.UserName,new {@class="form-control"})
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                @Html.TextBoxFor(e=>e.Password,new {@class="form-control",@type="password"})
+            </div>
+            <button class="btn btn-success w-100" type="submit">LogIn</button>
         </div>
     </div>
+    <style>
+           .form-group label{
+               font-weight: 500;
+           }
+    </style>
 }

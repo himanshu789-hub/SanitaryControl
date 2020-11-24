@@ -10,8 +10,12 @@ using System.IO;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SanitaryCartControl.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using SanitaryCartControl.Core.Entities.Enums;
+
 namespace SanitaryCartControl.Controllers
 {
+    [Authorize(Roles=ApplicationRoles.Both)]
     public class BrandController : Controller
     {
         IBrandService _brandService;

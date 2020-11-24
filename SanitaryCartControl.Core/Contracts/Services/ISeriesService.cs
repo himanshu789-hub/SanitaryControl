@@ -8,8 +8,9 @@ namespace SanitaryCartControl.Core.Contracts.Services
       int AddSeries(SeriesBLL series);   
       bool UpdateSeries(SeriesBLL series);
         IEnumerable<KeyValuePair<int,string>> GetCategory();
+        SeriesBLL GetById(int Id);
       bool MakeInActive(int seriesId); 
-      IEnumerable<SeriesBLL> GetByParentId(int Id);
+      IEnumerable<SeriesBLL> GetByBrandAndParentId(byte BrandId,int CategoryId);
     }
     
 }

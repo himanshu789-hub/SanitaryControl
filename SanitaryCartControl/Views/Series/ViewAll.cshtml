@@ -11,30 +11,72 @@
         categories.Add(new SelectListItem() { Value = item.Key.ToString(), Text = item.Value });
 }
 
-<div class="form-inline">
-    <div class="input-group mb-3">
+@using(Html.BeginForm("ViewAll","Series",FormMethod.Get,new {@class=""})){
+<div class="row">
+    <div class="col-auto form-group mr-2">
+        <div class="input-group">
         <div class="input-group-prepend">
             <label class="input-group-text" for="Brands">Select Brand</label>
         </div>
-        @Html.DropDownListFor(e=>e.Brands,selectListItems,new {@class="custom-select"})
+        @Html.DropDownList("BrandId",selectListItems,new {@class="custom-select"})
     </div>
+    @Html.ValidationMessage("BrandId","",new {@class="small text-danger"})
+   </div>
 
-    <div class="input-group mb-3">
+    <div class="col-auto form-group mr-3">
+    <div class="input-group">
         <div class="input-group-prepend">
             <label class="input-group-text" for="Brands">Select Category</label>
         </div>
-        @Html.DropDownListFor(e=>e.Category,categories,new {@class="custom-select"})
+        @Html.DropDownList("CategoryId",categories,new {@class="custom-select"})
     </div>
-    <button type="submit" id="submitButton" class="btn btn-success p-2">Go</button>
+     @Html.ValidationMessage("CategoryId","",new {@class="small text-danger"})
+    </div>
+    <div class="col-3">
+        <button type="submit" id="submitButton" class="col-2 btn btn-success p-2">Go</button>
+    </div>
+    @Html.Hidden("IsSecond",true)
 </div>
+}
 <div class="viewItems">
-    <table>
+    @if(Model.Series!=null)
+    {
+        @if(Model.Series.Count()>0)
+        {
+
+    <table class="table table-hover">
         <thead>
             <th>Id</th>
             <th>Name</th>
-<th></th>
+            <th>Image</th>
+            <th>Action</th>
         </thead>
+        <tbody>
+            @foreach (var item in Model.Series)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Title</td>
+                    <td><img src="@item.ImagPath" width="img-thumbnail"/></td>
+                    <td>@Html.ActionLink("Edit","Edit",new {Id=item.Id},new {@class="btn btn-danger"})</td>
+                </tr>
+            }
+        </tbody>
     </table>
+        }
+        else{
+            <div class="alert alert-danger alert-dismissible fade show small" role="alert">
+                <strong>No Item Added</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true ">&times;</span>
+                </button>
+            </div>
+        }
+    }
+    else
+    {
+
+    }
 </div>
 <script type="text/javascript">
     var elements = {

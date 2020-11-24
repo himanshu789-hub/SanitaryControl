@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using SanitaryCartControl.Core.Entities.BLLModels;
 namespace SanitaryCartControl.Core.Entities.BLLModels
 {
     public class SeriesBLL
@@ -5,7 +7,9 @@ namespace SanitaryCartControl.Core.Entities.BLLModels
         public int Id{get;set;}
         public string Title{get;set;}
         public byte BrandId{get;set;}
-        public int CategoryId{get;set;}
+        public KeyValuePair<int,string>? Category{get;set;}
+        public KeyValuePair<int, string> Parent { get; set; }
         public string ImagPath{get;set;}
+        
     }
 }

@@ -1,53 +1,64 @@
 @model SeriesViewModel
-
 @{
-  var brandName = @Model.Brands.First(e=>e.Id==Model.Series.Brand_Id_Fk);
+  var brandName = Model.Brands.First(e=>e.Id==Model.Series.Brand_Id_Fk);
+  var categoryName = ViewData["Name"] as string;
 }
 <fieldset disabled>
-<div>
-  <div class="row">
-    <div class="col d-flex align-items-center form-group">
-      <label>Brand</label>
-      <input type="text" class="form-control" value="@brandName.Name">
-      <img src="@brandName.ImagePath" width="90px" height="70px"/>
-    </div>
-    <div class="col form-group">
-      <label>Category Name : </label>
-      <label class="form-control">@ViewBag.Name</label>
-    </div>
+	<div>
+		<div class="row">
+			<div class="col form-group">
+				<label>Brand</label>
+				<input type="text" class="form-control" value="@brandName.Name"/>
+				<img src="@brandName.ImagePath" width="90px" height="70px"/>
+			</div>
+				<div class="vl" style="height: inherit;border-left: 3px solid gray;"></div>
+				<div class="col form-group">
+					<label>Category Name : </label>
+					<input type="text" class="form-control" value="@categoryName"/>
+				</div>
+			</div>
+		</div>
   </div>
-</div>
 </fieldset>
-@using (Html.BeginForm("Edit", "Series", FormMethod.Post))
+
+@using (Html.BeginForm("Edit", "Series", FormMethod.Post, new { @spellcheck = "false", @enctype = "multipart/form-data" }))
 {
   @Html.HiddenFor(e=>e.Series.Brand_Id_Fk)
   @Html.HiddenFor(e=>e.Series.Category_Id_FK)
   @Html.HiddenFor(e=>e.Series.ParentId)
+  @Html.HiddenFor(e=>e.Series.ImagePath)
   @Html.HiddenFor(e=>e.Series.Id)
-  <h1>Edit A Series</h1>
-  @Html.ValidationSummary("",new {@class="alert alert-warning"});
-  <div class="d-flex justify-content-around p-5  border border-primary">
-    <div class="form-group row">
-      @Html.LabelFor(e=>e.Series.Name,"Name",new {@class="col-sm-2 col-form-label",@for="Series_Name"})
-      <div class="col-sm-10">
-        @Html.TextBoxFor(modelItem=>modelItem.Series.Name,new {@class="form-control"})
-      </div>
-    </div>
-    <div class="form-group row">
+  
+		<h1>Edit A Series</h1>
+    @Html.ValidationSummary("",new {@class="alert alert-warning"});
+  
+		<div class="d-flex justify-content-around p-5  border border-primary">
+			<div>
+				<div class="form-group">
+        @Html.LabelFor(e=>e.Series.Name,"Name",new {@for="Series_Name"})
+		    @Html.TextBoxFor(modelItem=>modelItem.Series.Name,new {@class="form-control"})
+        </div>
+				<div class="form-group">
       @Html.LabelFor(e=>e.Image)
-      <div class="custom-file">
-        @Html.TextBoxFor(e=>e.Image,new {@class="form-control",@type="file",@accept="image/jpg, image/jpeg, image/png"})
-        <label class="custom-file-label" for="Image">Choose Image file<small class="font-italic">(Optional)</small></label>
-      </div>
-    </div>
-    <div>
-      <input type="submit" class="btn btn-success w-25" />
-      <button role="button" onclick="history.back()">Cancel</button>
-    </div>
-  </div>
-  <img src="@Model.Series.ImagePath" name="fileViewer" class="border rounded-lg img-thumbnail w-25" />
+      
+					<div class="custom-file">
+        @Html.TextBoxFor(e=>e.Image,new {@class="form-control",@type="file",@accept="image/jpg, image/jpeg, image/png",@data_val="false"})
+        
+						<label class="custom-file-label" for="Image">Choose Image file
+							<small class="font-italic">(Optional)</small>
+						</label>
+					</div>
+				</div>
+				<div>
+					<input type="submit" class="btn btn-success w-25" />
+					<button role="button" class="btn btn-outline-danger" onclick="history.back()">Cancel</button>
+				</div>
+			</div>
+    <img src="@Model.Series.ImagePath" name="fileViewer" class="border rounded-lg img-thumbnail w-25" />
+		</div>
 }
-<script>
+
+		<script>
   const form = {
     filePicker: $('[name="Image"]'),
     fileViewer: $('[name="fileViewer"]'),
@@ -67,3 +78,7 @@
   };
   form.init();
 </script>
+
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

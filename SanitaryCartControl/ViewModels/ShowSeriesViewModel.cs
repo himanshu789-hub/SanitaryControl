@@ -7,5 +7,6 @@ namespace SanitaryCartControl.ViewModels
     {
         public IEnumerable<BrandBLL> Brands{get;set;}
         public IEnumerable<KeyValuePair<int,string>> Category{get;set;}
+        public IEnumerable<SeriesBLL> Series{get;set;} 
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using SanitaryCartControl.Core.Entities.Enums;
 namespace SanitaryCartControl.Controllers
 {
-    [Authorize(Roles = ApplicationRoles.Administration)]
+    [Authorize(Roles = ApplicationRoles.Both)]
     public class HomeController : Controller
     {
         private readonly ILogger _logger;

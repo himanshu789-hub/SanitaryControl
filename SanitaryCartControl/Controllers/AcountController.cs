@@ -2,6 +2,9 @@ using SanitaryCartControl.Core.Entities.DALModels;
 using Microsoft.AspNetCore.Identity;
 using SanitaryCartControl.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using SanitaryCartControl.Core.Entities.Enums;
 namespace SanitaryCartControl.Controllers
 {
     public class AccountController : Controller
@@ -11,24 +14,39 @@ namespace SanitaryCartControl.Controllers
         {
             _signInManager = signInManager;
         }
+        [Authorize(Roles=ApplicationRoles.Both)]
         [HttpPost]
-        public IActionResult LogIn(LogInViewModel logIn)
+        public async Task<IActionResult> LogOut()
         {
-            if(ModelState.IsValid)
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(AccountController.LogIn), "Account");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult LogIn(LogInViewModel logIn,string returnUrl=null)
+        {
+            if (ModelState.IsValid)
             {
-               var result = _signInManager.PasswordSignInAsync(logIn.UserName,logIn.Password,false,false).Result;
-               if(result.Succeeded)
-               {
-                  return LocalRedirect(@"/Home/Index");
-               }
-               else
-               ModelState.AddModelError("InValidCredentials","Username or Password is Invalid");
+                var result = _signInManager.PasswordSignInAsync(logIn.UserName, logIn.Password, false, false).Result;
+                if (result.Succeeded)
+                {
+                    if(returnUrl!=null)
+                    return LocalRedirect(returnUrl);
+                    return LocalRedirect(@"/Home/Index");
+                }
             }
+
+            ModelState.Clear();
+            ModelState.AddModelError("InValidCredentials", "Username or Password is Invalid");
             return View(logIn);
         }
         [HttpGet]
-        public IActionResult LogIn()
+        [AllowAnonymous]
+        public IActionResult LogIn(string returnUrl = null)
         {
+            if (returnUrl != null)
+                return LocalRedirect(returnUrl);
             return View();
         }
     }

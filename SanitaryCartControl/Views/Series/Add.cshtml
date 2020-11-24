@@ -40,9 +40,10 @@
  </div>
    <div class="form-group">
         @Html.LabelFor(e=>e.Image)
+
        <div class="custom-file">
         @Html.TextBoxFor(e=>e.Image,new {@class="form-control invisible",@type="file",@accept="image/jpg, image/jpeg, image/png"})
-       <label class="custom-file-label" id="custom-file-label" for="Image">Choose Image file . . .</label>
+       <label class="custom-file-label text-truncate" id="custom-file-label" for="Image">Choose Image file . . .</label>
        @Html.ValidationMessageFor(e=>e.Image,"",new {@class="text-danger small"})
   </div>
   </div>
@@ -60,7 +61,7 @@
     init:function(){
          this.filePicker.change(e=>{
            const files = e.target.files;
-          
+    
            if(files && files[0])
            {
              const reader = new FileReader();
@@ -84,36 +85,6 @@
         addForm:'#formSeries',
         custom_file_label:'#custom-file-label'
     };
-
-@{
-  string value = ViewBag.Name +"";
-}
-    var subState = {
-       parentId:null,
-       brandId:null,
-       categoryName:@Json.Serialize(value),
-       remoteValues:null,
-       IsMeetError:false
-    };
-
-    $(document).ready(function(){
-        if(subState.brandId && subState.parentId)
-        {
-            $(subElements.dropdown).val(subState.parentId);
-        }  
-    });
-     $(subElements.dropdown).change(function(e){
-         if(!status.remoteValues)
-         return;
-               const category =  Array.from(state.remoteValues).find((value,index)=>
-                    value.Key===(Number.parseInt($(e.target).val()))
-                 );
-              if(category)
-              {
-                  subState.parentId = category.Key;
-                  subState.categoryName = category.Value;
-              }   
-    });
 </script>
 
 

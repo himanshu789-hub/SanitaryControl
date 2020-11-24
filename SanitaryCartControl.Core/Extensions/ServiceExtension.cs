@@ -34,6 +34,7 @@ namespace SanitaryCartControl.Core.Extensions
                    options.LogoutPath = "/Account/Logut";
                    options.AccessDeniedPath = "/Account/AccessDenied";
                    options.SlidingExpiration = true;
+                   options.ReturnUrlParameter="/Home/Index";
                    options.Cookie = new Microsoft.AspNetCore.Http.CookieBuilder
                    {
                        Path = "/",

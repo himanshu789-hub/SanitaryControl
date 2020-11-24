@@ -20,7 +20,7 @@ using X.PagedList.Mvc;
 using Microsoft.AspNetCore.Authorization;
 namespace SanitaryCartControl.Controllers
 {
-    [Authorize(Roles= ApplicationRoles.Administration)]
+    [Authorize(Roles= ApplicationRoles.Both)]
     public class ProductController : BaseController
     {
         readonly IProductService _productService;

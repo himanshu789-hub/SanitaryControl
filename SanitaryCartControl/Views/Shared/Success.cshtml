@@ -1,0 +1,64 @@
+@model MessageViewModel
+
+@if(Model.IsSuccess)
+{
+<div class="text-center">
+    <label class="scale-up-center"><span class="fa-stack fa-4x">
+  <i class="fa fa-circle fa-stack-2x text-success"></i>
+  <i class="fa fa-check fa-stack-1x fa-inverse" style="color:white;"></i>
+</span>
+    </label>
+<p class="font-weight-bold">Operation Successfull</p>
+</div>
+}
+else
+{
+    <div class="text-center text-danger">
+        <i class="fa fa-times-circle-o fa-4x scale-up-center" style="font-size: 120px;" aria-hidden="true"></i>
+    <p class="font-weight-bold">Operation Failed</p>
+    <p>Somethig Went Wrong</p>
+    </div>
+}
+
+<style>
+    .scale-up-center {
+	-webkit-animation: scale-up-center 2s linear infinite forwards;
+	        animation: scale-up-center 2s linear infinite forwards;
+    }
+@@-webkit-keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+@@keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
+}
+</style>
+<center>
+    <form action="@Model.Link" method="GET">
+@if(Model.Params!=null && Model.Params.Count()>0)
+    {
+          @foreach (var item in Model.Params)
+          {
+                  string name = item.Key;
+                  string value = item.Value.ToString();
+               <input name="@name" value="@value" hidden/>
+          }
+    }
+       <button class="btn btn-light" type="submit">Redirect</button>
+    </form>
+</center>

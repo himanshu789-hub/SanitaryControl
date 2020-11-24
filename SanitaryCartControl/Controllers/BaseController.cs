@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
+using SanitaryCartControl.ViewModels;
 namespace SanitaryCartControl.Controllers
 {
 
@@ -9,6 +10,7 @@ namespace SanitaryCartControl.Controllers
     {
        readonly IHostEnvironment _env;
         public BaseController(IHostEnvironment env)=>_env = env;
+      
       [NonAction]
       protected string AddImage(IFormFile file,string path)
       {
