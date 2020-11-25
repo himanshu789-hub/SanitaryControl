@@ -289,7 +289,6 @@ namespace SanitaryCartControl.Core.Context
                 entity.Property(e => e.ProductIdFk).HasColumnName("Product_Id_FK");
 
                 entity.Property(e => e.Value)
-                    .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
 

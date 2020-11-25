@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using System;
 using SanitaryCartControl.Core.Entities.Enums;
 using System.Linq;
 namespace SanitaryCartControl.Controllers
@@ -69,15 +70,14 @@ namespace SanitaryCartControl.Controllers
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
             ModelState.Remove<RegisterViewModel>(e => e.Id);
-
+            ApplicationUser user = new ApplicationUser()
+            {
+                FirstName = registerViewModel.FirstName,
+                LastName = registerViewModel.LastName,
+                UserName = registerViewModel.UserName,
+            };
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new ApplicationUser()
-                {
-                    FirstName = registerViewModel.FirstName,
-                    LastName = registerViewModel.LastName,
-                    UserName = registerViewModel.UserName,
-                };
                 var result = await _userManager.CreateAsync(user, registerViewModel.Password);
                 if (result.Succeeded)
                 {
@@ -87,32 +87,54 @@ namespace SanitaryCartControl.Controllers
                         return View("Success", new MessageViewModel()
                         {
                             IsSuccess = true,
-                            Link = @Url.Action("ViewAll"),
+                            Link = Url.Action("ViewAll")
                         });
                     }
                 }
                 else
-                    return View("Success", new MessageViewModel()
-                    {
-                        IsSuccess = false,
-                        Link = @Url.Action("Add"),
-                    });
+                    foreach (var error in result.Errors)
+                        ModelState.AddModelError("RegisterError", error.Description);
             }
-
-            return  View(registerViewModel);
+            return View(registerViewModel);
         }
         [HttpGet]
-        [Authorize(Roles=ApplicationRoles.Administration)]
+        [Authorize(Roles = ApplicationRoles.Administration)]
         public async Task<IActionResult> ViewAll()
         {
-           var result = (await _userManager
-           .GetUsersInRoleAsync(ApplicationRoles.Manager));
+            var result = (await _userManager
+            .GetUsersInRoleAsync(ApplicationRoles.Manager));
 
             return View(result);
         }
         public IActionResult AccessDenied()
         {
             return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete([BindRequired] Guid Id)
+        {
+
+            string userId = Id.ToString();
+            var user = _userManager.FindByIdAsync(userId).Result;
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return View("Success", new MessageViewModel()
+                    {
+                        IsSuccess = true,
+                        Link = Url.Action("ViewAll")
+                    });
+                }
+            }
+
+            return View("Success", new MessageViewModel()
+            {
+                IsSuccess = false,
+                Link = Url.Action("ViewAll")
+            });
         }
     }
 }

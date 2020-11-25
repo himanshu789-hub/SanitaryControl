@@ -6,14 +6,21 @@
 			<div class="row main">
 				<div class="main-login main-center">
 				<h5>Add User as Manager</h5>
+				@if(ViewData.ModelState.Keys.Where(e=>e.Equals("RegisterError")).Count()>0)
+				{    
+                <div class="alert alert-info alert-dismissible">
+			        @Html.ValidationSummary("",new {@class="small text-danger"},"span")
+				</div>
+				}
 						<div class="form-group">
 							<label for="email" class="cols-sm-2 control-label">FirstName</label>
 							<div class="cols-sm-10">
 								<div class="input-group">
 									<span class="input-group-prepend"><i class="fa fa-user fa fa-1x m-auto p-1" aria-hidden="true"></i></span>
-								@Html.TextBoxFor(e=>e.FirstName,"",new {@class="form-control",@placeholder="Enter FirstName"})
+					     			@Html.TextBoxFor(e=>e.FirstName,"",new {@class="form-control",@placeholder="Enter FirstName"})
 								</div>
 							</div>
+								@Html.ValidationMessageFor(e=>e.FirstName,"",new {@class="text-danger small"},"span")
 						</div>
 
 
@@ -25,6 +32,7 @@
 								@Html.TextBoxFor(e=>e.LastName,"",new {@class="form-control",@placeholder="Enter LastName"})
 								</div>
 							</div>
+								@Html.ValidationMessageFor(e=>e.LastName,"",new {@class="text-danger small"},"span")
 						</div>
 
 						<div class="form-group">
@@ -35,6 +43,7 @@
 								@Html.TextBoxFor(e=>e.UserName,"",new {@class="form-control",@placeholder="Enter Username"})
 								</div>
 							</div>
+						@Html.ValidationMessageFor(e=>e.UserName,"",new {@class="text-danger small"},"span")
 						</div>
 
 						<div class="form-group">
@@ -42,9 +51,10 @@
 							<div class="cols-sm-10">
 								<div class="input-group">
 									<span class="input-group-prepend"><i class="fa fa-lock fa-lg  fa-1x m-auto p-1" aria-hidden="true"></i></span>
-							    @Html.TextBoxFor(e=>e.Password,"",new {@class="form-control",@placeholder="LogIn Password"})
+							    @Html.TextBoxFor(e=>e.Password,"",new {@class="form-control",@type="password",@placeholder="LogIn Password"})
 									</div>
 							</div>
+						@Html.ValidationMessageFor(e=>e.Password,"",new {@class="text-danger small"},"span")
 						</div>
 
 						<div class="form-group">
@@ -52,54 +62,39 @@
 							<div class="cols-sm-10">
 								<div class="input-group">
 									<span class="input-group-prepend"><i class="fa fa-lock fa-lg  fa-1x m-auto p-1" aria-hidden="true"></i></span>
-                                    @Html.TextBoxFor(e=>e.ConfirmPassword,"",new {@class="form-control",@placeholder="Confirm Password"})
+										@Html.TextBoxFor(e=>e.ConfirmPassword,"",new {@class="form-control",@type="password",@placeholder="Confirm Password"})
 								</div>
 							</div>
+							@Html.ValidationMessageFor(e=>e.ConfirmPassword,"",new {@class="text-danger small"},"span")
 						</div>
 
 						<div class="form-group ">
-							<button type="button"   id="registerButton" class="btn btn-primary btn-lg btn-block login-button">Register</button>
+							<button type="button"   id="registerButton" class="btn btn-primary btn-lg btn-block login-button" data-toggle="modal" data-target="#exampleModal">Register</button>
 						</div>
-						
 				</div>
 			</div>
 		</div>
 
-<div class="modal in" id="confirmBox" style="display: none;position: fixed;top:30px">
-  <div class="modal-dialog">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Please, Not Down Password Before Registering</h4>
+			<h5 class="modal-title" id="exampleModalLabel">Please, Note Down Username and Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to add user</p>
-        <div class="row">
-            <div class="col-12-xs text-center">
-                <button class="btn btn-success btn-md" type="submit" id="yesButton">Yes</button>
-                <button class="btn btn-danger btn-md" type="button" id="noButton">No</button>
-            </div>
-        </div>
+          <p>Are you sure to add a user ?</p>
       </div>
-   
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+        <button type="submit" class="btn btn-success">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
 }
-<script>
-	var elements = {
-		yesButton:'#yesButton',
-		noButton:'#noButton',
-        confirmBox:"#confirmBox",
-		registerButton:'#registerButton'
-	};
-	$(elements.noButton).click(function(e)
-	{
-		$(elements.confirmBox).css("display","none").addClass("slide-bottom");
-	});
-	$(elements.registerButton).click(function(e){
-  $(elements.confirmBox).css("display","block").addClass('slide-bottom');
-	})
-</script>
 <style>
  .slide-bottom {
  -webkit-animation: slide-bottom 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;

@@ -11,6 +11,6 @@ namespace SanitaryCartControl.DTOModels
         [Required]
         public IEnumerable<AttributeDTO> Attributes{get;set;}
         
-        public IFormCollection Images{get;set;}
+        public IFormFileCollection Images{get;set;}
     }
 }

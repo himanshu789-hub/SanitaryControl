@@ -7,7 +7,6 @@ namespace SanitaryCartControl.Core.Entities.DALModels
     {
         public int ProductIdFk { get; set; }
         public byte Quantity { get; set; }
-        public byte Type { get; set; }
         public decimal Price { get; set; }
         public byte AtributeType { get; set; }
         public string Value { get; set; }

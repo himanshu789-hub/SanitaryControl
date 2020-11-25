@@ -4,13 +4,12 @@
 @{
     ViewData["Head"] = "Edit Product : " + Model.Product.Code;
 }
-@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { @enctype = "multipart-form-data" }))
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { @enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(e=>e.Product.Id)
     @Html.HiddenFor(e=>e.Product.Type)
     @Html.HiddenFor(e=>e.Product.Brand_Id_FK)
     @Html.HiddenFor(e=>e.Product.Category_Id_FK)
-    
     
 <div class="card">
     <div class="card-header font-weight-bold">Basic Information : </div>
@@ -18,7 +17,7 @@
         <div class="row">
             <div class="col-3 form-group">
                 <label>Code</label>
-                @Html.TextBoxFor(e=>e.Product.Code,"",new {@class="form-control",@disabled="true"})
+                @Html.TextBoxFor(e=>e.Product.Code,"",new {@class="form-control",@readonly="readonly"})
             </div>
             <div class="col-4 form-group">
                 <label>Category : </label>
@@ -31,6 +30,25 @@
                     <span><img src="@Model.Brand.ImagePath" width="99px" height="70px" class="border rounded"/></span>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-3 form-group">
+                <label>Date Created : </label>
+                @Html.TextBoxFor(e=>e.Product.DateAdded,"",new {@class="form-control pointer-none",@readonly="readonly"})
+            </div>
+            @{
+                string visisbility = "";
+                if(Model.Product.DateUpdated.Equals(Model.Product.DateAdded))
+                visisbility="invisible";
+            }
+            <div class="col-3 form-group @visisbility">
+                <label>Date Modified : </label>
+                        @Html.TextBoxFor(e=>e.Product.DateUpdated,"",new {@class="form-control pointer-none",@readonly="readonly"})
+            </div>
+            <style>
+
+            </style>
+            
         </div>
     </div>
 </div>
@@ -57,6 +75,7 @@
                   <div class="row">
                      <div class="d-none">
                          @Html.TextBoxFor(e=>e.Attributes[i].Id);
+                         
                          @Html.TextBoxFor(e=>e.Attributes[i].AttributeId);
                      </div>
                   
@@ -76,7 +95,7 @@
                                             <span></span>
                                                 break;
                                         } </label>
-                        @Html.TextBoxFor(e=>e.Attributes[i].Value,"",new {@class="form-control",@disabled="true"})
+                        @Html.TextBoxFor(e=>e.Attributes[i].Value,"",new {@class="form-control pointer-none",@readonly="readonly"})
                      </div>
                   
                      <div class="col-3 form-group">
@@ -292,7 +311,8 @@ $(".input-number").keydown(function (e) {
         imageUpload: '#Images',
         imageViewer: '#image-viewer',
         dateField:'#Product_DateAdded',
-        uploadButtonLabel:'#uploadButton'
+        uploadButtonLabel:'#uploadButton',
+        dateUpdated:'#Product_DateUpdated'
     };
     $(elements.imageUpload).change(function (e) {
         const files = e.target.files;
@@ -546,8 +566,9 @@ $(".input-number").keydown(function (e) {
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
     $(elements.dateField).removeAttr('data-val-required')
+    $(elements.dateUpdated).removeAttr('data-val-required')
     $('[type="submit"]').click(function(e){
-    $(elements.dateField).val(new Date().toISOString());
+    $(elements.dateUpdated).val(new Date().toISOString());
     $(this).submit();
     });
 </script>

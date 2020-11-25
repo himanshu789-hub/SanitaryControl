@@ -20,7 +20,7 @@ using X.PagedList.Mvc;
 using Microsoft.AspNetCore.Authorization;
 namespace SanitaryCartControl.Controllers
 {
-    [Authorize(Roles= ApplicationRoles.Both)]
+    [Authorize(Roles = ApplicationRoles.Both)]
     public class ProductController : BaseController
     {
         readonly IProductService _productService;
@@ -28,7 +28,7 @@ namespace SanitaryCartControl.Controllers
         readonly ICategoryService _categoryService;
         readonly IHostEnvironment _env;
         string imagesPath = @"/images/products";
-        public ProductController(IProductService productService, IBrandService brandService,ICategoryService categoryService, IHostEnvironment env):base(env)
+        public ProductController(IProductService productService, IBrandService brandService, ICategoryService categoryService, IHostEnvironment env) : base(env)
         {
             _brandService = brandService;
             _env = env;
@@ -49,7 +49,30 @@ namespace SanitaryCartControl.Controllers
         [HttpPost]
         public IActionResult Edit(ProductEditDTO productEditDTO)
         {
-            return View();
+            ModelState.Remove<ProductEditDTO>(e=>e.Images);
+            for (int i = 0; i < productEditDTO.Attributes.Count(); i++)
+            {
+                ModelState.RemoveIfPresent($"Attributes[{i}].Id");
+                ModelState.RemoveIfPresent($"Attributes[{i}].IsActive");
+            }
+            if(ModelState.IsValid)
+            {
+            string[] images = null;
+            if (productEditDTO.Images != null)
+                images = this.AddImages(productEditDTO.Images, imagesPath);
+                
+            bool IsUpdated = _productService.Update(Converters.ToProductBLL(productEditDTO.Product, productEditDTO.Attributes, images));
+            if(IsUpdated)
+                    return View("Success", new MessageViewModel()
+                    {
+                        IsSuccess = true,
+                        Link = Url.Action("Search", productEditDTO.Product.Id)
+                    });
+            }
+            return View("Success",new MessageViewModel(){
+                IsSuccess=false,
+                Link=Url.Action("Edit",productEditDTO.Product.Id)
+            });
         }
         [HttpGet]
         public IActionResult Edit(int Id)
@@ -72,7 +95,7 @@ namespace SanitaryCartControl.Controllers
             return Json(_productService.GetAttrinuteValues(type, categoryId));
         }
 
-        
+
         [HttpPost]
         public IActionResult Add(ProductViewModel productViewModel)
         {
@@ -81,17 +104,23 @@ namespace SanitaryCartControl.Controllers
             {
                 ModelState.RemoveIfPresent($"Attributes[{i}].Id");
                 ModelState.RemoveIfPresent($"Attributes[{i}].IsActive");
+                if(((int)ProductType.NoneVariable)==productViewModel.Product.Type)
+                ModelState.RemoveIfPresent($"Attributes[{i}].Value");
             }
             if (ModelState.IsValid)
             {
                 int productId = _productService
                 .Add(Converters.ToProductBLL(productViewModel.Product,
                 productViewModel.Attributes,
-                this.AddImages(productViewModel.Images,imagesPath)));
+                this.AddImages(productViewModel.Images, imagesPath)));
                 return Redirect(@"/Product/Edit/" + productId);
             }
-            throw new Exception("Error While Adding Product");
+            return View("Success",new MessageViewModel(){
+                IsSuccess=false,
+                Link=Url.Action("Add")
+            });
         }
+
         [HttpGet]
         public IActionResult Add()
         {

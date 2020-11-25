@@ -165,7 +165,7 @@ li:hover {
 	-webkit-animation: scale-up-center 2s linear infinite forwards;
 	        animation: scale-up-center 2s linear infinite forwards;
     }
-@@-webkit-keyframes scale-up-center {
+@-webkit-keyframes scale-up-center {
   0% {
     -webkit-transform: scale(0.5);
             transform: scale(0.5);
@@ -175,7 +175,7 @@ li:hover {
             transform: scale(1);
   }
 }
-@@keyframes scale-up-center {
+@keyframes scale-up-center {
   0% {
     -webkit-transform: scale(0.5);
             transform: scale(0.5);
@@ -185,5 +185,7 @@ li:hover {
             transform: scale(1);
   }
 }
-
+.pointer-none
+{
+	cursor: not-allowed;
 }

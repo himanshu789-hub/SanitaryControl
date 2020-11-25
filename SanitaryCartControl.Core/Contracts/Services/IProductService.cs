@@ -10,7 +10,7 @@ namespace SanitaryCartControl.Core.Contracts.Services
     IEnumerable<KeyValuePair<int,string>> GetAttrinuteValues(ProductType type,int categoryId);
   
     ProductBLL GetById(int Id);
-    ProductBLL Update(ProductBLL product);
+    bool Update(ProductBLL product);
     int Add(ProductBLL product);
     IEnumerable<ProductBLL> Search(string value);
 

@@ -68,6 +68,12 @@ namespace SanitaryCartControl
                     name: "default",
                     pattern: "{controller=Product}/{action=Add}/{id:int?}");
             });
-        }
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Product}/{action=Add}/{id:guid?}");
+            });
+       }
     }
 }

@@ -143,6 +143,25 @@
                             </ul>
                         </div>
                     </li>
+                    <li class="nav-item bg-light">
+                        <a class="nav-link collapsed text-truncate" href="#Users" data-toggle="collapse"
+                            data-target="#Users"><i class="fa fa-user-circle-o"></i> <span
+                                class="d-none d-sm-inline">Users</span></a>
+                        <div class="collapse" id="Users" aria-expanded="false">
+                            <ul class="flex-column pl-4 nav">
+                                <li class="nav-item">
+                                    <a class="nav-link collapsed py-1" asp-action="Register" asp-controller="Account">
+                                        <i class="fa fa-user-plus" aria-hidden="true"></i><span>Add</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item"> <a class="nav-link collapsed py-1" asp-action="ViewAll"
+                                        asp-controller="Account">
+                                        <i class="fa fa-users" aria-hidden="true"></i> <span>View All</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
             <div class="col pt-2">

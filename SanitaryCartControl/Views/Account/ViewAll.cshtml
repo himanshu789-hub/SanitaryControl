@@ -3,11 +3,11 @@
 
 @if (Model == null || Model.Count() == 0)
 {
-          <h1 class="alert alert-danger">No User Added</h1>
+          <h6 class="alert alert-danger">No User Added</h6>
 }
 else
 {
-    <table>
+    <table class="table w-50 mx-auto table-hover table-sm">
     <thead>
         <th>S.No </th>
         <th>FullName</th>
@@ -21,8 +21,69 @@ else
       <tr>
           <td>@(i+1)</td>
           <td>@fullName</td>
-          <td class="text-danger text-center"><i class="fa fa-delete"></i></td>
+          <td class="text-danger">@Html.ActionLink("","Delete",new {Id=user.Id},new {@class="fa fa-trash text-danger vibrate-1",@style="font-size:30px"})</td>
       </tr>
     }
     </table>
 }
+
+<style>
+    .vibrate-1:hover {
+	-webkit-animation: vibrate-1 0.3s linear infinite both;
+	        animation: vibrate-1 0.3s linear infinite both;
+}
+
+@@-webkit-keyframes vibrate-1 {
+  0% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+  20% {
+    -webkit-transform: translate(-2px, 2px);
+            transform: translate(-2px, 2px);
+  }
+  40% {
+    -webkit-transform: translate(-2px, -2px);
+            transform: translate(-2px, -2px);
+  }
+  60% {
+    -webkit-transform: translate(2px, 2px);
+            transform: translate(2px, 2px);
+  }
+  80% {
+    -webkit-transform: translate(2px, -2px);
+            transform: translate(2px, -2px);
+  }
+  100% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+}
+@@keyframes vibrate-1 {
+  0% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+  20% {
+    -webkit-transform: translate(-2px, 2px);
+            transform: translate(-2px, 2px);
+  }
+  40% {
+    -webkit-transform: translate(-2px, -2px);
+            transform: translate(-2px, -2px);
+  }
+  60% {
+    -webkit-transform: translate(2px, 2px);
+            transform: translate(2px, 2px);
+  }
+  80% {
+    -webkit-transform: translate(2px, -2px);
+            transform: translate(2px, -2px);
+  }
+  100% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+}
+
+    </style>

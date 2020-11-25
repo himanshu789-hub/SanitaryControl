@@ -6,6 +6,7 @@
 }
 @using (Html.BeginForm("Add", "Product", FormMethod.Post, new { @class = "",@enctype="multipart/form-data" }))
 {
+    @Html.HiddenFor(e =>e.Product.Type)
     <div class="card m-2">
         <div class="card-header font-weight-bold">Basic Information : </div>
         <div class="card-body">
@@ -80,6 +81,8 @@
         </div>
     </div>
     @Html.TextBoxFor(e=>e.Product.DateAdded,new {@class="invisible"})
+    @Html.TextBoxFor(e=>e.Product.DateUpdated,new {@class="invisible"})
+    
     <button type="submit" class="btn btn-success float-right invisible m-3">Submit</button>
 }
 <noscript>Please, Enable Javascript</noscript>
@@ -98,7 +101,9 @@
         nameInput: '#Product_Name',
         imageUpload: '#Images',
         imageViewer: '#image-viewer',
-        dateField:'#Product_DateAdded'
+        dateField:'#Product_DateAdded',
+        dateUpdatedField:'#Product_DateUpdated',
+        typeFields:'#Product_Type'
     };
     $(elements.imageUpload).change(function (e) {
         const files = e.target.files;
@@ -181,6 +186,7 @@
                         success: function (data) {
                             if (Number.isInteger(data))
                                 state.typeSelected = data;
+                            $(elements.typeFields).val(data); 
                         }
                     });
                     data = new Array();
@@ -412,8 +418,11 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script>
     $(elements.dateField).removeAttr('data-val-required')
+    $(elements.dateUpdatedField).removeAttr('data-val-required')
     $('[type="submit"]').click(function(e){
-    $(elements.dateField).val(new Date().toISOString());
+  const date = new Date().toISOString();
+    $(elements.dateField).val(date);
+    $(elements.dateUpdatedField).val(date);
     $(this).submit();
     });
 </script>

@@ -72,7 +72,9 @@ namespace SanitaryCartControl.Helphers.Converters
                 Name = productDTO.Name,
                 Type = attribute.ElementAt(0).AttributeId,
                 RootPath = new AncestorCategoryBLL() { Id = productDTO.Category_Id_FK },
-                DateAdded = productDTO.DateAdded
+                DateAdded = productDTO.DateAdded,
+                Id=productDTO.Id,
+                DateUpdated=productDTO.DateUpdated
             };
             return product;
         }

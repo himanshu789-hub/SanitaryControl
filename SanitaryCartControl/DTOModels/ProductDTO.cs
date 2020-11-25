@@ -23,9 +23,9 @@ namespace SanitaryCartControl.DTOModels
         
         [BindRequired]
         public DateTime DateAdded{get;set;}
-        [BindNever]
+        [BindRequired]
         public DateTime DateUpdated{get;set;}
-        [BindNever]
+        [BindRequired]
         public byte Type{get;set;}
         
     }
