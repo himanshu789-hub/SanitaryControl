@@ -1,0 +1,28 @@
+@using SanitaryCartControl.Core.Entities.DALModels;
+@model IEnumerable<ApplicationUser>
+
+@if (Model == null || Model.Count() == 0)
+{
+          <h1 class="alert alert-danger">No User Added</h1>
+}
+else
+{
+    <table>
+    <thead>
+        <th>S.No </th>
+        <th>FullName</th>
+        <th>Action</th>
+    </thead>
+    @for (var i = 0; i < Model.Count(); i++)
+    {
+            var user = Model.ElementAt(0);
+            string fullName = user.FirstName+" "+user.LastName;
+        
+      <tr>
+          <td>@(i+1)</td>
+          <td>@fullName</td>
+          <td class="text-danger text-center"><i class="fa fa-delete"></i></td>
+      </tr>
+    }
+    </table>
+}
