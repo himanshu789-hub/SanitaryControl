@@ -44,7 +44,7 @@ namespace SanitaryCartControl.Controllers
         }
         public IActionResult GetProductType([FromQuery][BindRequired] int CategoryId)
         {
-            return Json(_productService.GetProductType(CategoryId));
+            return Json(_categoryService.GetProductTypeById(CategoryId));
         }
 
         [HttpPost]

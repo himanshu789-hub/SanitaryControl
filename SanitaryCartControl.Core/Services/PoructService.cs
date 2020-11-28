@@ -55,40 +55,13 @@ namespace SanitaryCartControl.Core.Services
 
 
 
-        AncestorCategoryBLL GetAllAncestors(int ProductId)
-        {
-            using (var context = new SanitaryCartContext())
-            {
-                var categories = context.Category.FromSqlRaw<Category>("GetRootPath @Id={0}", ProductId).ToList();
-                var first = categories.First();
-                AncestorCategoryBLL ancestorCategoryBLL = new AncestorCategoryBLL
-                {
-                    Ancestors = new List<AncestorCategoryBLL>(),
-                    Title = first.Titlle,
-                    Id = first.Id
-                };
-                foreach (var item in categories.Where(e => e.Id != ProductId))
-                    ancestorCategoryBLL.Ancestors.Add(new AncestorCategoryBLL() { Id = item.Id, Title = item.Titlle, Ancestors = null });
-                return ancestorCategoryBLL;
-            }
-        }
         public ProductBLL GetById(int Id)
         {
-            var Ancestors = this.GetAllAncestors(Id);
+            var Ancestors = _categoryService.GetAllAncestors(Id);
             using (var context = new SanitaryCartContext())
             {
                 var Product = context.Product.AsNoTracking().Include(e => e.Image).Include(e => e.BrandIdFkNavigation).Include(e => e.TypeProductQuantity).Include(e => e.TypeProductQuantity).First(e => e.Id == Id);
                 return Helpher.HelpherMethods.ToProductBLL(Product, Ancestors);
-            }
-        }
-
-        public int GetProductType(int CategoryId)
-        {
-            int? parentId = _categoryService.GetRootId(CategoryId);
-            using (var context = new SanitaryCartContext())
-            {
-                ProductType productType = context.ProductType.FirstOrDefault(e => e.CategoryIdFk == parentId);
-                return productType.AttributeIdFk;
             }
         }
         public bool Update(ProductBLL product)
