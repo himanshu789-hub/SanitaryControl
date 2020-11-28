@@ -36,7 +36,11 @@ namespace SanitaryCartControl.Controllers
             _categoryService = categoryService;
             _productService = productService;
         }
-
+        [HttpGet]
+         public IActionResult Error()
+         {
+             throw new System.Exception();
+         }
         [HttpGet]
         public IActionResult GetCategory([FromQuery][BindRequired] int brandId)
         {

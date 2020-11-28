@@ -197,6 +197,11 @@ state.count=0;
                         async: false,
                         url: '/Product/GetProductType?CategoryId=' + state.categoryId,
                         success: function (data) {
+                            if(!data || data==-1)
+                            {
+                                alert('A Unexpected Error Occured');
+                                $('[type="submit"]').hide(); 
+                            }
                             if (Number.isInteger(data))
                                 state.typeSelected = data;
                             $(elements.typeFields).val(data); 
