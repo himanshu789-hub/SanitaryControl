@@ -78,7 +78,8 @@
                          
                          @Html.TextBoxFor(e=>e.Attributes[i].AttributeId);
                      </div>
-                  
+                    @if(Model.Product.Type!=(byte)ProductType.NoneVariable)
+                    {
                      <div class="col-3 form-group">
                         <label>@switch(Model.Product.Type)
                                         {
@@ -87,23 +88,23 @@
                                                 break;
                                             case ((byte)ProductType.SizeVariable):
                                             <span>Size</span>
+                       
                                                 break;
                                             case ((byte)ProductType.TypeVaribale):
                                             <span>Type</span>
                                                 break;
                                             default:
-                                            <span></span>
                                                 break;
                                         } </label>
-                        @Html.TextBoxFor(e=>e.Attributes[i].Value,"",new {@class="form-control pointer-none",@readonly="readonly"})
+                    @Html.TextBoxFor(e=>e.Attributes[i].Value,"",new {@class="form-control pointer-none",@readonly="readonly"})
                      </div>
                   
+                    }
                      <div class="col-3 form-group">
                         <label>Quantity : </label>
-
                     @{
                      var name = $"Attributes[{i}].Quantity";
-            }
+                     }
                 <div class="input-group">
                 <span class="input-group-prepend">
                 <button type="button" class="btn btn-default btn-number bg-danger text-white" 
@@ -137,6 +138,7 @@
                     {
                         background-color: white;
                     }
+            .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }
                 </style>
                 </div>
                 </div>
@@ -155,7 +157,13 @@
             </div>
             <script>
                $('#plusSign').click(function(){
-                     $(this).addClass('invisible')
+                if(data[0][itemNameandProperties.AttributeIdProperty]==types.None_Variable)
+                {
+                    alert('No More Item To Add');        
+                }
+                else
+                {
+                $(this).addClass('invisible')
                          $.ajax({
                 method: 'GET',
                 async: false,
@@ -163,12 +171,15 @@
                 success: function (result) {
                     state.IsSelected = true;
                     state.remoteValues = result;
+                   
                     if(state.remoteValues.length==data.length)
                        alert('No More Item To Add')     
                     else
                     buildAttribute(state.typeSelected,state.categoryId,data.length);
                 }
-            });
+                });
+                }
+                
                });
             </script>
             <div>
@@ -199,7 +210,7 @@
 
         </div>
     </div>
-    <div class="float-right w-75 d-flex justify-content-around">
+    <div class="float-right w-75 d-flex justify-content-around mt-5 mb-5">
             @Html.ActionLink("Cancel", null, null, null, new { @href = "#" ,@onclick="history.go(-1);",@class="btn btn-outline-danger p-2 w-50 mr-2" })
             <button type="submit" class="btn btn-success w-25 p-2">Update</button>
     </div> 
@@ -483,7 +494,7 @@ $(".input-number").keydown(function (e) {
         }
         dropdown.val(data[index][itemNameandProperties.ValueProperty]);
 
-        dropdownWrapper.append([label, hiddenType, dropdown, dropdownErrorMsg]);
+        dropdownWrapper.append([label, dropdown, dropdownErrorMsg]);
 
         let quantityWrapper = $('<div class="col-2 form-group"><label>Quantity : </label></div>');
         const quantityName = getNameByProperty(index, itemNameandProperties.QunatityProperty);
@@ -535,7 +546,7 @@ $(".input-number").keydown(function (e) {
 
         if (type != types.None_Variable)
             attributeWrapper.append(dropdownWrapper);
-        attributeWrapper.append([quantityWrapper, priceWrapper]);
+        attributeWrapper.append([quantityWrapper, priceWrapper, hiddenType]);
         const minusSign = $('<label class="display-1 text-danger"><i class="fa fa-minus-circle"></i></label>')
             .attr("id", "minus-sign")
             .click(function (e) {

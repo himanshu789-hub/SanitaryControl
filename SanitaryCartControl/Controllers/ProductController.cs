@@ -49,30 +49,39 @@ namespace SanitaryCartControl.Controllers
         [HttpPost]
         public IActionResult Edit(ProductEditDTO productEditDTO)
         {
-            ModelState.Remove<ProductEditDTO>(e=>e.Images);
+            ModelState.Remove<ProductEditDTO>(e => e.Images);
             for (int i = 0; i < productEditDTO.Attributes.Count(); i++)
             {
                 ModelState.RemoveIfPresent($"Attributes[{i}].Id");
                 ModelState.RemoveIfPresent($"Attributes[{i}].IsActive");
             }
-            if(ModelState.IsValid)
+            if(ModelState.GetValidationState("Product.Type")==ModelValidationState.Valid)
             {
-            string[] images = null;
-            if (productEditDTO.Images != null)
-                images = this.AddImages(productEditDTO.Images, imagesPath);
-                
-            bool IsUpdated = _productService.Update(Converters.ToProductBLL(productEditDTO.Product, productEditDTO.Attributes, images));
-            if(IsUpdated)
+                if(productEditDTO.Product.Type==(byte)ProductType.NoneVariable)
+                {
+                     ModelState.RemoveIfPresent($"Attributes[0].Value");
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                string[] images = null;
+                if (productEditDTO.Images != null)
+                    images = this.AddImages(productEditDTO.Images, imagesPath);
+
+                bool IsUpdated = _productService.Update(Converters.ToProductBLL(productEditDTO.Product, productEditDTO.Attributes, images));
+                if (IsUpdated)
                     return View("Success", new MessageViewModel()
                     {
                         IsSuccess = true,
                         Link = Url.Action("Search", productEditDTO.Product.Id)
                     });
             }
-            return View("Success",new MessageViewModel(){
-                IsSuccess=false,
-                Link=Url.Action("Edit",productEditDTO.Product.Id)
+            return View("Success", new MessageViewModel()
+            {
+                IsSuccess = false,
+                Link = Url.Action("Edit", productEditDTO.Product.Id)
             });
+
         }
         [HttpGet]
         public IActionResult Edit(int Id)
@@ -95,7 +104,23 @@ namespace SanitaryCartControl.Controllers
             return Json(_productService.GetAttrinuteValues(type, categoryId));
         }
 
-
+        public IActionResult Delete([BindRequired]int Id)
+        {
+            if(ModelState.IsValid)
+            { 
+             bool IsDeleted =  _productService.Delete(Id);
+              if(IsDeleted)
+              return View("Success",new MessageViewModel(){
+                  IsSuccess=true,
+                  Link=Url.Action("Search")
+              });
+            }
+            return View("Success", new MessageViewModel()
+            {
+                IsSuccess = false,
+                Link = Url.Action("Search")
+            });
+        }
         [HttpPost]
         public IActionResult Add(ProductViewModel productViewModel)
         {
@@ -104,8 +129,8 @@ namespace SanitaryCartControl.Controllers
             {
                 ModelState.RemoveIfPresent($"Attributes[{i}].Id");
                 ModelState.RemoveIfPresent($"Attributes[{i}].IsActive");
-                if(((int)ProductType.NoneVariable)==productViewModel.Product.Type)
-                ModelState.RemoveIfPresent($"Attributes[{i}].Value");
+                if (((int)ProductType.NoneVariable) == productViewModel.Product.Type)
+                    ModelState.RemoveIfPresent($"Attributes[{i}].Value");
             }
             if (ModelState.IsValid)
             {
@@ -115,9 +140,10 @@ namespace SanitaryCartControl.Controllers
                 this.AddImages(productViewModel.Images, imagesPath)));
                 return Redirect(@"/Product/Edit/" + productId);
             }
-            return View("Success",new MessageViewModel(){
-                IsSuccess=false,
-                Link=Url.Action("Add")
+            return View("Success", new MessageViewModel()
+            {
+                IsSuccess = false,
+                Link = Url.Action("Add")
             });
         }
 
@@ -136,7 +162,7 @@ namespace SanitaryCartControl.Controllers
                 return View(null);
             }
             var products = _productService.Search(search);
-            return View(products.ToPagedList(page ?? 1, 1));
+            return View(products.ToPagedList(page ?? 1, 40));
         }
 
     }

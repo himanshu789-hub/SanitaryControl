@@ -129,13 +129,18 @@
         else
             $(this).val($(this).val().subString(0, $(this).val().length - 1));
     })
-
+       function init()
+       {
+$(elements.productAttriuttesSection).children().remove();
+state.count=0;
+       }
     $(elements.brandSelection).change(function (e) {
         debugger;
         const value = $(e.currentTarget).val()
         if (!value)
             return;
         $(elements.menuId).empty();
+        init();
         $('.loading').removeClass("d-none")
         $.ajax({
             method: 'GET',
@@ -190,7 +195,7 @@
                         }
                     });
                     data = new Array();
-                    $(elements.productAttriuttesSection).children().remove()
+                    init();
                     $(elements.categoryTextBox).val(state.categoryId);
                     buildAttribute(state.typeSelected, state.categoryId, 0)
                     ResetFormValidation();
@@ -337,7 +342,7 @@
         }
         dropdown.val(data[index][itemNameandProperties.ValueProperty]);
 
-        dropdownWrapper.append([label, hiddenType, dropdown, dropdownErrorMsg]);
+        dropdownWrapper.append([label, dropdown, dropdownErrorMsg]);
 
         let quantityWrapper = $('<div class="col-2 form-group"><label>Quantity : </label></div>');
         const quantityName = getNameByProperty(index, itemNameandProperties.QunatityProperty);
@@ -389,7 +394,7 @@
 
         if (type != types.None_Variable)
             attributeWrapper.append(dropdownWrapper);
-        attributeWrapper.append([quantityWrapper, priceWrapper]);
+        attributeWrapper.append([quantityWrapper, priceWrapper,hiddenType]);
         const minusSign = $('<label class="display-1 text-danger"><i class="fa fa-minus-circle"></i></label>')
             .attr("id", "minus-sign")
             .click(function (e) {

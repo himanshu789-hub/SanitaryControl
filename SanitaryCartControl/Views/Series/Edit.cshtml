@@ -43,11 +43,15 @@
       
 					<div class="custom-file">
         @Html.TextBoxFor(e=>e.Image,new {@class="form-control",@type="file",@accept="image/jpg, image/jpeg, image/png",@data_val="false"})
-        
 						<label class="custom-file-label" for="Image">Choose Image file
 							<small class="font-italic">(Optional)</small>
 						</label>
 					</div>
+					<style>
+						input[type="file"]{
+							z-index:1;
+						}
+					</style>
 				</div>
 				<div>
 					<input type="submit" class="btn btn-success w-25" />

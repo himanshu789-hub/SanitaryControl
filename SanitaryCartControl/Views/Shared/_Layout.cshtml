@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,300" rel="stylesheet">
     <style>
         .nav-link[data-toggle].collapsed:before {
             content: " ▾";
@@ -28,7 +31,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@Constants.PortalHead</a>
             </div>
@@ -45,6 +48,12 @@
                 }
             </div>
             <style>
+                .navbar-brand {
+                    font-family: 'Exo 2', sans-serif;
+                    color: #2386bf !important;
+                    font-weight: 600;
+                }
+
                 .logout-section {
                     min-width: 350px;
                 }
@@ -62,53 +71,53 @@
                 }
 
                 .logout-section button:after {
-                      content: '\f08b';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    color: #213e3e78;
-    font-family: FontAwesome;
-    font-size: 30px;
+                    content: '\f08b';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: #213e3e78;
+                    font-family: FontAwesome;
+                    font-size: 30px;
                 }
             </style>
-         </nav>
+        </nav>
     </header>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-2 collapse show d-md-flex bg-light pt-2 pl-0 min-vh-100" id="sidebar">
-                <ul class="nav flex-column flex-nowrap overflow-hidden">
-                    <li class="nav-item  bg-light">
+            <div class="col-2 collapse show d-md-flex bg-light p-0 min-vh-100" id="sidebar">
+                <ul class="nav flex-column flex-nowrap overflow-hidden  main-ul">
+                    <li class="nav-item  ">
                         <a class="nav-link text-truncate" asp-controller="" asp-action="">
                             <i class="fa fa-home"></i>
-                            <span class="d-none d-sm-inline">Home</span></a>
+                            <span class="d-inline">Home</span></a>
                     </li>
-                    <li class="nav-item bg-light">
-                        <a class="nav-link collapsed text-truncate" href="#Brands" data-toggle="collapse"
-                            data-target="#Brands"><i class="fa fa-building"></i> <span
-                                class="d-none d-sm-inline">Brands</span></a>
-                        <div class="collapse" id="Brands" aria-expanded="false">
-                            <ul class="flex-column pl-4 nav">
+                    <li class="nav-item ">
+                        <a class="nav-link collapsed text-truncate" href="#Brand" data-toggle="collapse">
+                            <i class="fa fa-building"></i>
+                            <span class="d-inline">Brands</span></a>
+                        <div class="collapse" id="Brand" aria-expanded="false">
+                            <ul class="flex-column pl-4 nav sub-ul">
                                 <li class="nav-item">
                                     <a class="nav-link collapsed py-1" asp-action="Add" asp-controller="Brand">
                                         <i class="fa fa-plus-square" aria-hidden="true"></i><span>Add</span>
                                     </a>
 
                                 </li>
-                                <li class="nav-item"> <a class="nav-link collapsed py-1" asp-action="GetAll"
-                                        asp-controller="Brand">
+                                <li class="nav-item">
+                                    <a class="nav-link collapsed py-1" asp-action="GetAll" asp-controller="Brand">
                                         <i class="fa fa-list-ol" aria-hidden="true"></i> <span>View All</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item  bg-light">
-                        <a class="nav-link collapsed text-truncate" href="#Product" data-toggle="collapse"
-                            data-target="#Products"><i class="fa fa-sitemap" aria-hidden="true"></i> <span
-                                class="d-none d-sm-inline">Product</span></a>
-                        <div class="collapse" id="Products" aria-expanded="false">
-                            <ul class="flex-column pl-4 nav">
+                    <li class="nav-item  ">
+                        <a class="nav-link collapsed text-truncate" href="#Product" data-toggle="collapse">
+                            <i class="fa fa-sitemap" aria-hidden="true"></i>
+                            <span class="d-inline">Product</span></a>
+                        <div class="collapse" id="Product" aria-expanded="false">
+                            <ul class="flex-column pl-4 nav sub-ul">
                                 <li class="nav-item">
                                     <a class="nav-link collapsed py-1" asp-action="Add" asp-controller="Product">
                                         <i class="fa fa-plus-square" aria-hidden="true"></i> <span>Add</span>
@@ -123,12 +132,11 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item  bg-light">
-                        <a class="nav-link collapsed text-truncate" href="#Series" data-toggle="collapse"
-                            data-target="#Series"><i class="fa fa-cubes" aria-hidden="true"></i> <span
-                                class="d-none d-sm-inline">Series</span></a>
+                    <li class="nav-item  ">
+                        <a class="nav-link collapsed text-truncate" href="#Series" data-toggle="collapse"><i
+                                class="fa fa-cubes" aria-hidden="true"></i> <span class="d-inline">Series</span></a>
                         <div class="collapse" id="Series" aria-expanded="false">
-                            <ul class="flex-column pl-4 nav">
+                            <ul class="flex-column pl-4 nav sub-ul">
                                 <li class="nav-item">
                                     <a class="nav-link collapsed py-1" asp-action="Add" asp-controller="Series">
                                         <i class="fa fa-plus-square" aria-hidden="true"></i> <span>Add</span>
@@ -143,12 +151,11 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item bg-light">
-                        <a class="nav-link collapsed text-truncate" href="#Users" data-toggle="collapse"
-                            data-target="#Users"><i class="fa fa-user-circle-o"></i> <span
-                                class="d-none d-sm-inline">Users</span></a>
-                        <div class="collapse" id="Users" aria-expanded="false">
-                            <ul class="flex-column pl-4 nav">
+                    <li class="nav-item ">
+                        <a class="nav-link collapsed text-truncate" href="#Account" data-toggle="collapse"><i
+                                class="fa fa-user-circle-o"></i> <span class="d-none d-sm-inline">Users</span></a>
+                        <div class="collapse" id="Account" aria-expanded="false">
+                            <ul class="flex-column pl-4 nav sub-ul">
                                 <li class="nav-item">
                                     <a class="nav-link collapsed py-1" asp-action="Register" asp-controller="Account">
                                         <i class="fa fa-user-plus" aria-hidden="true"></i><span>Add</span>
@@ -164,17 +171,66 @@
                     </li>
                 </ul>
             </div>
-            <div class="col pt-2">
-                <h2 class="font-italic">
-                    <a href="" data-target="#sidebar" data-toggle="collapse" class="d-md-none"><i
-                            class="fa fa-bars"></i></a> @ViewData["Head"] </h2>
+            <style>
+                .main-ul {
+                    background: url(https://images.unsplash.com/photo-1557683304-673a23048d34?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=243&q=80);
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                }
 
+                .main-ul i {
+                    color: #49a780;
+                }
+
+                .main-ul>.nav-item:hover {
+                    background: #00000061;
+                    box-shadow: 0 0 5px 0px #c4c8ccc7;
+                }
+
+                .current-link {
+                    font-weight: bolder;
+                }
+
+                .current-item {
+                    background: #00000061;
+                    box-shadow: 0 0 5px 0px #c4c8ccc7;
+                }
+
+                .current-link-item {
+                    background: none;
+                    border: 1px dashed darkgrey;
+                }
+
+                .sub-ul .nav-item:hover {
+                    background: none;
+                    border: 1px dashed darkgrey;
+                }
+
+                .sub-ul .nav-item a:hover {
+                    font-weight: bolder;
+                }
+
+                .main-ul>.nav-item a {
+                    color: white;
+                    font-weight: 300;
+                }
+            </style>
+            <div class="col pt-2">
+                <label class="body-header">
+                    <img src="/images/site/icon.png" width="50px" height="50px" class="pr-1" /> <span
+                        style="vertical-align:middle;">@ViewData["Head"]</span> </label>
                 <div class="container">
                     <main role="main" class="pb-3">
                         @RenderBody()
                     </main>
                 </div>
             </div>
+            <style>
+                .body-header {
+                    font-weight: 300;
+                    font-size: 38px;
+                }
+            </style>
         </div>
     </div>
     <footer class="border-top footer text-muted">
@@ -184,6 +240,19 @@
     </footer>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        const pathName = location.pathname;
+        const controller = pathName.split('/')[1]
+        const selector = '#' + controller
+        $(selector + ' a').each(function (index, element) {
+            if ($(element).attr('href') == window.location.pathname) {
+                 $(selector).collapse('show')
+                 $(element).addClass('current-link')
+                 $(element).parent().addClass('current-link-item');
+                 $(selector).parent().addClass('current-item');
+            }
+        });              
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 

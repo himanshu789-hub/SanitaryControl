@@ -75,27 +75,31 @@ namespace SanitaryCartControl.Controllers
                 string path = this.AddImage(Image, imagePath);
                 series.ImagePath = path;
             }
-            
+            IDictionary<string, object> values = new Dictionary<string, object>();
+            SeriesBLL seriesBLL = _seriesService.GetById(series.Id);
+            values.Add("brandId", series.Brand_Id_Fk);
+            values.Add("categoryId", seriesBLL.Parent.Key);
+            values.Add("IsSecond", true);
             if (ModelState.IsValid)
             {
-
                 bool IsUpdated = _seriesService.UpdateSeries(Converters.ToSeriesBLL(series));
                 return View("Success", new MessageViewModel()
                 {
                     IsSuccess = IsUpdated,
-                    Link = Url.Action("ViewAll")
+                    Link = Url.Action("ViewAll"),
+                    Params = values
                 });
             }
             return View("Success", new MessageViewModel()
             {
                 IsSuccess = false,
+                Params = values,
                 Link = Url.Action("ViewAll")
             });
         }
         [HttpGet]
         public IActionResult ViewAll(byte? brandId, int? categoryId, bool IsSecond)
         {
-
             ShowSeriesViewModel showSeriesViewModel = new ShowSeriesViewModel();
             showSeriesViewModel.Brands = _brandService.GetBrands();
             showSeriesViewModel.Category = _seriesService.GetCategory();
@@ -116,12 +120,13 @@ namespace SanitaryCartControl.Controllers
             ModelState.Remove("Series.Id");
             ModelState.Remove("Series.ImagePath");
             ModelState.Remove<SeriesViewModel>(expression => expression.Series.Category_Id_FK);
+            IDictionary<string, object> values = new Dictionary<string, object>();
+            values.Add("brandId", seriesViewModel.Series.Brand_Id_Fk);
+            values.Add("parentId", seriesViewModel.Series.ParentId);
+
             if (ModelState.IsValid)
             {
                 int Id = _seriesService.AddSeries(Converters.ToSeriesBLL(seriesViewModel.Series));
-                IDictionary<string, object> values = new Dictionary<string, object>();
-                values.Add("brandId", seriesViewModel.Series.Brand_Id_Fk);
-                values.Add("parentId", seriesViewModel.Series.ParentId);
                 return View("Success", new MessageViewModel()
                 {
                     IsSuccess = true,
@@ -129,7 +134,12 @@ namespace SanitaryCartControl.Controllers
                     Params = values
                 });
             }
-            return BadRequest();
+            return View("Success", new MessageViewModel()
+            {
+                IsSuccess = false,
+                Link = @Url.Action("Add"),
+                Params = values
+            });
         }
         [HttpGet]
         public IActionResult Add([FromQuery] byte? brandId, [FromQuery] int? parentId)

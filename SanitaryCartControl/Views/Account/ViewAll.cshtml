@@ -11,16 +11,18 @@ else
     <thead>
         <th>S.No </th>
         <th>FullName</th>
+        <th>UserName</th>
         <th>Action</th>
     </thead>
     @for (var i = 0; i < Model.Count(); i++)
     {
-            var user = Model.ElementAt(0);
+            var user = Model.ElementAt(i);
             string fullName = user.FirstName+" "+user.LastName;
-        
+           
       <tr>
           <td>@(i+1)</td>
           <td>@fullName</td>
+          <td>@Model.ElementAt(i).UserName</td>
           <td class="text-danger">@Html.ActionLink("","Delete",new {Id=user.Id},new {@class="fa fa-trash text-danger vibrate-1",@style="font-size:30px"})</td>
       </tr>
     }

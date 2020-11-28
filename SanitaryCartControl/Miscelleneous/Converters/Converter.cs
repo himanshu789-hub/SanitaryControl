@@ -54,7 +54,8 @@ namespace SanitaryCartControl.Helphers.Converters
                     AttributeId = item.AttributeId,
                     Price = item.Price,
                     Quantity = item.Quantity,
-                    Value = item.Value
+                    Value = item.Value,
+                    IsActive=item.IsActive
                 });
             }
             return Attributes;
