@@ -14,7 +14,8 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext())
             {
-                Category category = new Category() { Titlle = series.Title, ParentId = series.Parent.Key, ImagePath = series.ImagPath };
+                Category category = new Category() { Titlle = series.Title, 
+                ParentId = series.Parent.Key, ImagePath = series.ImagPath };
                 SeriesBrand seriesBrand = new SeriesBrand()
                 {
                     BrandIdFk = series.BrandId,

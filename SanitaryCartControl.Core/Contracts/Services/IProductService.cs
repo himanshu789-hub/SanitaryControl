@@ -14,5 +14,7 @@ namespace SanitaryCartControl.Core.Contracts.Services
     int Add(ProductBLL product);
     IEnumerable<ProductBLL> Search(string value);
 
+    bool Delete(int Id);
+
     }
 }

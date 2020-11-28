@@ -4,13 +4,13 @@
 @{
     ViewData["Head"] = "Edit Product : " + Model.Product.Code;
 }
+
 @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { @enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(e=>e.Product.Id)
     @Html.HiddenFor(e=>e.Product.Type)
     @Html.HiddenFor(e=>e.Product.Brand_Id_FK)
-    @Html.HiddenFor(e=>e.Product.Category_Id_FK)
-    
+    @Html.HiddenFor(e=>e.Product.Category_Id_FK)    
 <div class="card">
     <div class="card-header font-weight-bold">Basic Information : </div>
     <div class="card-body">
@@ -156,6 +156,11 @@
             </style>
             </div>
             <script>
+                const onError=function()
+                {
+                alert('Error Communicating To Server.\nPlease, Contact Administration');
+                $('[type="submit"]').hide() 
+                }
                $('#plusSign').click(function(){
                 if(data[0][itemNameandProperties.AttributeIdProperty]==types.None_Variable)
                 {
@@ -176,7 +181,8 @@
                        alert('No More Item To Add')     
                     else
                     buildAttribute(state.typeSelected,state.categoryId,data.length);
-                }
+                },
+                error:onError
                 });
                 }
                 
@@ -185,7 +191,7 @@
             <div>
     <p class="p-2 m-0">
   <button id="uploadButton" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-        Upload Images <span class="small text-light">Optional</span>
+        Upload Images <small class="text-light">(Optional)</small>
   </button>
 </p>
     <div class="collapse shadow p-3 mb-5 bg-white rounded" id="collapseExample">
@@ -487,7 +493,8 @@ $(".input-number").keydown(function (e) {
                     state.IsSelected = true;
                     state.remoteValues = data;
                     setValues(state.remoteValues);
-                }
+                },
+                error:onError
             });
         else {
             setValues(state.remoteValues);
@@ -511,7 +518,6 @@ $(".input-number").keydown(function (e) {
             .attr("data-msg-max", validationMesage.Quantity.Max)
             .attr("data-rule-min", 1)
             .attr("data-rule-max", 255)
-
             .focusout(function () {
                 data[index][itemNameandProperties.QunatityProperty] = $(quantity).val();
             }.bind(index));

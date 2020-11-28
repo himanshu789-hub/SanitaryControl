@@ -93,45 +93,48 @@ namespace SanitaryCartControl.Core.Services
         }
         public bool Update(ProductBLL product)
         {
-            using(var context = new SanitaryCartContext())
-            { 
-              Product OldProduct  = context.Product.Include(e=>e.TypeProductQuantity).Include(e=>e.Image).FirstOrDefault(e=>e.Id==product.Id);
-              OldProduct.DateUpdated = product.DateUpdated;
-              OldProduct.Description = product.Description;
-              if(OldProduct==null)
-                return false;
-              if(product.Images!=null)
-              {
-                  context.Image.RemoveRange(context.Image.Where(e=>e.Id==OldProduct.Id).ToList());
-                  foreach (var item in product.Images)
-                  {
-                      OldProduct.Image.Add(new Image(){
-                          Path=item,Type=OldProduct.Type
-                      });
-                  }
-              }
-              int[] AttributeId = product.AttributeBLLs.Where(e=>e.Id!=0).Select(e=>e.Id).ToArray();
-              foreach (var item in AttributeId)
-              {
-                TypeProductQuantity typeProductQuantity = OldProduct.TypeProductQuantity.FirstOrDefault(e=>e.Id==item);
-                AttributeBLL attributeBLL = product.AttributeBLLs.FirstOrDefault(e=>e.Id==item);
-                typeProductQuantity.IsActive = attributeBLL.IsActive;
-                typeProductQuantity.Price= attributeBLL.Price;
-                typeProductQuantity.Quantity = attributeBLL.Quantity;
-              }
-              IEnumerable<AttributeBLL> attributeBLLs = product.AttributeBLLs.Where(e=>e.Id==0);
-              foreach(var item in attributeBLLs)
-              {
-                  OldProduct.TypeProductQuantity.Add(new TypeProductQuantity(){
-                      Value=item.Value,
-                      Quantity=item.Quantity,
-                      IsActive=true,
-                      Price=item.Price,
-                      AtributeType=item.AttributeId
-                  });
-              }
-              context.SaveChanges();
-              return true;
+            using (var context = new SanitaryCartContext())
+            {
+                Product OldProduct = context.Product.Include(e => e.TypeProductQuantity).Include(e => e.Image).FirstOrDefault(e => e.Id == product.Id);
+                OldProduct.DateUpdated = product.DateUpdated;
+                OldProduct.Description = product.Description;
+                if (OldProduct == null)
+                    return false;
+                if (product.Images != null)
+                {
+                    context.Image.RemoveRange(context.Image.Where(e => e.Id == OldProduct.Id).ToList());
+                    foreach (var item in product.Images)
+                    {
+                        OldProduct.Image.Add(new Image()
+                        {
+                            Path = item,
+                            Type = OldProduct.Type
+                        });
+                    }
+                }
+                int[] AttributeId = product.AttributeBLLs.Where(e => e.Id != 0).Select(e => e.Id).ToArray();
+                foreach (var item in AttributeId)
+                {
+                    TypeProductQuantity typeProductQuantity = OldProduct.TypeProductQuantity.FirstOrDefault(e => e.Id == item);
+                    AttributeBLL attributeBLL = product.AttributeBLLs.FirstOrDefault(e => e.Id == item);
+                    typeProductQuantity.IsActive = attributeBLL.IsActive;
+                    typeProductQuantity.Price = attributeBLL.Price;
+                    typeProductQuantity.Quantity = attributeBLL.Quantity;
+                }
+                IEnumerable<AttributeBLL> attributeBLLs = product.AttributeBLLs.Where(e => e.Id == 0);
+                foreach (var item in attributeBLLs)
+                {
+                    OldProduct.TypeProductQuantity.Add(new TypeProductQuantity()
+                    {
+                        Value = item.Value,
+                        Quantity = item.Quantity,
+                        IsActive = true,
+                        Price = item.Price,
+                        AtributeType = item.AttributeId
+                    });
+                }
+                context.SaveChanges();
+                return true;
             }
         }
         public int Add(ProductBLL product)
@@ -151,19 +154,20 @@ namespace SanitaryCartControl.Core.Services
                     DateUpdated = product.DateAdded
                 };
                 foreach (var item in product.AttributeBLLs)
-                    NewProduct.TypeProductQuantity.Add(new TypeProductQuantity { 
+                    NewProduct.TypeProductQuantity.Add(new TypeProductQuantity
+                    {
                         AtributeType = item.AttributeId,
-                        Price = item.Price, 
+                        Price = item.Price,
                         Quantity = item.Quantity,
-                        Value = item.AttributeId==((byte)Enums.ProductType.NoneVariable)?null:item.Value,
-                        IsActive=true
-                });
+                        Value = item.AttributeId == ((byte)Enums.ProductType.NoneVariable) ? null : item.Value,
+                        IsActive = true
+                    });
 
                 foreach (var item in product.Images)
                     NewProduct.Image.Add(new Image { Path = item, Type = product.Type });
                 context.Product.Add(NewProduct);
                 context.SaveChanges();
-                
+
                 return NewProduct.Id;
             }
         }
@@ -172,10 +176,24 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext())
             {
-                var products = context.Product.AsNoTracking().Where(e => e.Code.Equals(value,System.StringComparison.OrdinalIgnoreCase) || e.Name.Contains(value))
+                var products = context.Product.AsNoTracking().Where(e => e.Code == value || e.Name.Contains(value))
                   .Include(e => e.TypeProductQuantity)
                   .Include(e => e.BrandIdFkNavigation).Include(e => e.Category).ThenInclude(e => e.Parent).ToList();
                 return HelpherMethods.ToProductBLLs(products.AsQueryable());
+            }
+        }
+
+        public bool Delete(int Id)
+        {
+            using (var context = new SanitaryCartContext())
+            {
+                Product product = context.Product.FirstOrDefault(e => e.Id == Id);
+                if (product != null)
+                {
+                    product.IsActive = false;
+                    return true;
+                }
+                return false;
             }
         }
     }

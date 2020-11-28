@@ -9,6 +9,7 @@ using SanitaryCartControl.Extensions;
 using System.ComponentModel.DataAnnotations;
 using SanitaryCartControl.Helphers.Converters;
 using SanitaryCartControl.Core.Contracts.Services;
+using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.Enums;
@@ -72,6 +73,8 @@ namespace SanitaryCartControl.Controllers
 
             if (Image != null)
             {
+                Thread DeleteThread =  new Thread(()=>this.DeleteImage(series.ImagePath));
+                DeleteThread.Start();
                 string path = this.AddImage(Image, imagePath);
                 series.ImagePath = path;
             }

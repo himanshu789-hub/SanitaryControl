@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using SanitaryCartControl.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using SanitaryCartControl.Core.Entities.Enums;
-
+using System.Threading;
 namespace SanitaryCartControl.Controllers
 {
     [Authorize(Roles=ApplicationRoles.Both)]
@@ -43,15 +43,13 @@ namespace SanitaryCartControl.Controllers
 
         const string brandPath = @"/images/brand";
         [NonAction]
-        public bool RemoveFile(string filePath)
+        public void RemoveFile(string filePath)
         {
             string absoluetPath = Path.Join(_host.ContentRootPath, "wwwroot", filePath);
             if (System.IO.File.Exists(absoluetPath))
             {
                 System.IO.File.Delete(absoluetPath);
-                return true;
             }
-            return false;
         }
         [HttpPost]
         public IActionResult Edit(BrandViewModel brandView)
@@ -62,6 +60,7 @@ namespace SanitaryCartControl.Controllers
             {
                 if (brandView.Logo != null)
                 {
+                    new Thread(()=>this.RemoveFile(brandView.Brand.ImagePath)).Start();
                     this.RemoveFile(brandView.Brand.ImagePath);
                     string path = this.UploadFile(brandView.Logo);
                     brandView.Brand.ImagePath = path;

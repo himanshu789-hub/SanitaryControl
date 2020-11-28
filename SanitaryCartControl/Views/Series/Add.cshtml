@@ -40,12 +40,17 @@
  </div>
    <div class="form-group">
         @Html.LabelFor(e=>e.Image)
-
        <div class="custom-file">
         @Html.TextBoxFor(e=>e.Image,new {@class="form-control invisible",@type="file",@accept="image/jpg, image/jpeg, image/png"})
        <label class="custom-file-label text-truncate" id="custom-file-label" for="Image">Choose Image file . . .</label>
        @Html.ValidationMessageFor(e=>e.Image,"",new {@class="text-danger small"})
   </div>
+  <style>
+    input[type="file"]
+    {
+      z-index:1;
+    }
+  </style>
   </div>
   <input type="submit" class="btn btn-success w-25" />
 </div>
@@ -58,18 +63,48 @@
   const form ={
     filePicker:$('[name="Image"]'),
     fileViewer:$('[name="fileViewer"]'),
+    label:'#custom-file-label',
+    validation:function(e){
+
+    },
+    remove:function()
+    {
+      $(form.filePicker).val(null)
+      $(form.fileViewer).attr("src",null);
+    },
     init:function(){
          this.filePicker.change(e=>{
            const files = e.target.files;
     
            if(files && files[0])
            {
+             if(Number.parseInt(files[0].size/1024)>28)
+             {
+               alert('Image Fle Size Too Long');
+             form.remove();
+               return false;
+             }
              const reader = new FileReader();
-            $(subElements.custom_file_label).text(files[0].name);
              reader.onload = function (e) {
-                $(fileViewer)
-                    .attr('src', e.target.result);
-            
+             const image = new Image();
+             image.src = reader.result;
+             image.onload = function()
+             {
+               const height = this.height;
+               const width = this.width;
+              
+                 if(height!=280 && width!=280)
+                 {
+                 alert("Image Dimension Should be 280 x 280");
+                 form.remove();
+                 return false;
+                 }
+                 $(form.label).text(files[0].name)
+                  $(fileViewer)
+                     .attr('src', this.src);
+
+
+             }
             };
            reader.readAsDataURL(files[0]);
            }

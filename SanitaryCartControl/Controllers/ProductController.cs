@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -65,9 +66,13 @@ namespace SanitaryCartControl.Controllers
             if (ModelState.IsValid)
             {
                 string[] images = null;
+                string[] oldImages = _productService.GetById(productEditDTO.Product.Id).Images;
                 if (productEditDTO.Images != null)
-                    images = this.AddImages(productEditDTO.Images, imagesPath);
+                    {
+                        new Thread(()=>this.DeleteImages(oldImages)).Start();
 
+                        images = this.AddImages(productEditDTO.Images, imagesPath);
+                    }
                 bool IsUpdated = _productService.Update(Converters.ToProductBLL(productEditDTO.Product, productEditDTO.Attributes, images));
                 if (IsUpdated)
                     return View("Success", new MessageViewModel()

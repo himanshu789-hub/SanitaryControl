@@ -134,6 +134,10 @@
 $(elements.productAttriuttesSection).children().remove();
 state.count=0;
        }
+    const onError = function () {
+                alert('Error Communicating To Server\nPlease, Contact Administration');
+                $('[type="submit"]').hide()
+        };
     $(elements.brandSelection).change(function (e) {
         debugger;
         const value = $(e.currentTarget).val()
@@ -146,11 +150,15 @@ state.count=0;
             method: 'GET',
             url: '/Product/GetCategory?brandId=' + value,
             accepts: 'application/json',
-            
             success: function (data) {
-                debugger;
                 buildMenu($(elements.menuId), data)
                 $('.loading').addClass("d-none")
+            },
+            error:function(){
+                onError();
+                $('.loading').find('i').removeAttr("class");
+                $('.loading').find('i').addClass("text-danger fa fa-exclamation-triangle  fa-2x scale-up-center error-shadow");
+
             }
         })
     })
@@ -192,7 +200,7 @@ state.count=0;
                             if (Number.isInteger(data))
                                 state.typeSelected = data;
                             $(elements.typeFields).val(data); 
-                        }
+                        },error:onError
                     });
                     data = new Array();
                     init();
@@ -325,7 +333,7 @@ state.count=0;
         let dropdownErrorMsg = $('<span data-valmsg-replace="true"><span>')
             .attr("data-valmsg-for", dropdownName)
             .addClass("small text-danger");
-
+        
         if (!state.IsSelected)
             $.ajax({
                 method: 'GET',
@@ -335,7 +343,8 @@ state.count=0;
                     state.IsSelected = true;
                     state.remoteValues = data;
                     setValues(state.remoteValues);
-                }
+                },
+                error:onError
             });
         else {
             setValues(state.remoteValues);

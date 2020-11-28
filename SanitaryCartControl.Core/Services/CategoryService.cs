@@ -25,7 +25,24 @@ namespace SanitaryCartControl.Core.Services
             using (var context = new SanitaryCartContext())
             {
                 IList<CategoryBLL> CategoryBLLs = new List<CategoryBLL>();
-                var list = context.Category.AsNoTracking().Include(e => e.SeriesBrand).ToList();
+                int[] SeriesHolderIds =  context.SeriesHolderCategory.AsNoTracking().Select(e=>e.CategoryIdFk).ToArray();
+                
+                var list = context.Category.AsNoTracking().Include(e=>e.SeriesBrand).Include(e=>e.SeriesHolderCategory).ToList().Where(e => {
+                    if(e.SeriesBrand!=null)
+                    {
+                        if(e.SeriesBrand.BrandIdFk == brandId)
+                            return true;
+                        else
+                            return false;
+                    }
+                    else
+                    return true;
+                });
+                foreach (var item in SeriesHolderIds)
+                {
+                    if(list.Where(e=>e.ParentId==item).Count()==0)
+                          list = list.Where(e=>e.Id!=item);
+                }
                 foreach (var item in list)
                 {
                     CategoryBLLs.Add(new CategoryBLL() { Id = item.Id, ParentId = item.ParentId, Title = item.Titlle, Categories = null });

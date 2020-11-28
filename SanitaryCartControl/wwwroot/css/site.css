@@ -162,6 +162,9 @@ li:hover {
 	-webkit-animation: scale-up-center 2s linear infinite forwards;
 	animation: scale-up-center 2s linear infinite forwards;
 }
+.error-shadow{
+	    text-shadow: -7px -4px black;
+}
 @-webkit-keyframes scale-up-center {
 	0% {
 		-webkit-transform: scale(0.5);
