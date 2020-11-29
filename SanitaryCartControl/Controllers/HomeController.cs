@@ -11,7 +11,12 @@ namespace SanitaryCartControl.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger _logger;
-
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult LogOff()
+        {
+            return View("Thanks");
+        }
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;

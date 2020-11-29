@@ -27,8 +27,9 @@ namespace SanitaryCartControl.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(AccountController.LogIn), "Account");
+            return RedirectToAction(nameof(HomeController.LogOff), "Home");
         }
+    
 
         [HttpPost]
         [AllowAnonymous]
