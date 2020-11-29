@@ -6,21 +6,23 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using SanitaryCartControl.Core.Entities.DALModels;
 using Enums = SanitaryCartControl.Core.Entities.Enums;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using SanitaryCartControl.Core.Helpher;
 namespace SanitaryCartControl.Core.Services
 {
     public class ProductService : IProductService
     {
         readonly ICategoryService _categoryService;
-        public ProductService(ICategoryService categoryService)
+        readonly string _con;
+        public ProductService(ICategoryService categoryService,IOptions<ConnectionStringOptions> connectionStrings)
         {
             _categoryService = categoryService;
+            _con = connectionStrings.Value.SQLConnection;
         }
         public IEnumerable<KeyValuePair<int, string>> GetAttrinuteValues(SanitaryCartControl.Core.Entities.Enums.ProductType type, int categoryId)
         {
             int rootId = _categoryService.GetRootId(categoryId);
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 ICollection<KeyValuePair<int, string>> Values = new List<KeyValuePair<int, string>>();
                 switch (type)
@@ -58,7 +60,7 @@ namespace SanitaryCartControl.Core.Services
         public ProductBLL GetById(int Id)
         {
             var Ancestors = _categoryService.GetAllAncestors(Id);
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 var Product = context.Product.AsNoTracking().Include(e => e.Image).Include(e => e.BrandIdFkNavigation).Include(e => e.TypeProductQuantity).Include(e => e.TypeProductQuantity).First(e => e.Id == Id);
                 return Helpher.HelpherMethods.ToProductBLL(Product, Ancestors);
@@ -66,7 +68,7 @@ namespace SanitaryCartControl.Core.Services
         }
         public bool Update(ProductBLL product)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 Product OldProduct = context.Product.Include(e => e.TypeProductQuantity).Include(e => e.Image).FirstOrDefault(e => e.Id == product.Id);
                 OldProduct.DateUpdated = product.DateUpdated;
@@ -112,7 +114,7 @@ namespace SanitaryCartControl.Core.Services
         }
         public int Add(ProductBLL product)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 Product NewProduct = new Product
                 {
@@ -147,7 +149,7 @@ namespace SanitaryCartControl.Core.Services
 
         public IEnumerable<ProductBLL> Search(string value)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 var products = context.Product.AsNoTracking().Where(e => e.Code == value || e.Name.Contains(value))
                   .Include(e => e.TypeProductQuantity)
@@ -158,7 +160,7 @@ namespace SanitaryCartControl.Core.Services
 
         public bool Delete(int Id)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 Product product = context.Product.FirstOrDefault(e => e.Id == Id);
                 if (product != null)

@@ -29,13 +29,12 @@ namespace SanitaryCartControl
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<SanitaryCartContext>(options =>
-             options.UseSqlServer(Configuration.GetConnectionString("SQLConnection")));
 
             services.AddDbContext<SanitaryCartIdentityContext>(oo =>
               oo.UseSqlServer(Configuration.GetConnectionString("IdentitySQLConnection")));
 
             services.AddCoreExtensions();
+            services.AddServicesExtensionsWithIConfiguration(Configuration);
             services.AddControllersWithViews();
 
         }

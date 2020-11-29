@@ -7,9 +7,10 @@ namespace SanitaryCartControl.Core.Context
 {
     public partial class SanitaryCartContext : DbContext
     {
-        public SanitaryCartContext()
+        readonly string _con;
+        public SanitaryCartContext(string con)
         {
-            
+            _con =con;
         }
 
         public SanitaryCartContext(DbContextOptions<SanitaryCartContext> options)
@@ -36,9 +37,7 @@ namespace SanitaryCartControl.Core.Context
             
             if (!optionsBuilder.IsConfigured)
             {
-    
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=USER-PC;Database=sanitarycart;Trusted_Connection=True");
+                optionsBuilder.UseSqlServer(_con);
             }
         }
 
