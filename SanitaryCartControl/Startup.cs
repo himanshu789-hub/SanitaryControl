@@ -10,11 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SanitaryCartControl.Extensions;
-using SanitaryCartControl.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Internal;
 using SanitaryCartControl.Core.Context;
-
+using SanitaryCartControl.Core.Extensions;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 namespace SanitaryCartControl
 {
     public class Startup
@@ -29,9 +28,15 @@ namespace SanitaryCartControl
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+             services.AddCors();
 
             services.AddDbContext<SanitaryCartIdentityContext>(oo =>
-              oo.UseSqlServer(Configuration.GetConnectionString("IdentitySQLConnection")));
+              oo.UseMySql(Configuration.GetConnectionString("IdentitySQLConnection"),options => {
+                  options
+                  .ServerVersion(new Version(8,0,0),ServerType.MySql)
+                  .EnableRetryOnFailure(3);
+            })
+            .EnableDetailedErrors());
 
             services.AddCoreExtensions();
             services.AddServicesExtensionsWithIConfiguration(Configuration);
@@ -46,8 +51,9 @@ namespace SanitaryCartControl
 
             if (env.IsDevelopment())
             {
-                //ApplicationExtensionsMethods.SeedRolesAndAdmin(serviceProvider,Configuration);
                 app.UseDeveloperExceptionPage();
+                ApplicationExtensionsMethods.SeedRolesAndAdmin(serviceProvider, Configuration);
+
             }
             else
             {

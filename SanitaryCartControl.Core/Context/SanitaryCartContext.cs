@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Pomelo.EntityFrameworkCore;
 using SanitaryCartControl.Core.Entities.DALModels;
-using System.Configuration;
 namespace SanitaryCartControl.Core.Context
 {
     public partial class SanitaryCartContext : DbContext
@@ -37,7 +37,7 @@ namespace SanitaryCartControl.Core.Context
             
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(_con);
+                optionsBuilder.UseMySql(_con);
             }
         }
 
@@ -219,7 +219,7 @@ namespace SanitaryCartControl.Core.Context
 
             modelBuilder.Entity<SeriesBrand>(entity =>
             {
-                entity.ToTable("Series.Brand");
+                entity.ToTable("Series_Brand");
 
                 entity.HasIndex(e => e.CategoryIdFk)
                     .HasName("IX_Series.Brand")
@@ -246,7 +246,7 @@ namespace SanitaryCartControl.Core.Context
 
             modelBuilder.Entity<SeriesHolderCategory>(entity =>
             {
-                entity.ToTable("SeriesHolder.Category");
+                entity.ToTable("SeriesHolder_Category");
 
                 entity.Property(e => e.CategoryIdFk).HasColumnName("CategoryId_Fk");
 
@@ -277,7 +277,7 @@ namespace SanitaryCartControl.Core.Context
 
             modelBuilder.Entity<TypeProductQuantity>(entity =>
             {
-                entity.ToTable("Type.Product.Quantity");
+                entity.ToTable("Type_Product_Quantity");
 
                 entity.Property(e => e.IsActive)
                     .IsRequired()

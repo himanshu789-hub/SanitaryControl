@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using SanitaryCartControl.Core.Entities.DALModels;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-
-using System.IO;
-
-namespace SanitaryCartControl.Core.Context
+namespace  SanitaryCartControl.Core.Context
 {
     public partial class SanitaryCartIdentityContext : IdentityDbContext<ApplicationUser>
     {
@@ -22,7 +19,7 @@ namespace SanitaryCartControl.Core.Context
         {
             if(!builder.IsConfigured)
             {
-                builder.UseSqlServer(_connection);
+                builder.UseMySql(_connection).EnableDetailedErrors();
             }
         }
         protected override void OnModelCreating(ModelBuilder builder)
