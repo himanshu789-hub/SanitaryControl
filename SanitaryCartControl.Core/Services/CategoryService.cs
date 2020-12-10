@@ -79,12 +79,12 @@ namespace SanitaryCartControl.Core.Services
         }
 
 
-        public int GetRootId(int categoryId)
+        public int GetImmediateNodeId(int categoryId)
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var Parent = context.Category.FromSqlRaw<Category>("GetRootNode @Id={0}", categoryId).AsEnumerable().FirstOrDefault();
-                return Parent.Id;
+                var ImmediateNode = context.Category.FromSqlRaw<Category>("GetImmedaiteNode @Id={0}", categoryId).AsEnumerable().FirstOrDefault();
+                return ImmediateNode.Id;
             }
 
         }

@@ -21,7 +21,7 @@ namespace SanitaryCartControl.Core.Services
         }
         public IEnumerable<KeyValuePair<int, string>> GetAttrinuteValues(SanitaryCartControl.Core.Entities.Enums.ProductType type, int categoryId)
         {
-            int rootId = _categoryService.GetRootId(categoryId);
+            int rootId = _categoryService.GetImmediateNodeId(categoryId);
             using (var context = new SanitaryCartContext(_con))
             {
                 ICollection<KeyValuePair<int, string>> Values = new List<KeyValuePair<int, string>>();
@@ -59,10 +59,10 @@ namespace SanitaryCartControl.Core.Services
 
         public ProductBLL GetById(int Id)
         {
-            var Ancestors = _categoryService.GetAllAncestors(Id);
             using (var context = new SanitaryCartContext(_con))
             {
                 var Product = context.Product.AsNoTracking().Include(e => e.Image).Include(e => e.BrandIdFkNavigation).Include(e => e.TypeProductQuantity).Include(e => e.TypeProductQuantity).First(e => e.Id == Id);
+                var Ancestors = _categoryService.GetAllAncestors(Product.CategoryId);
                 return Helpher.HelpherMethods.ToProductBLL(Product, Ancestors);
             }
         }

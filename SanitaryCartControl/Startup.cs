@@ -33,11 +33,10 @@ namespace SanitaryCartControl
             services.AddDbContext<SanitaryCartIdentityContext>(oo =>
               oo.UseMySql(Configuration.GetConnectionString("IdentitySQLConnection"),options => {
                   options
-                  .ServerVersion(new Version(8,0,0),ServerType.MySql)
+                  .ServerVersion(new Version(8,0,3),ServerType.MySql)
                   .EnableRetryOnFailure(3);
             })
             .EnableDetailedErrors());
-
             services.AddCoreExtensions();
             services.AddServicesExtensionsWithIConfiguration(Configuration);
             services.AddControllersWithViews();
@@ -52,7 +51,7 @@ namespace SanitaryCartControl
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                ApplicationExtensionsMethods.SeedRolesAndAdmin(serviceProvider, Configuration);
+               // ApplicationExtensionsMethods.SeedRolesAndAdmin(serviceProvider, Configuration);
 
             }
             else

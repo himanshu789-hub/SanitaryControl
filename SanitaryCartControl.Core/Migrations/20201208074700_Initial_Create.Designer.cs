@@ -9,15 +9,15 @@ using SanitaryCartControl.Core.Context;
 namespace SanitaryCartControl.Core.Migrations
 {
     [DbContext(typeof(SanitaryCartIdentityContext))]
-    [Migration("20201205192814_Initial_Create")]
+    [Migration("20201208074700_Initial_Create")]
     partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.0");
+                .HasAnnotation("ProductVersion", "3.1.10")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -29,12 +29,12 @@ namespace SanitaryCartControl.Core.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
@@ -160,8 +160,8 @@ namespace SanitaryCartControl.Core.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
@@ -182,12 +182,12 @@ namespace SanitaryCartControl.Core.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -205,8 +205,8 @@ namespace SanitaryCartControl.Core.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 

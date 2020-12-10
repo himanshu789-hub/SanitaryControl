@@ -7,7 +7,7 @@ namespace SanitaryCartControl.Core.Contracts.Services
     {
          int? GetProductTypeById(int Id);
         IEnumerable<CategoryBLL> GetCategoryList(int brandId);
-        int GetRootId(int categoryId);
+        int GetImmediateNodeId(int categoryId);
         AncestorCategoryBLL GetAllAncestors(int Id);
     }
 }
