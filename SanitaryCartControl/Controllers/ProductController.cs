@@ -112,7 +112,7 @@ namespace SanitaryCartControl.Controllers
         {
             return Json(_productService.GetAttrinuteValues(type, categoryId));
         }
-
+        
         public IActionResult Delete([BindRequired]int Id)
         {
             if(ModelState.IsValid)

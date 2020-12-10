@@ -19,7 +19,7 @@ namespace SanitaryCartControl.Core.Services
         }
         public IEnumerable<KeyValuePair<int, string>> GetAttrinuteValues(SanitaryCartControl.Core.Entities.Enums.ProductType type, int categoryId)
         {
-            int rootId = _categoryService.GetRootId(categoryId);
+            int rootId = _categoryService.GetImmediateNodeId(categoryId);
             using (var context = new SanitaryCartContext())
             {
                 ICollection<KeyValuePair<int, string>> Values = new List<KeyValuePair<int, string>>();
@@ -52,15 +52,12 @@ namespace SanitaryCartControl.Core.Services
                 return Values;
             }
         }
-
-
-
         public ProductBLL GetById(int Id)
         {
-            var Ancestors = _categoryService.GetAllAncestors(Id);
             using (var context = new SanitaryCartContext())
             {
                 var Product = context.Product.AsNoTracking().Include(e => e.Image).Include(e => e.BrandIdFkNavigation).Include(e => e.TypeProductQuantity).Include(e => e.TypeProductQuantity).First(e => e.Id == Id);
+                var Ancestors = _categoryService.GetAllAncestors(Product.CategoryId);
                 return Helpher.HelpherMethods.ToProductBLL(Product, Ancestors);
             }
         }
@@ -144,7 +141,6 @@ namespace SanitaryCartControl.Core.Services
                 return NewProduct.Id;
             }
         }
-
         public IEnumerable<ProductBLL> Search(string value)
         {
             using (var context = new SanitaryCartContext())
@@ -155,7 +151,6 @@ namespace SanitaryCartControl.Core.Services
                 return HelpherMethods.ToProductBLLs(products.AsQueryable());
             }
         }
-
         public bool Delete(int Id)
         {
             using (var context = new SanitaryCartContext())

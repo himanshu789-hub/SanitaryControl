@@ -180,7 +180,11 @@
                     if(state.remoteValues.length==data.length)
                        alert('No More Item To Add')     
                     else
+                    {
+
                     buildAttribute(state.typeSelected,state.categoryId,data.length);
+                ResetFormValidation();
+                    }
                 },
                 error:onError
                 });
@@ -465,12 +469,12 @@ $(".input-number").keydown(function (e) {
             .change(function () {
                 data[index][itemNameandProperties.ValueProperty] = $(dropdown).val()
             }).click(function () {
-                debugger;
                 dropdown.children().remove();
                 setValues(state.remoteValues);
                 dropdown.val(data[index][itemNameandProperties.ValueProperty]);
             })
             .prop('disabled', type === types.None_Variable);
+
         const setValues = function (remoteValues) {
             data.forEach((e, eIndex) => {
                 if (eIndex != index) {

@@ -42,10 +42,10 @@ namespace SanitaryCartControl.Core.Services
                     };
                     cmd.Parameters.Add(InputParameter);
                     cmd.Parameters.Add(OutputParameter);
+                    con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();
-                    if(OutputParameter.Value==null)
-                    result= (int)OutputParameter.Value;
+                    result = (int)OutputParameter.Value;
                 }
             }
             using(var context=new SanitaryCartContext())
@@ -73,17 +73,18 @@ namespace SanitaryCartControl.Core.Services
                 };
                 foreach (var item in categories.Where(e => e.Id != Id))
                     ancestorCategoryBLL.Ancestors.Add(new AncestorCategoryBLL() { Id = item.Id, Title = item.Titlle, Ancestors = null });
+                
                 return ancestorCategoryBLL;
             }
         }
 
 
-        public int GetRootId(int categoryId)
+        public int GetImmediateNodeId(int categoryId)
         {
             using (var context = new SanitaryCartContext())
             {
-                var Parent = context.Category.FromSqlRaw<Category>("GetRootNode @Id={0}", categoryId).AsEnumerable().FirstOrDefault();
-                return Parent.Id;
+                var ImmediateParent = context.Category.FromSqlRaw<Category>("GetImmediateNode @Id={0}", categoryId).AsEnumerable().FirstOrDefault();
+                return ImmediateParent.Id;
             }
 
         }
