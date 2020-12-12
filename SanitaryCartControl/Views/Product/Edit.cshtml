@@ -349,8 +349,7 @@ $(".input-number").keydown(function (e) {
         $(elements.fileHolder).prepend(inputFile); 
         ResetFormValidation();
     }
-   
-    $(elements.imageUpload).change(function (e) {
+   const ImageChangeEvent = function (e) {
         const files = e.target.files;
         debugger;
         if (files && files.length > 0) {
@@ -366,7 +365,7 @@ $(".input-number").keydown(function (e) {
             }).length>0;
             if(IsAllFileNotAppropriate)
             {
-                alert('Image File Size Too Long');
+                alert('Image File Size Too Long.\nEach Must Be Less Than 64KB');
                 reInitializeFileInput();
                 return false;
             }
@@ -380,7 +379,9 @@ $(".input-number").keydown(function (e) {
                 };
             });
         }
-    });
+    };
+
+    $(elements.imageUpload).change(ImageChangeEvent);
     $(elements.nameInput).keyup(function (e) {
         e.preventDefault();
         $(this).val($(this).val().charAt(0).toUpperCase() + $(this).val().slice(1));

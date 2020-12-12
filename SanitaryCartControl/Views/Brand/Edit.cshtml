@@ -12,24 +12,49 @@
     @Html.TextBoxFor(modelItem=>modelItem.Brand.Name,new {@class="form-control"})
  </div>
  @Html.HiddenFor(e=>e.Brand.ImagePath)
-   <div class="form-group">
+   <div class="form-group " id="fileHolder">
       @Html.LabelFor(e=>e.Logo)
       @Html.TextBoxFor(e=>e.Logo,new {@class="form-control",@type="file",@accept="image/jpg, image/jpeg, image/png"})
    </div>
-<input type="submit" class="btn btn-success block w-25" />
+<input type="submit" class="btn btn-success block w-25" value="Update"/>
+<button role="button" class="btn btn-outline-danger" onclick="history.back()">Cancel</button>
+			
 }
 
 <img src="@Model.Brand.ImagePath" name="fileViewer" class="border rounded-lg img-thumbnail w-25"/>
 </div>
 <script>
+
+  
+  const elements = {
+    fileHolder:'#fileHolder',
+    fileInput:"#Logo"
+  }
+  const inputName = {
+    fileInput:"Logo"
+  }
+  function reInitializeFileInput() {
+    debugger;
+   $(elements.fileInput).remove();
+    const input = $(`<input type="file" name='${inputName.fileInput}' id='${inputName.fileInput}' 
+    accept="image/jpg, image/jpeg, image/png" class="form-control"/>`)
+    $(elements.fileHolder).append(input);
+    form.init();
+  }
   const form ={
-    filePicker:$('[name="Logo"]'),
+    filePicker:"#Logo",
     fileViewer:$('[name="fileViewer"]'),
     init:function(){
-         this.filePicker.change(e=>{
+         $(form.filePicker).change(e=>{
            const files = e.target.files;
            if(files && files[0])
            {
+             if(Math.ceil(files[0].size/1024)>10)
+             {
+               alert("Image File Size Too Long.\nMust Be Less Than 10kb")
+               reInitializeFileInput();
+               return false;
+             }
              const reader = new FileReader();
             reader.onload = function (e) {
                 $(fileViewer)

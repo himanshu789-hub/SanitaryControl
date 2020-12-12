@@ -67,14 +67,20 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                Product OldProduct = context.Product.Include(e => e.TypeProductQuantity).Include(e => e.Image).FirstOrDefault(e => e.Id == product.Id);
+                Product OldProduct = context.Product
+                .Include(e => e.TypeProductQuantity)
+                .Include(e => e.Image)
+                .FirstOrDefault(e => e.Id == product.Id);
+                
                 OldProduct.DateUpdated = product.DateUpdated;
+                
                 OldProduct.Description = product.Description;
+                
                 if (OldProduct == null)
                     return false;
                 if (product.Images != null)
                 {
-                    context.Image.RemoveRange(context.Image.Where(e => e.Id == OldProduct.Id).ToList());
+                    context.Image.RemoveRange(OldProduct.Image);
                     foreach (var item in product.Images)
                     {
                         OldProduct.Image.Add(new Image()
