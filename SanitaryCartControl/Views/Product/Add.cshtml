@@ -211,9 +211,9 @@ state.count=0;
             if (this.categories && this.categories.length > 0) {
                 let a = li.find('a');
                 a.text(this.title);
-                li.add("parent")
+                li.addClass("parent")
                 a.append('<span class="expand">&raquo;</span>');
-                var ul = $('<ul></ul>').addClass('child');
+                var ul = $('<ul></ul>').attr("id",'child');
                 ul.appendTo(li);
                 buildMenu(ul, this.categories);
             }

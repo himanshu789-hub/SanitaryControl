@@ -66,6 +66,22 @@ namespace SanitaryCartControl.Controllers
             return View(seriesViewModel);
         }
         [HttpPost]
+        public JsonResult CheckNameExistsUnderParentIdAndBrandId(SeriesNameRemoteValidate seriesNameRemote)
+        {
+            ModelState.RemoveIfPresent("Series.Id");
+
+            if (ModelState.IsValid)
+            {
+                string name = seriesNameRemote.name;
+                int ParentId = seriesNameRemote.ParentId;
+                int BrandId = seriesNameRemote.BrandId;
+                int? Id = seriesNameRemote.Id;
+                bool IsNameExists =_seriesService.IsNameExists(name, ParentId, BrandId, Id); 
+                return Json(!IsNameExists);
+            }
+            throw new System.Exception("Didn't Obtain Name Or ParentId while checking series name");
+        }
+        [HttpPost]
         public IActionResult Edit(SeriesDTO series, IFormFile Image)
         {
             ModelState.RemoveIfPresent("Series.ImagePath");
@@ -73,7 +89,7 @@ namespace SanitaryCartControl.Controllers
 
             if (Image != null)
             {
-                Thread DeleteThread =  new Thread(()=>this.DeleteImage(series.ImagePath));
+                Thread DeleteThread = new Thread(() => this.DeleteImage(series.ImagePath));
                 DeleteThread.Start();
                 string path = this.AddImage(Image, imagePath);
                 series.ImagePath = path;

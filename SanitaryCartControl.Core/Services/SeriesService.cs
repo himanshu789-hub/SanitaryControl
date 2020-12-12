@@ -20,8 +20,12 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                Category category = new Category() { Titlle = series.Title, 
-                ParentId = series.Parent.Key, ImagePath = series.ImagPath };
+                Category category = new Category()
+                {
+                    Titlle = series.Title,
+                    ParentId = series.Parent.Key,
+                    ImagePath = series.ImagPath
+                };
                 SeriesBrand seriesBrand = new SeriesBrand()
                 {
                     BrandIdFk = series.BrandId,
@@ -65,6 +69,20 @@ namespace SanitaryCartControl.Core.Services
                     new KeyValuePair<int, string>(e.Id, e.Titlle)
                 ));
                 return result;
+            }
+        }
+
+        public bool IsNameExists(string name, int ParentId, int BrandId, int? Id)
+        {
+            using (var context = new SanitaryCartContext(_con))
+            {
+                bool IsNameExists = false;
+                if (Id == null)
+                    IsNameExists = context.Category.Include(e => e.SeriesBrand).FirstOrDefault(e => e.ParentId == ParentId && e.SeriesBrand.BrandIdFk == BrandId && e.Titlle.Equals(name)) != null;
+                else
+                    IsNameExists = context.Category.Include(e => e.SeriesBrand)
+                    .FirstOrDefault(e => e.SeriesBrand.Id != Id && e.ParentId == ParentId && e.SeriesBrand.BrandIdFk == BrandId && e.Titlle.Equals(name)) != null;
+                return IsNameExists;
             }
         }
 

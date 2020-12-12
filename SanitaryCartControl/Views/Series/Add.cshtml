@@ -7,24 +7,25 @@
     ICollection<SelectListItem> categoryLists =  new List<SelectListItem>();
       foreach (var item in Model.Category)
        categoryLists.Add(new SelectListItem(){Text=item.Value,Value=item.Key.ToString()});
+    ViewData["Head"]="Add Series";
 }
-@using(Html.BeginForm("Add","Series",FormMethod.Post,new {@enctype="multipart/form-data"}))
+@using(Html.BeginForm("Add","Series",FormMethod.Post,new {@enctype="multipart/form-data",@id="seriesForm"}))
 {
 <div class="form-group row">
     @Html.LabelFor(e=>e.Series.Brand_Id_Fk,"Brand",new {@class="col-sm-2 col-form-label",@for="Series_Brand__Id__Fk"})
     <div class="col-sm-10">
-    @Html.DropDownListFor(e=>e.Series.Brand_Id_Fk,brandLists,"-- Choose A Brand --",new {@class="form-control"})
+    @Html.DropDownListFor(e=>e.Series.Brand_Id_Fk,brandLists,"-- Please Select A Brand --",new {@class="form-control"})
     @Html.ValidationMessageFor(e=>e.Series.Brand_Id_Fk,"",new {@class="text-danger small"})
     </div>
 </div>
 <div class="form-group row">
     @Html.LabelFor(e=>e.Series.ParentId,"Category",new {@class="col-sm-2 col-form-label",@for="Series_Brand__Id__Fk"})
     <div class="col-sm-10">
-    @Html.DropDownListFor(e=>e.Series.ParentId,categoryLists,"-- Choose A Category --",new {@class="form-control col-sm-5"})
+      @Html.DropDownListFor(e=>e.Series.ParentId,categoryLists,"-- Please Select A Category --",new {@class="form-control col-sm-5"})
     @Html.ValidationMessageFor(e=>e.Series.ParentId,"",new {@class="text-danger small"})
  </div>
 </div>
-   <div class="card">
+   <div class="card disabled" id="subForm">
 <div class="card-head  bg-info text-white">
        <h4 class="font-weight-normal text-center">Add A Series</h4>
 </div>
@@ -61,7 +62,40 @@
 }
 <script>
   var elements = {
-    fileHolder:"custom-file"
+    fileHolder:"custom-file",
+    subForm:'#subForm',
+    brandDropDown:'#Series_Brand_Id_Fk',
+    CategoryDropDown:'#Series_ParentId',
+    seriesForm:'#seriesForm',
+    nameField:'#Series_Name'
+  }
+  const ActivateNameRemoteValidation = function(){
+    if(IsVisible && $(elements.nameField).val())
+    {
+      $(elements.seriesForm).validate().element(elements.nameField)
+    }
+  }
+  $(elements.brandDropDown).change(()=>{
+    MakeVisibleSubForm()
+    ActivateNameRemoteValidation();
+  })
+  $(elements.CategoryDropDown).change(()=>{
+    MakeVisibleSubForm();
+    ActivateNameRemoteValidation();
+  })
+  var IsVisible = false;
+  function MakeVisibleSubForm()
+  {
+    if(!IsVisible)
+    if(($(elements.CategoryDropDown).val()) && ($(elements.brandDropDown)))
+    {
+         IsVisible =true;
+         $(elements.CategoryDropDown).children().first().remove();
+         
+         $(elements.brandDropDown).children().first().remove();
+         $(elements.subForm).removeClass("disabled");
+    
+    }
   }
   const inputName = {
     fileInput:'Image'

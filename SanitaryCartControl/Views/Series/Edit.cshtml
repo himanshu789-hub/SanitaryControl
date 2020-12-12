@@ -35,6 +35,7 @@ ViewData["Head"]="Edit A Series";
 				<div class="form-group">
         @Html.LabelFor(e=>e.Series.Name,"Name",new {@for="Series_Name"})
 		    @Html.TextBoxFor(modelItem=>modelItem.Series.Name,new {@class="form-control"})
+        @Html.ValidationMessageFor(e=>e.Series.Name,"",new {@class="small text-danger"},"span")
         </div>
 				<div class="form-group">
       @Html.LabelFor(e=>e.Image)      
@@ -43,7 +44,8 @@ ViewData["Head"]="Edit A Series";
 						<label class="custom-file-label text-truncate" id="custom-file-label" for="Image">Choose Image file
 							<small class="font-italic">(Optional)</small>
 						</label>
-					</div>
+        @Html.ValidationMessageFor(e=>e.Image,"",new {@class="small text-danger"},"span")
+        	</div>
 					<style>
 						input[type="file"]{
 							z-index:1;
