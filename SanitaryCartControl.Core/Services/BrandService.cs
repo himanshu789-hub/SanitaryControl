@@ -76,25 +76,24 @@ namespace SanitaryCartControl.Core.Services
             }
         }
 
-        public bool IsNameExists(string name)
+        public bool IsNameExists(string name,byte? Id=null)
         {
             using (var context = new SanitaryCartContext(_con))
             {
                 try
                 {
-
-                    var brands = context.Brand.AsNoTracking().FirstOrDefault(e => e.Name.Equals(name));
-                    if (brands != null)
-                    {
-                        return true;
-                    }
+                    bool IsNameExists = false;
+                    if(Id!=null)
+                    IsNameExists = context.Brand.AsNoTracking().FirstOrDefault(e=>e.Id!=Id && e.Name.Equals(name))!=null;
+                    else
+                    IsNameExists = context.Brand.AsNoTracking().FirstOrDefault(e => e.Name.Equals(name))!=null;
+                    return IsNameExists;
                 }
                 catch (System.Exception e)
                 {
                     e.Data.Add("Description", "SQL Error on brand name checking");
                     throw e;
                 }
-                return false;
             }
         }
 

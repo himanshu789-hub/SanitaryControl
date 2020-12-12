@@ -56,6 +56,15 @@ namespace SanitaryCartControl.Controllers
         {
             if (ModelState.ContainsKey("logo"))
                 ModelState.Remove("logo");
+            if(brandView.Brand?.Name!=null)
+            {
+               string name = brandView.Brand.Name;
+               BrandBLL brandBLL = _brandService.GetById(brandView.Brand.Id);
+               if(_brandService.IsNameExists(name,brandBLL.Id))
+               {
+                   ModelState.AddModelError("Duplicate Entry","Name Already Exists");
+               } 
+            }
             if (ModelState.IsValid)
             {
                 if (brandView.Logo != null)
@@ -119,8 +128,11 @@ namespace SanitaryCartControl.Controllers
             ModelState.RemoveIfPresent("Brand.ImagePath");
             if (brandView.Logo == null)
                 ModelState.AddModelError("Logo", "Logo Required");
+            if(brandView.Brand?.Name!=null && _brandService.IsNameExists(brandView.Brand.Name))
+            ModelState.AddModelError("Duplicate Entry","Name Already Exists");
             if (ModelState.IsValid)
             {
+                
                 string path = this.UploadFile(brandView.Logo);
                 _brandService.Create(new BrandBLL() { ImagePath = path, Name = brandView.Brand.Name });
                 return Redirect(@"\Brand\GetAll");

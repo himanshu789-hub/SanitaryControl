@@ -11,6 +11,7 @@ namespace SanitaryCartControl.DTOModels
         [Required]
         [Remote("CheckName","Brand",ErrorMessage="Name already in Use")]
         [RegularExpression(@"^[A-Z^0-9][a-z]+$",ErrorMessage="Name not valid")]
+        [MaxLength(50,ErrorMessage="Maximum Length Exceed")]
         public string Name{get;set;}
         [Required]
         public string ImagePath{get;set;}

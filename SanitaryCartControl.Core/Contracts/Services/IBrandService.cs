@@ -8,7 +8,7 @@ namespace SanitaryCartControl.Core.Contracts.Services
     bool Update(BrandBLL brand);
     IEnumerable<BrandBLL> GetBrands();
 
-    bool IsNameExists(string name);
+    bool IsNameExists(string name,byte? Id=null);
 
     BrandBLL GetById(int Id);
   }
