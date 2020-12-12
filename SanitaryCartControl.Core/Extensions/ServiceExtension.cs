@@ -3,10 +3,9 @@ using SanitaryCartControl.Core.Contracts.Services;
 using SanitaryCartControl.Core.Services;
 using SanitaryCartControl.Core.Context;
 using SanitaryCartControl.Core.Entities.DALModels;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using SanitaryCartControl.Core.Helpher;
 namespace SanitaryCartControl.Core.Extensions
 {
     public static class ApplicationCoreEntensions
@@ -44,6 +43,11 @@ namespace SanitaryCartControl.Core.Extensions
                });
 
         }
-
+        public static void AddServicesExtensionsWithIConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddOptions();
+            var connection = configuration.GetSection(ConnectionStringOptions.OptionName);
+            services.Configure<ConnectionStringOptions>(options => connection.Bind(options));
+        }
     }
 }

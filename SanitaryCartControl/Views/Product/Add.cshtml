@@ -65,7 +65,7 @@
         <div class="card-header font-weight-bold">Select Images : </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-2 form-group">
+                <div class="col-2 form-group" id="fileHolder">
                     @Html.TextBoxFor(e=>e.Images,null,new {@class="form-control invisible",@type="file",@multiple="true",@accept="image/jpg, image/jpeg, image/png"})
                     <label for="Images" class="btn btn-outline-success">
                         <span>Browse</span>
@@ -103,12 +103,40 @@
         imageViewer: '#image-viewer',
         dateField:'#Product_DateAdded',
         dateUpdatedField:'#Product_DateUpdated',
-        typeFields:'#Product_Type'
+        typeFields:'#Product_Type',
+        fileHolder:'#fileHolder'
     };
-    $(elements.imageUpload).change(function (e) {
+    var inputNames = {
+        fileInput:'Images'
+    }
+    function reInitializeFileInput(){
+        $(elements.fileHolder).children().first().remove();
+        var inputFile = $(`<input id='${inputNames.fileInput}' name='${inputNames.fileInput}'
+         type='file' accept='image/jpg, image/jpeg, image/png' class="invisible" multiple=true data-val='true' data-val-required="Please, Select Files"/>`);
+        $(inputFile).change(ImageChangeEvent)
+        $(elements.fileHolder).prepend(inputFile); 
+        ResetFormValidation();
+    }
+    const ImageChangeEvent = function (e) {
         const files = e.target.files;
         debugger;
         if (files && files.length > 0) {
+            if(files.length>7)
+            {
+                alert("Number of Image must be less than 7");
+                reInitializeFileInput();
+                return false;
+            }
+           const IsAllFileNotAppropriate=  $(files).filter((index,file)=>{    
+                if(Math.ceil(file.size/1024)>64)
+                   return true;
+            }).length>0;
+            if(IsAllFileNotAppropriate)
+            {
+                alert('Image File Size Too Long');
+                reInitializeFileInput();
+                return false;
+            }
             $(elements.imageViewer).children().remove();
             Array.from(files).forEach(e => {
                 const reader = new FileReader();
@@ -118,7 +146,8 @@
                 };
             });
         }
-    })
+    }
+    $(elements.imageUpload).change(ImageChangeEvent)
     $(elements.nameInput).keyup(function (e) {
         e.preventDefault();
         $(this).val($(this).val().charAt(0).toUpperCase() + $(this).val().slice(1));
@@ -177,11 +206,12 @@ state.count=0;
     });
     function buildMenu(parent, items) {
         $.each(items, function (index, item) {
-            var li = $('<li class="parent"><a href="#">' + this.title + '</a></li>');
+            var li = $('<li><a href="#">' + this.title + '</a></li>');
             li.appendTo(parent);
             if (this.categories && this.categories.length > 0) {
                 let a = li.find('a');
                 a.text(this.title);
+                li.add("parent")
                 a.append('<span class="expand">&raquo;</span>');
                 var ul = $('<ul></ul>').addClass('child');
                 ul.appendTo(li);
@@ -205,7 +235,8 @@ state.count=0;
                             if (Number.isInteger(data))
                                 state.typeSelected = data;
                             $(elements.typeFields).val(data); 
-                        },error:onError
+                        },
+                    error:onError
                     });
                     data = new Array();
                     init();

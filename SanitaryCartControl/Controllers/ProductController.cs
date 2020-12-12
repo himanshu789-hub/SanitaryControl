@@ -73,8 +73,7 @@ namespace SanitaryCartControl.Controllers
                 string[] oldImages = _productService.GetById(productEditDTO.Product.Id).Images;
                 if (productEditDTO.Images != null)
                     {
-                        new Thread(()=>this.DeleteImages(oldImages)).Start();
-
+                        this.DeleteImages(oldImages);
                         images = this.AddImages(productEditDTO.Images, imagesPath);
                     }
                 bool IsUpdated = _productService.Update(Converters.ToProductBLL(productEditDTO.Product, productEditDTO.Attributes, images));

@@ -7,12 +7,15 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using SanitaryCartControl.Core.Helpher;
-
+using Microsoft.Extensions.Options;
 namespace SanitaryCartControl.Core.Services
 {
     public class BrandService : IBrandService
     {
-        ILogger _logger;
+        readonly string _con;
+        public BrandService(IOptions<ConnectionStringOptions> connection){
+            _con = connection.Value.SQLConnection;
+        } 
         BrandBLL ConvertToBLL(Brand item)
         {
             if (item != null)
@@ -34,12 +37,9 @@ namespace SanitaryCartControl.Core.Services
             }
             return null;
         }
-
-        public BrandService(ILogger<BrandService> logger) => _logger = logger;
-
         public bool Create(BrandBLL brand)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 Brand NewBrand = new Brand()
                 {
@@ -55,7 +55,7 @@ namespace SanitaryCartControl.Core.Services
 
         public IEnumerable<BrandBLL> GetBrands()
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 var Brands = context.Brand.AsNoTracking().ToList();
                 var Result = new List<BrandBLL>();
@@ -69,7 +69,7 @@ namespace SanitaryCartControl.Core.Services
 
         public BrandBLL GetById(int Id)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 Brand brand = context.Brand.AsNoTracking().FirstOrDefault(e => e.Id == Id);
                 return this.ConvertToBLL(brand);
@@ -78,7 +78,7 @@ namespace SanitaryCartControl.Core.Services
 
         public bool IsNameExists(string name)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 try
                 {
@@ -100,7 +100,7 @@ namespace SanitaryCartControl.Core.Services
 
         public bool Update(BrandBLL brand)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 try
                 {

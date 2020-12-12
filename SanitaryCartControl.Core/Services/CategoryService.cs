@@ -9,19 +9,20 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using Microsoft.Extensions.Configuration;
 using SanitaryCartControl.Core.Helpher;
+using Microsoft.Extensions.Options;
 namespace SanitaryCartControl.Core.Services
 {
     public class CategoryService : ICategoryService
     {
-        IConfiguration _config;
-        public CategoryService(IConfiguration configuration)
+        readonly string _con;
+        public CategoryService(IOptions<ConnectionStringOptions> connection)
         {
-            _config = configuration;
+           _con = connection.Value.SQLConnection;
         }
         public int? GetProductTypeById(int CategoryId)
         {
             int result  = 0;
-            using (var con = new SqlConnection(_config.GetConnectionString(ConnectionStrings.SQLConnection)))
+            using (var con = new SqlConnection(_con))
             {
                 string StoredProcedureName = "GetTypeImmediateResult";
                 using (var cmd = new SqlCommand(StoredProcedureName, con))
@@ -48,20 +49,20 @@ namespace SanitaryCartControl.Core.Services
                     result = (int)OutputParameter.Value;
                 }
             }
-            using(var context=new SanitaryCartContext())
+            using(var context=new SanitaryCartContext(_con))
             {
              ProductType productType = context.ProductType.FirstOrDefault(e=>e.CategoryIdFk==result);
              return productType?.AttributeIdFk; 
             }
         }
-        // using (var context = new SanitaryCartContext())
+        // using (var context = new SanitaryCartContext(_con))
         // {
         //     ProductType productType = context.ProductType.FirstOrDefault(e => e.CategoryIdFk == parentId);
         //     return productType.AttributeIdFk;
         // }
         public AncestorCategoryBLL GetAllAncestors(int Id)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 var categories = context.Category.FromSqlRaw<Category>("GetRootPath @Id={0}", Id).ToList();
                 var first = categories.First();
@@ -81,7 +82,7 @@ namespace SanitaryCartControl.Core.Services
 
         public int GetImmediateNodeId(int categoryId)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 var ImmediateParent = context.Category.FromSqlRaw<Category>("GetImmediateNode @Id={0}", categoryId).AsEnumerable().FirstOrDefault();
                 return ImmediateParent.Id;
@@ -91,7 +92,7 @@ namespace SanitaryCartControl.Core.Services
 
         public IEnumerable<CategoryBLL> GetCategoryList(int brandId)
         {
-            using (var context = new SanitaryCartContext())
+            using (var context = new SanitaryCartContext(_con))
             {
                 IList<CategoryBLL> CategoryBLLs = new List<CategoryBLL>();
                 int[] SeriesHolderIds = context.SeriesHolderCategory.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();

@@ -201,9 +201,9 @@
     <div class="collapse shadow p-3 mb-5 bg-white rounded" id="collapseExample">
   <div class="card card-body">
     <div class="row">
-        <div class="col-3">
-            <label class="btn btn-outline-warning" for="Images">Browse</label>
+        <div class="col-3" id="fileHolder">
                 <input name="Images" id="Images" type="file" multiple="true" class="invisible" accept="image/jpg, image/jpeg, image/png"/>
+            <label class="btn btn-outline-warning" for="Images">Browse</label>
                 @Html.ValidationMessageFor(e=>e.Images,"",new {@class="text-danger small"},"span")
         </div>
             <div id="image-viewer" 
@@ -333,12 +333,43 @@ $(".input-number").keydown(function (e) {
         imageViewer: '#image-viewer',
         dateField:'#Product_DateAdded',
         uploadButtonLabel:'#uploadButton',
-        dateUpdated:'#Product_DateUpdated'
+        dateUpdated:'#Product_DateUpdated',
+            fileHolder:'#fileHolder'
+    
     };
+    var inputNames = {
+        fileInput:'Images'
+    }
+   
+     function reInitializeFileInput(){
+        $(elements.fileHolder).children().first().remove();
+        var inputFile = $(`<input id='${inputNames.fileInput}' name='${inputNames.fileInput}'
+         type='file' accept='image/jpg, image/jpeg, image/png' class="invisible" multiple=true data-val='false' data-val-required="Please, Select Files"/>`);
+        $(inputFile).change(ImageChangeEvent)
+        $(elements.fileHolder).prepend(inputFile); 
+        ResetFormValidation();
+    }
+   
     $(elements.imageUpload).change(function (e) {
         const files = e.target.files;
         debugger;
         if (files && files.length > 0) {
+             if(files.length>7)
+            {
+                alert("Number of Image must be less than 7");
+                reInitializeFileInput();
+                return false;
+            }
+             const IsAllFileNotAppropriate=  $(files).filter((index,file)=>{    
+                if(Math.ceil(file.size/1024)>64)
+                   return true;
+            }).length>0;
+            if(IsAllFileNotAppropriate)
+            {
+                alert('Image File Size Too Long');
+                reInitializeFileInput();
+                return false;
+            }
             $(elements.imageViewer).children().remove();
             $(elements.uploadButtonLabel).removeAttr("data-toggle")
             Array.from(files).forEach(e => {

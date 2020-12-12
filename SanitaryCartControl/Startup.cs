@@ -34,8 +34,8 @@ namespace SanitaryCartControl
 
             services.AddDbContext<SanitaryCartIdentityContext>(oo =>
               oo.UseSqlServer(Configuration.GetConnectionString("IdentitySQLConnection")));
-
             services.AddCoreExtensions();
+            services.AddServicesExtensionsWithIConfiguration(Configuration);
             services.AddControllersWithViews();
 
         }
