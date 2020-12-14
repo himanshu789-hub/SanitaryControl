@@ -51,7 +51,7 @@ namespace SanitaryCartControl.Core.Services
             }
             using(var context=new SanitaryCartContext(_con))
             {
-             ProductType productType = context.ProductType.FirstOrDefault(e=>e.CategoryIdFk==result);
+             ProductType productType = context.ProductTypes.FirstOrDefault(e=>e.CategoryIdFk==result);
              return productType?.AttributeIdFk; 
             }
         }
@@ -64,7 +64,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var categories = context.Category.FromSqlRaw<Category>("GetRootPath @Id={0}", Id).ToList();
+                var categories = context.Categories.FromSqlRaw<Category>("GetRootPath @Id={0}", Id).ToList();
                 var first = categories.First();
                 AncestorCategoryBLL ancestorCategoryBLL = new AncestorCategoryBLL
                 {
@@ -84,7 +84,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var ImmediateParent = context.Category.FromSqlRaw<Category>("GetImmediateNode @Id={0}", categoryId).AsEnumerable().FirstOrDefault();
+                var ImmediateParent = context.Categories.FromSqlRaw<Category>("GetImmediateNode @Id={0}", categoryId).AsEnumerable().FirstOrDefault();
                 return ImmediateParent.Id;
             }
 
@@ -95,9 +95,9 @@ namespace SanitaryCartControl.Core.Services
             using (var context = new SanitaryCartContext(_con))
             {
                 IList<CategoryBLL> CategoryBLLs = new List<CategoryBLL>();
-                int[] SeriesHolderIds = context.SeriesHolderCategory.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();
+                int[] SeriesHolderIds = context.SeriesHolderCategories.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();
 
-                var list = context.Category.AsNoTracking().Include(e => e.SeriesBrand).Include(e => e.SeriesHolderCategory).ToList().Where(e =>
+                var list = context.Categories.AsNoTracking().Include(e => e.SeriesBrand).Include(e => e.SeriesHolderCategories).ToList().Where(e =>
                 {
                     if (e.SeriesBrand != null)
                     {

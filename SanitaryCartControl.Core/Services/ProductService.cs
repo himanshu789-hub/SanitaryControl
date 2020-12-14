@@ -4,7 +4,6 @@ using SanitaryCartControl.Core.Entities.BLLModels;
 using SanitaryCartControl.Core.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using SanitaryCartControl.Core.Entities.DALModels;
 using Enums = SanitaryCartControl.Core.Entities.Enums;
 using Microsoft.Extensions.Options;
 using SanitaryCartControl.Core.Helpher;
@@ -29,20 +28,20 @@ namespace SanitaryCartControl.Core.Services
                 {
                     case Entities.Enums.ProductType.ColorVariable:
                         {
-                            var result = context.Color.Where(e => e.CategoryIdFk == rootId).AsNoTracking().ToList();
+                            var result = context.Colors.Where(e => e.CategoryIdFk == rootId).AsNoTracking().ToList();
                             result.ForEach(e => Values.Add(new KeyValuePair<int, string>(e.Id, e.Title)));
                         }
                         break;
                     case Entities.Enums.ProductType.SizeVariable:
                         {
-                            var result = context.Size.Where(e => e.CategoryIdFk == rootId).AsNoTracking().ToList();
+                            var result = context.Sizes.Where(e => e.CategoryIdFk == rootId).AsNoTracking().ToList();
                             result.ForEach(e => Values.Add(new KeyValuePair<int, string>(e.Id, e.Size1)));
                         }
                         break;
 
                     case Entities.Enums.ProductType.TypeVaribale:
                         {
-                            var result = context.Kind.Where(e => e.CategoryIdFk == rootId).AsNoTracking().ToList();
+                            var result = context.Kinds.Where(e => e.CategoryIdFk == rootId).AsNoTracking().ToList();
                             result.ForEach(e => Values.Add(new KeyValuePair<int, string>(e.Id, e.Kind1)));
                         }
                         break;
@@ -58,7 +57,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var Product = context.Product.AsNoTracking().Include(e => e.Image).Include(e => e.BrandIdFkNavigation).Include(e => e.TypeProductQuantity).Include(e => e.TypeProductQuantity).First(e => e.Id == Id);
+                var Product = context.Products.AsNoTracking().Include(e => e.Images).Include(e => e.BrandIdFkNavigation).Include(e => e.TypeProductQuantities).First(e => e.Id == Id);
                 var Ancestors = _categoryService.GetAllAncestors(Product.CategoryId);
                 return Helpher.HelpherMethods.ToProductBLL(Product, Ancestors);
             }
@@ -67,9 +66,9 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                Product OldProduct = context.Product
-                .Include(e => e.TypeProductQuantity)
-                .Include(e => e.Image)
+                Product OldProduct = context.Products
+                .Include(e => e.TypeProductQuantities)
+                .Include(e => e.Images)
                 .FirstOrDefault(e => e.Id == product.Id);
                 
                 OldProduct.DateUpdated = product.DateUpdated;
@@ -80,10 +79,10 @@ namespace SanitaryCartControl.Core.Services
                     return false;
                 if (product.Images != null)
                 {
-                    context.Image.RemoveRange(OldProduct.Image);
+                    context.Images.RemoveRange(OldProduct.Images);
                     foreach (var item in product.Images)
                     {
-                        OldProduct.Image.Add(new Image()
+                        OldProduct.Images.Add(new Image()
                         {
                             Path = item,
                             Type = OldProduct.Type
@@ -93,7 +92,7 @@ namespace SanitaryCartControl.Core.Services
                 int[] AttributeId = product.AttributeBLLs.Where(e => e.Id != 0).Select(e => e.Id).ToArray();
                 foreach (var item in AttributeId)
                 {
-                    TypeProductQuantity typeProductQuantity = OldProduct.TypeProductQuantity.FirstOrDefault(e => e.Id == item);
+                    TypeProductQuantity typeProductQuantity = OldProduct.TypeProductQuantities.FirstOrDefault(e => e.Id == item);
                     AttributeBLL attributeBLL = product.AttributeBLLs.FirstOrDefault(e => e.Id == item);
                     typeProductQuantity.IsActive = attributeBLL.IsActive;
                     typeProductQuantity.Price = attributeBLL.Price;
@@ -102,7 +101,7 @@ namespace SanitaryCartControl.Core.Services
                 IEnumerable<AttributeBLL> attributeBLLs = product.AttributeBLLs.Where(e => e.Id == 0);
                 foreach (var item in attributeBLLs)
                 {
-                    OldProduct.TypeProductQuantity.Add(new TypeProductQuantity()
+                    OldProduct.TypeProductQuantities.Add(new TypeProductQuantity()
                     {
                         Value = item.Value,
                         Quantity = item.Quantity,
@@ -132,7 +131,7 @@ namespace SanitaryCartControl.Core.Services
                     DateUpdated = product.DateAdded
                 };
                 foreach (var item in product.AttributeBLLs)
-                    NewProduct.TypeProductQuantity.Add(new TypeProductQuantity
+                    NewProduct.TypeProductQuantities.Add(new TypeProductQuantity
                     {
                         AtributeType = item.AttributeId,
                         Price = item.Price,
@@ -142,8 +141,8 @@ namespace SanitaryCartControl.Core.Services
                     });
 
                 foreach (var item in product.Images)
-                    NewProduct.Image.Add(new Image { Path = item, Type = product.Type });
-                context.Product.Add(NewProduct);
+                    NewProduct.Images.Add(new Image { Path = item, Type = product.Type });
+                context.Products.Add(NewProduct);
                 context.SaveChanges();
 
                 return NewProduct.Id;
@@ -153,8 +152,8 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var products = context.Product.AsNoTracking().Where(e => e.Code == value || e.Name.Contains(value))
-                  .Include(e => e.TypeProductQuantity)
+                var products = context.Products.AsNoTracking().Where(e => e.Code == value || e.Name.Contains(value))
+                  .Include(e => e.TypeProductQuantities)
                   .Include(e => e.BrandIdFkNavigation).Include(e => e.Category).ThenInclude(e => e.Parent).ToList();
                 return HelpherMethods.ToProductBLLs(products.AsQueryable());
             }
@@ -163,7 +162,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                Product product = context.Product.FirstOrDefault(e => e.Id == Id);
+                Product product = context.Products.FirstOrDefault(e => e.Id == Id);
                 if (product != null)
                 {
                     product.IsActive = false;

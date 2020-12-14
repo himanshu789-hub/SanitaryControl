@@ -24,7 +24,7 @@ namespace SanitaryCartControl.Core.Helpher
         {
             if (product == null || ancestors == null)
                 throw new System.ArgumentNullException();
-            if (product.BrandIdFkNavigation == null || product.TypeProductQuantity == null)
+            if (product.BrandIdFkNavigation == null || product.TypeProductQuantities == null)
                 throw new System.NullReferenceException();
 
             ProductBLL productBLL = new ProductBLL();
@@ -38,14 +38,14 @@ namespace SanitaryCartControl.Core.Helpher
             productBLL.Name = product.Name;
             productBLL.Code = product.Code;
             productBLL.RootPath = ancestors;
-            productBLL.Images = product.Image.Select(e => e.Path).ToArray();
-            productBLL.AttributeBLLs = HelpherMethods.ToAttributeBLL(product.TypeProductQuantity);
+            productBLL.Images = product.Images.Select(e => e.Path).ToArray();
+            productBLL.AttributeBLLs = HelpherMethods.ToAttributeBLL(product.TypeProductQuantities);
             return productBLL;
         }
 
         public static IEnumerable<ProductBLL> ToProductBLLs(IQueryable<Product> products)
         {
-            if (products == null || products.Where(e => e.BrandIdFkNavigation == null || e.TypeProductQuantity == null || e.BrandIdFkNavigation == null).Count() > 0)
+            if (products == null || products.Where(e => e.BrandIdFkNavigation == null || e.TypeProductQuantities == null || e.BrandIdFkNavigation == null).Count() > 0)
             {
                 throw new System.ArgumentNullException();
             }
@@ -67,7 +67,7 @@ namespace SanitaryCartControl.Core.Helpher
                         Title = product.Category.Titlle,
                         Ancestors = new List<AncestorCategoryBLL>()
                     },
-                    AttributeBLLs = HelpherMethods.ToAttributeBLL(product.TypeProductQuantity)
+                    AttributeBLLs = HelpherMethods.ToAttributeBLL(product.TypeProductQuantities)
                 };
                 var element = product.Category.Parent;
                 while (element != null)

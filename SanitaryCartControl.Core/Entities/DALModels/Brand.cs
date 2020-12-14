@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SanitaryCartControl.Core.Entities.DALModels
+#nullable disable
+
+namespace SanitaryCartControl.Core
 {
     public partial class Brand
     {
         public Brand()
         {
-            Product = new HashSet<Product>();
-            SeriesBrand = new HashSet<SeriesBrand>();
+            Products = new HashSet<Product>();
+            SeriesBrands = new HashSet<SeriesBrand>();
         }
 
         public byte Id { get; set; }
         public string Name { get; set; }
         public string ImagePath { get; set; }
 
-        public virtual ICollection<Product> Product { get; set; }
-        public virtual ICollection<SeriesBrand> SeriesBrand { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<SeriesBrand> SeriesBrands { get; set; }
     }
 }

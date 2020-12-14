@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.BLLModels;
-using System.Threading.Tasks;
-using SanitaryCartControl.Core.Entities.Enums;
+using Enums = SanitaryCartControl.Core.Entities.Enums;
 namespace SanitaryCartControl.Core.Contracts.Services
 {
     public interface IProductService
     {
-    IEnumerable<KeyValuePair<int,string>> GetAttrinuteValues(ProductType type,int categoryId);
-  
+    IEnumerable<KeyValuePair<int,string>> GetAttrinuteValues(Enums.ProductType type,int categoryId);
     ProductBLL GetById(int Id);
     bool Update(ProductBLL product);
     int Add(ProductBLL product);

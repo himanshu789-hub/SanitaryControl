@@ -31,7 +31,7 @@ namespace SanitaryCartControl.Core.Services
                     BrandIdFk = series.BrandId,
                     CategoryIdFkNavigation = category
                 };
-                context.SeriesBrand.Add(seriesBrand);
+                context.SeriesBrands.Add(seriesBrand);
                 context.SaveChanges();
                 return seriesBrand.Id;
             }
@@ -41,7 +41,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var result = context.SeriesBrand.Include(e => e.CategoryIdFkNavigation).Where(e => e.CategoryIdFkNavigation.ParentId == CategoryId && e.IsActive == true && e.BrandIdFk == BrandId).ToList();
+                var result = context.SeriesBrands.Include(e => e.CategoryIdFkNavigation).Where(e => e.CategoryIdFkNavigation.ParentId == CategoryId && e.IsActive == true && e.BrandIdFk == BrandId).ToList();
                 IEnumerable<SeriesBLL> seriesBLLs = Helpher.HelpherMethods.ToSeriesBLL(result.AsQueryable());
                 return seriesBLLs;
             }
@@ -51,7 +51,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                SeriesBrand seriesBrand = context.SeriesBrand.Include(e => e.CategoryIdFkNavigation).ThenInclude(e => e.Parent).FirstOrDefault(e => e.Id == Id);
+                SeriesBrand seriesBrand = context.SeriesBrands.Include(e => e.CategoryIdFkNavigation).ThenInclude(e => e.Parent).FirstOrDefault(e => e.Id == Id);
                 if (seriesBrand == null)
                     return null;
                 return Helpher.HelpherMethods.ToSeriesBLL(seriesBrand);
@@ -62,8 +62,8 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                int[] SeriesHolderId = context.SeriesHolderCategory.Distinct().Select(e => e.CategoryIdFk).ToArray();
-                var categories = context.Category.Where(e => SeriesHolderId.Contains(e.Id)).ToList();
+                int[] SeriesHolderId = context.SeriesHolderCategories.Distinct().Select(e => e.CategoryIdFk).ToArray();
+                var categories = context.Categories.Where(e => SeriesHolderId.Contains(e.Id)).ToList();
                 ICollection<KeyValuePair<int, string>> result = new List<KeyValuePair<int, string>>();
                 categories.ForEach(e => result.Add(
                     new KeyValuePair<int, string>(e.Id, e.Titlle)
@@ -78,9 +78,9 @@ namespace SanitaryCartControl.Core.Services
             {
                 bool IsNameExists = false;
                 if (Id == null)
-                    IsNameExists = context.Category.Include(e => e.SeriesBrand).FirstOrDefault(e => e.ParentId == ParentId && e.SeriesBrand.BrandIdFk == BrandId && e.Titlle.Equals(name)) != null;
+                    IsNameExists = context.Categories.Include(e => e.SeriesBrand).FirstOrDefault(e => e.ParentId == ParentId && e.SeriesBrand.BrandIdFk == BrandId && e.Titlle.Equals(name)) != null;
                 else
-                    IsNameExists = context.Category.Include(e => e.SeriesBrand)
+                    IsNameExists = context.Categories.Include(e => e.SeriesBrand)
                     .FirstOrDefault(e => e.SeriesBrand.Id != Id && e.ParentId == ParentId && e.SeriesBrand.BrandIdFk == BrandId && e.Titlle.Equals(name)) != null;
                 return IsNameExists;
             }
@@ -90,7 +90,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                context.SeriesBrand.Find(seriesId).IsActive = false;
+                context.SeriesBrands.Find(seriesId).IsActive = false;
                 context.SaveChanges();
                 return true;
             }
@@ -100,7 +100,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                SeriesBrand SeriesBrand = context.SeriesBrand
+                SeriesBrand SeriesBrand = context.SeriesBrands
                 .Include(e => e.CategoryIdFkNavigation)
                 .FirstOrDefault(e => e.Id == series.Id);
                 if (series == null)

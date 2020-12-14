@@ -46,7 +46,7 @@ namespace SanitaryCartControl.Core.Services
                     Name = brand.Name,
                     ImagePath = brand.ImagePath
                 };
-                context.Brand.Add(NewBrand);
+                context.Brands.Add(NewBrand);
                 context.SaveChanges();
                 return true;
             }
@@ -57,7 +57,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var Brands = context.Brand.AsNoTracking().ToList();
+                var Brands = context.Brands.AsNoTracking().ToList();
                 var Result = new List<BrandBLL>();
                 foreach (var item in Brands)
                 {
@@ -71,7 +71,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                Brand brand = context.Brand.AsNoTracking().FirstOrDefault(e => e.Id == Id);
+                Brand brand = context.Brands.AsNoTracking().FirstOrDefault(e => e.Id == Id);
                 return this.ConvertToBLL(brand);
             }
         }
@@ -84,9 +84,9 @@ namespace SanitaryCartControl.Core.Services
                 {
                     bool IsNameExists = false;
                     if(Id!=null)
-                    IsNameExists = context.Brand.AsNoTracking().FirstOrDefault(e=>e.Id!=Id && e.Name.Equals(name))!=null;
+                    IsNameExists = context.Brands.AsNoTracking().FirstOrDefault(e=>e.Id!=Id && e.Name.Equals(name))!=null;
                     else
-                    IsNameExists = context.Brand.AsNoTracking().FirstOrDefault(e => e.Name.Equals(name))!=null;
+                    IsNameExists = context.Brands.AsNoTracking().FirstOrDefault(e => e.Name.Equals(name))!=null;
                     return IsNameExists;
                 }
                 catch (System.Exception e)
@@ -103,7 +103,7 @@ namespace SanitaryCartControl.Core.Services
             {
                 try
                 {
-                    var OldBrand = context.Brand.FirstOrDefault(e => e.Id ==brand.Id);
+                    var OldBrand = context.Brands.FirstOrDefault(e => e.Id ==brand.Id);
 
                     if (OldBrand != null)
                     {

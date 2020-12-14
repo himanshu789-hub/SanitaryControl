@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SanitaryCartControl.Core.Entities.DALModels
+#nullable disable
+
+namespace SanitaryCartControl.Core
 {
     public partial class SeriesBrand
     {

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SanitaryCartControl.Core.Entities.DALModels
+#nullable disable
+
+namespace SanitaryCartControl.Core
 {
     public partial class Product
     {
         public Product()
         {
-            Image = new HashSet<Image>();
-            TypeProductQuantity = new HashSet<TypeProductQuantity>();
+            Images = new HashSet<Image>();
+            TypeProductQuantities = new HashSet<TypeProductQuantity>();
         }
 
         public int Id { get; set; }
@@ -25,7 +27,7 @@ namespace SanitaryCartControl.Core.Entities.DALModels
         public virtual Brand BrandIdFkNavigation { get; set; }
         public virtual Category Category { get; set; }
         public virtual AttributeType TypeNavigation { get; set; }
-        public virtual ICollection<Image> Image { get; set; }
-        public virtual ICollection<TypeProductQuantity> TypeProductQuantity { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<TypeProductQuantity> TypeProductQuantities { get; set; }
     }
 }

@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace SanitaryCartControl.Core
 {
-    public partial class Size
+    public partial class Grade
     {
         public byte Id { get; set; }
-        public string Size1 { get; set; }
+        public string Grade1 { get; set; }
         public int CategoryIdFk { get; set; }
 
         public virtual Category CategoryIdFkNavigation { get; set; }
