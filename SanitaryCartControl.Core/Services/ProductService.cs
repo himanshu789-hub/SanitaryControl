@@ -47,6 +47,20 @@ namespace SanitaryCartControl.Core.Services
                         break;
                     case Entities.Enums.ProductType.NoneVariable:
                         break;
+                    case Entities.Enums.ProductType.GradeVariable:
+                        {
+                            var result = context.Grades.Where(e => e.CategoryIdFk == rootId).AsNoTracking().ToList();
+                            result.ForEach(e => Values.Add(new KeyValuePair<int, string>(e.Id, e.Grade1)));
+                        }
+
+                        break;
+                    case Entities.Enums.ProductType.MaterialVariable:
+                        {
+                            var result = context.Materials.Where(e => e.CategoryIdFk == rootId).AsNoTracking().ToList();
+                            result.ForEach(e => Values.Add(new KeyValuePair<int, string>(e.Id, e.Title)));
+                        }
+
+                        break;
                     default:
                         throw new System.Exception("A Non Recognised Product Type Encountered");
                 }

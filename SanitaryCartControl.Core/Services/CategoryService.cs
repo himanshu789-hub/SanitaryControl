@@ -17,11 +17,11 @@ namespace SanitaryCartControl.Core.Services
         readonly string _con;
         public CategoryService(IOptions<ConnectionStringOptions> connection)
         {
-           _con = connection.Value.SQLConnection;
+            _con = connection.Value.SQLConnection;
         }
         public int? GetProductTypeById(int CategoryId)
         {
-            int result  = 0;
+            int result = 0;
             using (var con = new SqlConnection(_con))
             {
                 string StoredProcedureName = "GetTypeImmediateResult";
@@ -49,10 +49,10 @@ namespace SanitaryCartControl.Core.Services
                     result = (int)OutputParameter.Value;
                 }
             }
-            using(var context=new SanitaryCartContext(_con))
+            using (var context = new SanitaryCartContext(_con))
             {
-             ProductType productType = context.ProductTypes.FirstOrDefault(e=>e.CategoryIdFk==result);
-             return productType?.AttributeIdFk; 
+                ProductType productType = context.ProductTypes.FirstOrDefault(e => e.CategoryIdFk == result);
+                return productType?.AttributeIdFk;
             }
         }
         // using (var context = new SanitaryCartContext(_con))
@@ -74,7 +74,7 @@ namespace SanitaryCartControl.Core.Services
                 };
                 foreach (var item in categories.Where(e => e.Id != Id))
                     ancestorCategoryBLL.Ancestors.Add(new AncestorCategoryBLL() { Id = item.Id, Title = item.Titlle, Ancestors = null });
-                
+
                 return ancestorCategoryBLL;
             }
         }
@@ -84,7 +84,8 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var ImmediateParent = context.Categories.FromSqlRaw<Category>("GetImmediateNode @Id={0}", categoryId).AsEnumerable().FirstOrDefault();
+                var sqlParameter = new SqlParameter("Id",categoryId);
+                var ImmediateParent = context.Categories.FromSqlRaw<Category>("EXECUTE dbo.GetImmediateNode {0}",categoryId).AsEnumerable().FirstOrDefault();
                 return ImmediateParent.Id;
             }
 

@@ -82,7 +82,7 @@ body {
 	background-color: white;
 	border-right: #ccc 1px solid;
 	color: black;
-	width: 100%;
+	width: 210px;
 }
 #menu li.parent {
 	width: 100%;
@@ -103,9 +103,8 @@ body {
 	display: block;
 	width: 100%;
 	position: absolute;
-	
-    max-height: 400px;
-    overflow-y: scroll;
+	top: 0;
+    left: 154px;
 }
 #child {
 	display: none;

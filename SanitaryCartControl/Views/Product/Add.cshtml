@@ -251,12 +251,16 @@ state.count=0;
 <script>
     const types = {
         'Size_Variable': 2,
-        'Color_Variable': 1,
-        'None_Variable': 3,
-        'Type_Variable': 4,
+        'Color_Variable': 3,
+        'None_Variable': 5,
+        'Type_Variable': 1,
+        'Material_Variable':7,
+        'Grade_Variable':4
     };
     function GetTypeName(Id) {
+        debugger;
         let result;
+        
         switch (Id) {
             case types.Size_Variable:
                 result = 'Size';
@@ -267,12 +271,17 @@ state.count=0;
             case types.Color_Variable:
                 result = 'Color';
                 break;
+            case types.Grade_Variable:
+                result = 'Grade';
+                break;
+            case types.Material_Variable:
+                result = 'Material';
+                break;
             default:
                 result = "";
                 break;
-
         }
-        return result;
+    return result;
     }
     var item = {
         'AttributeId': null,
