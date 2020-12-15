@@ -17,7 +17,7 @@
                 {@class="form-control"})
                     @Html.ValidationMessageFor(e=>e.Product.Brand_Id_FK,"",new {@class="text-danger small"},"span")
                 </div>
-                <div class="col-2 form-group">
+                <div class="col-3 form-group">
                     <label> Category : <span class="loading d-none"><i class="fa fa-spinner fa-pulse fa-fw"></i>
 <span class="sr-only">Loading...</span></span></label>
                     @Html.TextBoxFor(e=>e.Product.Category_Id_FK,"",new {@class="d-none w-0 h-0"})
@@ -25,6 +25,10 @@
                         <ul id="menu"></ul>
                     </div>
                     @Html.ValidationMessageFor(e=>e.Product.Category_Id_FK,"",new {@class="text-danger small"},"span")
+                </div>
+                <div class="col-* form-group">
+                 <label>Selected Category : </label>         
+                <label id="displayBreadCrmps" class="form-control disabled"><small>No Category Selected</small></label>
                 </div>
             </div>
             <div class="row">
@@ -104,7 +108,8 @@
         dateField:'#Product_DateAdded',
         dateUpdatedField:'#Product_DateUpdated',
         typeFields:'#Product_Type',
-        fileHolder:'#fileHolder'
+        fileHolder:'#fileHolder',
+        breadcrumpLabel:'#displayBreadCrmps'
     };
     var inputNames = {
         fileInput:'Images'
@@ -117,6 +122,7 @@
         $(elements.fileHolder).prepend(inputFile); 
         ResetFormValidation();
     }
+
     const ImageChangeEvent = function (e) {
         const files = e.target.files;
         debugger;
@@ -180,14 +186,14 @@ state.count=0;
             url: '/Product/GetCategory?brandId=' + value,
             accepts: 'application/json',
             success: function (data) {
-                buildMenu($(elements.menuId), data)
+                buildMenu($(elements.menuId), data,0)
                 $('.loading').addClass("d-none")
+             InitializeEvents();
             },
             error:function(){
                 onError();
                 $('.loading').find('i').removeAttr("class");
                 $('.loading').find('i').addClass("text-danger fa fa-exclamation-triangle  fa-2x scale-up-center error-shadow");
-
             }
         })
     })
@@ -204,10 +210,11 @@ state.count=0;
         console.log(quill.container.firstChild.innerHTML)
         $(elements.textAreaId).val(quill.container.firstChild.innerHTML);
     });
-    function buildMenu(parent, items) {
+    function buildMenu(parent, items,level) {
         $.each(items, function (index, item) {
             var li = $('<li><a href="#">' + this.title + '</a></li>');
             li.appendTo(parent);
+            li.attr('data-level',level)
             if (this.categories && this.categories.length > 0) {
                 let a = li.find('a');
                 a.text(this.title);
@@ -215,7 +222,7 @@ state.count=0;
                 a.append('<span class="expand">&raquo;</span>');
                 var ul = $('<ul></ul>').attr("id",'child');
                 ul.appendTo(li);
-                buildMenu(ul, this.categories);
+                buildMenu(ul, this.categories,level+1);
             }
             else
                 li.click(function (e) {
@@ -303,9 +310,68 @@ state.count=0;
         remoteValues: null,
         typeSelected: null,
         categoryId: null,
-        IsSelected: false
+        IsSelected: false,
+        breadcrumps:new Array(),
+        level:-1
     };
+    function addToBreadcrumps(text){
+        localBreadcrumps.push(text);
+        state.level++;
+    }
+    var localBreadcrumps = new Array();
+    function appendToBreadrumps(text,index){
+      localBreadcrumps  = localBreadcrumps.map(function(value,eindex){
+          if(eindex==index)
+           return text;
+          else if(eindex>index)
+          return null;
+          else
+          return value;
+      });
+     localBreadcrumps = localBreadcrumps.filter((value) => value!=null || value!=undefined); 
+    state.level = index;
+    }
+    function InitializeEvents(){
 
+    $('#menu>li.parent').mouseenter(function(e){
+        debugger;
+        localBreadcrumps=new Array();
+
+       addToBreadcrumps($(e.currentTarget).find('>a').text())
+       state.level=0;
+   e.preventDefault();
+    })
+
+    $('#child>li.parent').mouseenter(function(e){
+        debugger;
+        let text = $(e.currentTarget).find('>a').text();
+        let currentLevel = Number.parseInt($(e.currentTarget).attr('data-level'));
+        if(currentLevel>state.level)
+        addToBreadcrumps(text)
+        else
+        appendToBreadrumps(text,currentLevel); 
+        e.preventDefault();    
+    })
+    $('#menu li:not(.parent)').click(function(e){
+        debugger;
+        const level =Number.parseInt($(e.currentTarget).attr('data-level'))
+        if(level>state.level)
+        addToBreadcrumps($(e.currentTarget).text())
+        else 
+        appendToBreadrumps($(e.currentTarget).text(),level)
+        state.breadcrumps = localBreadcrumps;  
+        displayCrumps();
+        e.preventDefault();
+    })
+ function displayCrumps(){
+     const withoutRado = state.breadcrumps.join('→').replaceAll('»','');
+    
+$(elements.breadcrumpLabel).text(withoutRado).removeClass("disabled");
+ }
+    $('#menu a').mouseenter(function(e){
+        e.preventDefault();
+    })
+    }
     const validationMesage = {
         Price: {
             Required: "Please Enter Price",
