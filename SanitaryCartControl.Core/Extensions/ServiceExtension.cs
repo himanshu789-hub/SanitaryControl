@@ -34,11 +34,13 @@ namespace SanitaryCartControl.Core.Extensions
                    options.AccessDeniedPath = "/Account/AccessDenied";
                    options.SlidingExpiration = true;
                    options.ReturnUrlParameter="/Home/Index";
+                
                    options.Cookie = new Microsoft.AspNetCore.Http.CookieBuilder
                    {
                        Path = "/",
                        SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax,
-                       SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest
+                       SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest,
+                       HttpOnly=true
                    };
                });
 

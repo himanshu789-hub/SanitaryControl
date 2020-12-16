@@ -14,8 +14,8 @@ namespace SanitaryCartControl.Controllers
 
     public class AccountController : Controller
     {
-        readonly SignInManager<ApplicationUser> _signInManager;
-        readonly UserManager<ApplicationUser> _userManager;
+       private readonly SignInManager<ApplicationUser> _signInManager;
+       private readonly UserManager<ApplicationUser> _userManager;
         public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
@@ -32,8 +32,10 @@ namespace SanitaryCartControl.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult LogIn(LogInViewModel logIn, string returnUrl = null)
+        [ValidateAntiForgeryToken]
+        public IActionResult LogIn([FromForm]LogInViewModel logIn, string returnUrl = null)
         {
+            
             if (ModelState.IsValid)
             {
                 var result = _signInManager.PasswordSignInAsync(logIn.UserName, logIn.Password, false, false).Result;

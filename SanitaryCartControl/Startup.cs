@@ -13,6 +13,7 @@ using SanitaryCartControl.Extensions;
 using SanitaryCartControl.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
+using Microsoft.AspNetCore.Mvc;
 using SanitaryCartControl.Core.Context;
 
 namespace SanitaryCartControl
@@ -36,7 +37,7 @@ namespace SanitaryCartControl
               oo.UseSqlServer(Configuration.GetConnectionString("IdentitySQLConnection")));
             services.AddCoreExtensions();
             services.AddServicesExtensionsWithIConfiguration(Configuration);
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options=>options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
         }
 

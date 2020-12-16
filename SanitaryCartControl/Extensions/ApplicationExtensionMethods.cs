@@ -45,7 +45,7 @@ namespace SanitaryCartControl.Extensions
                         LastName = lastname,
                         FirstName = firstname,
                         UserName=userName,
-                        ImagePath = Path.Combine(@"images/site", "administration.svg")
+                        ImagePath = Path.Combine(@"/images/site", "administration.svg")
                     };
                var createResult =   await  userManager.CreateAsync(user, "NL@1crt8");
                if(createResult.Succeeded)
