@@ -37,12 +37,24 @@ namespace SanitaryCartControl
               oo.UseSqlServer(Configuration.GetConnectionString("IdentitySQLConnection")));
             services.AddCoreExtensions();
             services.AddServicesExtensionsWithIConfiguration(Configuration);
-            services.AddControllersWithViews(options=>options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+            services.AddAntiforgery(options =>
+            {
+                  options.FormFieldName = "AntiforgeryASP.NETGKLEnterprises";
+                  options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
+                  options.SuppressXFrameOptionsHeader =true;
+                  options.Cookie.HttpOnly=true;
+                  options.Cookie.Expiration=new TimeSpan(0,15,0);
+                  options.Cookie.Name="AnyiforgeryGKLEnterprise";
+                  options.Cookie.SameSite=Microsoft.AspNetCore.Http.SameSiteMode.Strict;
+                  options.Cookie.SecurePolicy=Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                  
+});
+            services.AddControllersWithViews(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IServiceProvider serviceProvider, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILogger<Startup> logger)
         {
             logger.LogInformation("Environment Name : " + env.EnvironmentName);
 
@@ -75,6 +87,6 @@ namespace SanitaryCartControl
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id:guid?}");
             });
-       }
+        }
     }
 }
