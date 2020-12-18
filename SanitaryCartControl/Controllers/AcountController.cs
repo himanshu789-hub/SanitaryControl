@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
+
 using System;
 using SanitaryCartControl.Core.Entities.Enums;
 using System.Linq;
 namespace SanitaryCartControl.Controllers
 {
 
-    public class AccountController : Controller
+    public class AccountController : MessageController
     {
        private readonly SignInManager<ApplicationUser> _signInManager;
        private readonly UserManager<ApplicationUser> _userManager;
@@ -32,7 +32,7 @@ namespace SanitaryCartControl.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [IgnoreAntiforgeryToken]
         public IActionResult LogIn([FromForm]LogInViewModel logIn, string returnUrl = null)
         {
             
@@ -46,7 +46,6 @@ namespace SanitaryCartControl.Controllers
                     return LocalRedirect(@"/Home/Index");
                 }
             }
-
             ModelState.Clear();
             ModelState.AddModelError("InValidCredentials", "Username or Password is Invalid");
             return View(logIn);
@@ -59,8 +58,8 @@ namespace SanitaryCartControl.Controllers
                 return LocalRedirect(returnUrl);
             return View();
         }
-
-
+        
+       
         [HttpGet]
         [Authorize(Roles = ApplicationRoles.Administration)]
         public IActionResult Register()
@@ -112,31 +111,33 @@ namespace SanitaryCartControl.Controllers
         {
             return View();
         }
+        
         [HttpGet]
+        public IActionResult DeleteSucced()
+        {
+          return  this.Success(@"/Account/ViewAll");
+        }
+        
+        [HttpGet]
+        public IActionResult DeleteFailed()
+        {
+           return this.Failed(@"/Account/ViewAll");
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Delete([BindRequired] Guid Id)
         {
-
             string userId = Id.ToString();
             var user = _userManager.FindByIdAsync(userId).Result;
             if (user != null)
             {
                 var result = await _userManager.DeleteAsync(user);
-
                 if (result.Succeeded)
                 {
-                    return View("Success", new MessageViewModel()
-                    {
-                        IsSuccess = true,
-                        Link = Url.Action("ViewAll")
-                    });
+                    return Ok(true);
                 }
             }
-
-            return View("Success", new MessageViewModel()
-            {
-                IsSuccess = false,
-                Link = Url.Action("ViewAll")
-            });
+            return BadRequest();
         }
     }
 }

@@ -43,10 +43,10 @@ namespace SanitaryCartControl
                   options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
                   options.SuppressXFrameOptionsHeader =true;
                   options.Cookie.HttpOnly=true;
-                  options.Cookie.Expiration=new TimeSpan(0,15,0);
+                  options.Cookie.Expiration=new TimeSpan(0,30,0);
                   options.Cookie.Name="AnyiforgeryGKLEnterprise";
                   options.Cookie.SameSite=Microsoft.AspNetCore.Http.SameSiteMode.Strict;
-                  options.Cookie.SecurePolicy=Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                  options.Cookie.SecurePolicy=Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                   
 });
             services.AddControllersWithViews(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
@@ -66,11 +66,11 @@ namespace SanitaryCartControl
             else
             {
                 app.UseCustomExceptionHandler();
-                app.UseHsts();
+             //   app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
+    
             app.UseStaticFiles();
+          //  app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();

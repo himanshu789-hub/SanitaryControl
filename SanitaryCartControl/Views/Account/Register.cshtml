@@ -51,7 +51,7 @@
 							<div class="cols-sm-10">
 								<div class="input-group">
 									<span class="input-group-prepend"><i class="fa fa-lock fa-lg  fa-1x m-auto p-1" aria-hidden="true"></i></span>
-							    @Html.TextBoxFor(e=>e.Password,"",new {@class="form-control",@type="password",@placeholder="LogIn Password"})
+							    @Html.TextBoxFor(e=>e.Password,"",new {@class="form-control",@type="password",@placeholder="LogIn Password",@autocomplete="off"})
 									</div>
 							</div>
 						@Html.ValidationMessageFor(e=>e.Password,"",new {@class="text-danger small"},"span")

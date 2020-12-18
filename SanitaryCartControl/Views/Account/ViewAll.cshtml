@@ -1,6 +1,7 @@
 @using SanitaryCartControl.Core.Entities.DALModels;
 @model IEnumerable<ApplicationUser>
-
+@using Microsoft.AspNetCore.Antiforgery;
+@inject IAntiforgery antiForgery;
 @if (Model == null || Model.Count() == 0)
 {
           <h6 class="alert alert-danger">No User Added</h6>
@@ -23,12 +24,36 @@ else
           <td>@(i+1)</td>
           <td>@fullName</td>
           <td>@Model.ElementAt(i).UserName</td>
-          <td class="text-danger">@Html.ActionLink("","Delete",new {Id=user.Id},new {@class="fa fa-trash text-danger vibrate-1",@style="font-size:30px"})</td>
+          <td class="p-0">
+                <button role="button" class="text-danger btn btn-lg p-0" style="font-size: 29px;" onclick='deleteRequest(@Json.Serialize(Model.ElementAt(i).Id))'><i class="fa fa-trash vibrate-1"></i></button>
+          </td>
       </tr>
     }
     </table>
 }
-
+@{
+var antiforgery = antiForgery.GetAndStoreTokens(httpContext:Context);
+string formFieldName = antiforgery.FormFieldName;
+string token = antiforgery.RequestToken;  
+}
+<script>
+  function failed(){
+  window.location=@Json.Serialize(Url.Action("DeleteFailed"));
+  }
+ function deleteRequest(Id){
+  if(Id)  
+  $.post({url:@Json.Serialize(Url.Action("Delete")),
+  data:{Id,@Json.Serialize(formFieldName): @Json.Serialize(token)},
+  success:function(){
+   window.location=@Json.Serialize(@Url.Action("DeleteSucced"));
+   
+  },
+  failed:failed()
+  });
+  else
+   failed();
+  }
+</script>
 <style>
     .vibrate-1:hover {
 	-webkit-animation: vibrate-1 0.3s linear infinite both;
@@ -87,5 +112,4 @@ else
             transform: translate(0);
   }
 }
-
     </style>

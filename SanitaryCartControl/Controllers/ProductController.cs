@@ -111,23 +111,42 @@ namespace SanitaryCartControl.Controllers
         {
             return Json(_productService.GetAttrinuteValues(type, categoryId));
         }
-        
+
+        [HttpGet]
+        public IActionResult DeleteSucced(string search,int page)
+        {
+            IDictionary<string,object> dict =  new Dictionary<string, object>();
+            dict.Add("search",search);
+            dict.Add("page",page);
+            return View("Success",new MessageViewModel(){
+                IsSuccess=true,
+                Link="Search",
+                Params=dict
+            });
+        }
+        [HttpGet]
+        public IActionResult DeleteFailed(string search,int page)
+        {
+            IDictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("search", search);
+            dict.Add("page", page);
+            return View("Success", new MessageViewModel()
+            {
+                IsSuccess = false,
+                Link = "Search",
+                Params = dict
+            });
+        }
+        [HttpPost]
         public IActionResult Delete([BindRequired]int Id)
         {
             if(ModelState.IsValid)
             { 
              bool IsDeleted =  _productService.Delete(Id);
               if(IsDeleted)
-              return View("Success",new MessageViewModel(){
-                  IsSuccess=true,
-                  Link=Url.Action("Search")
-              });
+              return Ok();
             }
-            return View("Success", new MessageViewModel()
-            {
-                IsSuccess = false,
-                Link = Url.Action("Search")
-            });
+              return BadRequest();
         }
         [HttpPost]
         public IActionResult Add(ProductViewModel productViewModel)
@@ -169,8 +188,10 @@ namespace SanitaryCartControl.Controllers
             {
                 return View(null);
             }
+            int pageSize = 40;
             var products = _productService.Search(search);
-            return View(products.ToPagedList(page ?? 1, 40));
+            
+            return View(products.ToPagedList(page??1,pageSize));
         }
 
     }

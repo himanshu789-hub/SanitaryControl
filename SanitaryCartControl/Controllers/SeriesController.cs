@@ -65,7 +65,9 @@ namespace SanitaryCartControl.Controllers
             ViewData.Add("Name", seriesBLL.Parent.Value);
             return View(seriesViewModel);
         }
+        
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public JsonResult CheckNameExistsUnderParentIdAndBrandId(SeriesNameRemoteValidate seriesNameRemote)
         {
             ModelState.RemoveIfPresent("Series.Id");

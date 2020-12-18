@@ -2,6 +2,9 @@
 @using X.PagedList;
 @using X.PagedList.Mvc.Bootstrap4.Core;
 @model IPagedList<ProductBLL>;
+@using Microsoft.AspNetCore.Antiforgery;
+@inject IAntiforgery antiForgery;
+
 @{
     ViewData["Head"] = "Search Product";
 }
@@ -82,7 +85,7 @@
                     <td>@Html.Raw(item.Description)</td>
                     <td class="d-flex justify-content-around">
                         @Html.ActionLink("Edit","Edit","Product",new {Id=item.Id},new {@class="btn btn-warning"})
-                        @Html.ActionLink("Delete","Delete","Product",new {Id=item.Id},new {@class="btn btn-danger"})
+                      <button role="button" onclick="deleteProduct(@Json.Serialize(item.Id))" class="btn btn-danger">Delete</button>    
                     </td>
                 </tr>
             }
@@ -113,5 +116,47 @@ table table>thead>tr>th{
 else{
     <h6 class="alert alert-danger"><i class="fa fa-exclamation" aria-hidden="true"></i> Not Found</h6>
 }
-
 }
+
+        @{
+var antiforgery = antiForgery.GetAndStoreTokens(httpContext:Context);
+string formFieldName = antiforgery.FormFieldName;
+string token = antiforgery.RequestToken;
+
+String[] Search=Context.Request.Query["search"];
+ string search = null;
+ if(Search!=null && Search.Count()>0){
+  search = Search[0].ToString();
+ }
+String[] Pages=Context.Request.Query["page"];
+int Page = 1;
+ if(Pages!=null && Pages.Count()>0){
+    Page =Int32.Parse(Pages[0]);
+ }
+}
+
+    <script>
+   function failedDelete()
+        {
+            window.location=@Json.Serialize(@Url.Action("DeleteFailed",new {search=search??"",Page}));
+        }
+      function  successDelete()
+        {
+            window.location=@Json.Serialize(@Url.Action("DeleteSucced",new {search=search??"",Page}));
+        }
+       function deleteProduct(id){
+            if(id)
+            {
+          const Id = Number.parseInt(id);
+            $.ajax({url:@Json.Serialize(Url.Action("Delete")),async:false,type:'POST',data:{
+                Id,
+                @Json.Serialize(formFieldName):@Json.Serialize(token)
+            },
+            success:function(){successDelete()},
+            error:function(){failedDelete()}
+            });
+            }
+            else
+            failedDelete()
+        }
+    </script>
