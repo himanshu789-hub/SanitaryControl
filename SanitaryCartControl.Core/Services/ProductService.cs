@@ -84,7 +84,7 @@ namespace SanitaryCartControl.Core.Services
                 .Include(e => e.TypeProductQuantities)
                 .Include(e => e.Images)
                 .FirstOrDefault(e => e.Id == product.Id);
-                
+                OldProduct.Name = product.Name;
                 OldProduct.DateUpdated = product.DateUpdated;
                 
                 OldProduct.Description = product.Description;
@@ -166,7 +166,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var products = context.Products.AsNoTracking().Where(e => e.Code == value || e.Name.Contains(value))
+                var products = context.Products.AsNoTracking().Where(e => (e.Code == value || e.Name.Contains(value)) && e.IsActive)
                   .Include(e => e.TypeProductQuantities)
                   .Include(e => e.BrandIdFkNavigation).Include(e => e.Category).ThenInclude(e => e.Parent).ToList();
                 return HelpherMethods.ToProductBLLs(products.AsQueryable());
@@ -180,6 +180,7 @@ namespace SanitaryCartControl.Core.Services
                 if (product != null)
                 {
                     product.IsActive = false;
+                    context.SaveChanges();
                     return true;
                 }
                 return false;

@@ -1,36 +1,45 @@
+@using SanitaryCartControl.Miscelleneous.Constnants;
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SanitaryCartControl</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <style>
-        .nav-link[data-toggle].collapsed:before {
-            content: " ▾";
-        }
+    <title>@Constants.PortalName</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,300" rel="stylesheet">
+  
+    <environment include="Production">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>   
+    </environment>
 
-        .nav-link[data-toggle]:not(.collapsed):before {
-            content: " ▴";
-        }
-    </style>
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <link rel="stylesheet" href="~/css/site.css" />
+        <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>   
+   </environment>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+   
+    @RenderSection("Styles",false)
 </head>
 
 <body>
+    @if(!Context.Request.RouteValues["action"].ToString().Equals("LogIn"))
+    {
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand"  asp-controller="Home" asp-action="Index">Gokul Enterprises</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">@Constants.PortalHead</a>
             </div>
         </nav>
     </header>
-   
+    }
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
@@ -38,12 +47,17 @@
     </div>
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - SanitaryCartControl - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @Constants.PortalName
         </div>
     </footer>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
-</body>
+    <environment include="Development">
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
 
+   <environment include="Production">
+   <script src="~/js/site.min.js" asp-append-version="true"></script>
+   </environment>
+
+</body>
 </html>

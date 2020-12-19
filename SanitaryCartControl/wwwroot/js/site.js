@@ -1,10 +1,11 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-
-function Kill()
-{
-
-};
+﻿const pathName = location.pathname;
+        const controller = pathName.split('/')[1]
+        const selector = '#' + controller
+        $(selector + ' a').each(function (index, element) {
+            if ($(element).attr('href') == window.location.pathname) {
+                 $(selector).collapse('show')
+                 $(element).addClass('current-link')
+                 $(element).parent().addClass('current-link-item');
+                 $(selector).parent().addClass('current-item');
+            }
+        });

@@ -125,7 +125,7 @@
 
     const ImageChangeEvent = function (e) {
         const files = e.target.files;
-        debugger;
+         
         if (files && files.length > 0) {
             if(files.length>7)
             {
@@ -174,7 +174,7 @@ state.count=0;
                 $('[type="submit"]').hide()
         };
     $(elements.brandSelection).change(function (e) {
-        debugger;
+         
         const value = $(e.currentTarget).val()
         if (!value)
             return;
@@ -265,7 +265,7 @@ state.count=0;
         'Grade_Variable':4
     };
     function GetTypeName(Id) {
-        debugger;
+         
         let result;
         
         switch (Id) {
@@ -334,7 +334,7 @@ state.count=0;
     function InitializeEvents(){
 
     $('#menu>li.parent').mouseenter(function(e){
-        debugger;
+         
         localBreadcrumps=new Array();
 
        addToBreadcrumps($(e.currentTarget).find('>a').text())
@@ -342,7 +342,7 @@ state.count=0;
    e.preventDefault();
     })
     $('#child>li.parent').mouseenter(function(e){
-        debugger;
+         
         let text = $(e.currentTarget).find('>a').text();
         let currentLevel = Number.parseInt($(e.currentTarget).attr('data-level'));
         if(currentLevel>state.level)
@@ -352,7 +352,7 @@ state.count=0;
         e.preventDefault();    
     })
     $('#menu li:not(.parent)').click(function(e){
-        debugger;
+         
         const level =Number.parseInt($(e.currentTarget).attr('data-level'))
         if(level>state.level)
         addToBreadcrumps($(e.currentTarget).text())

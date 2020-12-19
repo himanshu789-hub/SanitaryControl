@@ -21,13 +21,13 @@ namespace SanitaryCartControl.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
-
+        
         [Authorize(Roles = ApplicationRoles.Both)]
         [HttpPost]
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(AccountController.LogIn), "Account");
+            return View();       
         }
 
         [HttpPost]

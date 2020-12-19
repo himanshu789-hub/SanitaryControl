@@ -1,0 +1,29 @@
+@{
+    Layout = "_Initial";
+}
+
+<div class="text-center p-3 fullPage">
+    <h2>Thank You,You are SuccessFully LogOut</h2>
+    <p>Redirecting You To LogIn Page</p>
+    <i class="fa fa-spinner fa-spin fa-5x"></i>
+</div>
+<style>
+    .fullPage {
+        width: 100%;
+        background: url('https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=715&q=80');
+        color: white;
+        background-size: cover;
+        font-family: 'Andika New Basic', sans-serif;
+        font-family: 'Quicksand', sans-serif;
+        position: fixed;
+        top: 38%;
+        width: 100%;
+    }
+</style>
+<script>
+    const fontLink = $('<link rel="preconnect" href="https://fonts.gstatic.com">');
+    $('head').append('<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Andika+New+Basic:ital@1&family=Quicksand&display=swap" rel="stylesheet">')
+    setTimeout(function () {
+        window.location = @Json.Serialize(Url.Action("LogIn"));
+    }, 5000);
+</script>

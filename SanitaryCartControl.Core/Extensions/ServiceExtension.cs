@@ -34,11 +34,11 @@ namespace SanitaryCartControl.Core.Extensions
                   
                    options.Cookie = new Microsoft.AspNetCore.Http.CookieBuilder
                    {
+                       MaxAge=new System.TimeSpan(8,0,0),
                        Path = "/",
                        SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
-                       SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always,
-                       HttpOnly=true,
-                       
+                       SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest,
+                       HttpOnly=true,                       
                    };
                });
 

@@ -1,12 +1,12 @@
 @model LogInViewModel
-
+@using SanitaryCartControl.Miscelleneous.Constnants;
 @{
     Layout = "_Initial";
 }
 
-<h2 class="font-italic w-100 text-center font-weight-light">     <i class="fa fa-sign-in" aria-hidden="true"></i></i> </h2>
+<h2 class="font-italic w-100 text-center font-weight-light p-3"><img src="/images/site/icon.png" width="40px" height="40px"/> </h2>
 
-<h2 class="font-italic w-100 text-center font-weight-light">LogIn To Gokul Enterprise Portal</h2>
+<h2 class="font-italic w-100 text-center font-weight-bold p-3 logInHead">LogIn To @Constants.PortalName</h2>
 
 @using (Html.BeginForm("LogIn", "Account", FormMethod.Post, new { @class = "d-flex justify-content-center",@spellcheck="false"}))
 {
@@ -35,9 +35,13 @@
             <button class="btn btn-success w-100" type="submit">LogIn</button>
         </div>
     </div>
-    <style>
-           .form-group label{
+
+    @section Styles{
+    <style>   
+        .form-group label{
                font-weight: 500;
            }
     </style>
+    }
+
 }

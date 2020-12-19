@@ -11,7 +11,6 @@ namespace SanitaryCartControl.Core.Contracts.Services
         SeriesBLL GetById(int Id);
       bool MakeInActive(int seriesId); 
       IEnumerable<SeriesBLL> GetByBrandAndParentId(byte BrandId,int CategoryId);
-
       bool IsNameExists(string name,int ParentId,int BrandId,int? Id);
     }
     

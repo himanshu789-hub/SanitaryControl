@@ -85,7 +85,7 @@ namespace SanitaryCartControl.Core.Services
             using (var context = new SanitaryCartContext(_con))
             {
                 var sqlParameter = new SqlParameter("Id",categoryId);
-                var ImmediateParent = context.Categories.FromSqlRaw<Category>("EXECUTE dbo.GetImmediateNode {0}",categoryId).AsEnumerable().FirstOrDefault();
+                var ImmediateParent = context.Categories.FromSqlRaw<Category>("EXECUTE GetImmediateNode {0}",categoryId).AsEnumerable().FirstOrDefault();
                 return ImmediateParent.Id;
             }
 

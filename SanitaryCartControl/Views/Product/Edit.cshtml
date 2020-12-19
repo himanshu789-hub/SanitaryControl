@@ -130,9 +130,10 @@
                     <label>Status : </label>
                  @Html.CheckBoxFor(e=>e.Attributes[i].IsActive,
                  new {@data_on="Visible",@data_off="Hidden",@data_toggle="toggle", @data_onstyle="info" ,@data_offstyle="danger"})
-                <script type="text/javascript">
-                    $('head').append('<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"/>');            
-                </script>
+               @section Styles
+               {
+                 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"/>
+               }
                 <style>
                     .toggle-handle
                     {
@@ -351,7 +352,7 @@ $(".input-number").keydown(function (e) {
     }
    const ImageChangeEvent = function (e) {
         const files = e.target.files;
-        debugger;
+         
         if (files && files.length > 0) {
              if(files.length>7)
             {
@@ -403,7 +404,7 @@ $(".input-number").keydown(function (e) {
         'Grade_Variable':4
     };
     function GetTypeName(Id) {
-        debugger;
+        
         let result;
         
         switch (Id) {
