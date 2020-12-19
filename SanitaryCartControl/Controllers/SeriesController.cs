@@ -144,9 +144,9 @@ namespace SanitaryCartControl.Controllers
             IDictionary<string, object> values = new Dictionary<string, object>();
             values.Add("brandId", seriesViewModel.Series.Brand_Id_Fk);
             values.Add("parentId", seriesViewModel.Series.ParentId);
-
             if (ModelState.IsValid)
             {
+                seriesViewModel.Series.ImagePath = this.AddImage(seriesViewModel.Image,imagePath);
                 int Id = _seriesService.AddSeries(Converters.ToSeriesBLL(seriesViewModel.Series));
                 return View("Success", new MessageViewModel()
                 {
@@ -168,13 +168,14 @@ namespace SanitaryCartControl.Controllers
             SeriesViewModel seriesViewModel = new SeriesViewModel();
             seriesViewModel.Brands = _brandService.GetBrands();
             seriesViewModel.Category = _seriesService.GetCategory();
-
+            
             if (brandId == null || parentId == null)
             {
                 return View(seriesViewModel);
             }
             else
             {
+                ViewData.Add("ShouldVisible", brandId != null && parentId != null);
                 seriesViewModel.Series = new SeriesDTO();
                 seriesViewModel.Series.Brand_Id_Fk = (byte)brandId;
                 seriesViewModel.Series.ParentId = (int)parentId;

@@ -134,7 +134,7 @@ namespace SanitaryCartControl.Controllers
                 var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
-                    return Ok(true);
+                    return Ok();
                 }
             }
             return BadRequest();

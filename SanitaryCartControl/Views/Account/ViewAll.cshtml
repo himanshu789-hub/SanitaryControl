@@ -42,14 +42,13 @@ string token = antiforgery.RequestToken;
   }
  function deleteRequest(Id){
   if(Id)  
-  $.post({url:@Json.Serialize(Url.Action("Delete")),
-  data:{Id,@Json.Serialize(formFieldName): @Json.Serialize(token)},
-  success:function(){
-   window.location=@Json.Serialize(@Url.Action("DeleteSucced"));
-   
-  },
-  failed:failed()
-  });
+  $.ajax({url:@Json.Serialize(Url.Action("Delete")),data:{Id,@Json.Serialize(formFieldName): @Json.Serialize(token)},type:'POST'})
+  .done(function(){
+    window.location  = @Json.Serialize(Url.Action("DeleteSucced"))
+  })
+  .fail(function(jqXHR, textStatus, errorThrown){
+    failed();
+  })
   else
    failed();
   }

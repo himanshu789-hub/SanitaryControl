@@ -10,7 +10,7 @@ namespace SanitaryCartControl.Controllers
     public abstract class BaseController : Controller
     {
         readonly IHostEnvironment _env;
-       
+
         public BaseController(IHostEnvironment env) => _env = env;
 
         [NonAction]
@@ -47,7 +47,6 @@ namespace SanitaryCartControl.Controllers
             {
                 file.CopyTo(stream);
             }
-
             return getRelativePath;
         }
         [NonAction]
@@ -57,15 +56,8 @@ namespace SanitaryCartControl.Controllers
             int i = 0;
             foreach (var file in files)
             {
-                var getRelativePath = Path.Combine(path,
-                System.Guid.NewGuid().ToString() + Path.GetExtension(file.FileName));
-                var FilePath = Path.Join(_env.ContentRootPath, "wwwroot", getRelativePath);
-
-                using (var stream = new FileStream(FilePath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-                images[i++] = getRelativePath;
+                string imagePath = this.AddImage(file, path);
+                images[i++] = imagePath;
             }
             return images;
         }

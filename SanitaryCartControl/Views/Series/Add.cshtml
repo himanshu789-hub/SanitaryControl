@@ -97,6 +97,9 @@
     
     }
   }
+  const ShouldVisible = @Json.Serialize(ViewData["ShouldVisible"]);
+  if(ShouldVisible)
+  MakeVisibleSubForm();
   const inputName = {
     fileInput:'Image'
   }
@@ -116,7 +119,6 @@
      form.init();
     $(form.label).html("Choose Image file <small class='font-italic'>(Optional)</small>");
     this.fileViewer.attr("src",null);
-  
     },
     init:function(){
          $(form.filePicker).change(e=>{
