@@ -11,7 +11,7 @@ namespace SanitaryCartControl
             return View("Success", new MessageViewModel()
             {
                 IsSuccess = true,
-                Link = Url.Action(link)
+                Link = link
             });
         }
 
@@ -21,7 +21,7 @@ namespace SanitaryCartControl
             return View("Success", new MessageViewModel()
             {
                 IsSuccess = false,
-                Link = Url.Action("ViewAll")
+                Link = Url.Action(link)
             });
         }
     }

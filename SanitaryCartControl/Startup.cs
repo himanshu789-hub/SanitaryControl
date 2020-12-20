@@ -69,8 +69,14 @@ namespace SanitaryCartControl
              //   app.UseHsts();
             }
     
-            app.UseStaticFiles();
-          //  app.UseHttpsRedirection();
+            app.UseStaticFiles(new StaticFileOptions{
+                OnPrepareResponse = ctx => {
+                    string fileName = ctx.File.Name;
+                    if(fileName.Contains("bootstrap") || fileName.Contains("jquery"))
+                    ctx.Context.Response.Headers.Add("Cache-Control","public, max-age=604800, immutable");
+                }
+            });
+          //  app.UseHttpsRedirection()
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
