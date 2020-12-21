@@ -122,24 +122,34 @@
         $(elements.fileHolder).prepend(inputFile); 
         ResetFormValidation();
     }
+      const literals = {
+          validation:{
+          MAXImage:20,
+          MAXImageSizeinKB:64
+          },
+          message:{
+          MAXImage:`Number of Image must be less than or 20`,
+          MAXImageSizeInKB:'Image File Size Too Long.\nEach Must Be Less Than 64KB'
+          }
+      };
 
     const ImageChangeEvent = function (e) {
         const files = e.target.files;
          
         if (files && files.length > 0) {
-            if(files.length>7)
+            if(files.length>literals.validation.MAXImage)
             {
-                alert("Number of Image must be less than 7");
+                alert(literals.message.MAXImage);
                 reInitializeFileInput();
                 return false;
             }
            const IsAllFileNotAppropriate=  $(files).filter((index,file)=>{    
-                if(Math.ceil(file.size/1024)>64)
+                if(Math.ceil(file.size/1024)>literals.validation.MAXImageSizeinKB)
                    return true;
             }).length>0;
             if(IsAllFileNotAppropriate)
             {
-                alert('Image File Size Too Long.\nEach Must Be Less Than 64KB');
+                alert(literals.message.MAXImageSizeInKB);
                 reInitializeFileInput();
                 return false;
             }

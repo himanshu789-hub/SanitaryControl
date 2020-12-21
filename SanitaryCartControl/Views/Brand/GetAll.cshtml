@@ -2,8 +2,10 @@
 @{
   ViewData["Head"] = "View All Brand";
  }
+  <p class="text-right">Total Count : @Model.Count()</p>
+
 <div class="d-flex flex-row justify-content-between align-items-end">
-<table class="table table-hover custom-align-table">
+<table class="table table-hover custom-align-table brands">
   <thead>
     <tr>
       <th scope="col">S.No.</th>
@@ -13,14 +15,14 @@
     </tr>
   </thead>
   <tbody>
-     @foreach (var item in Model)
+     @for (int i=0;i<Model.Count();i++)
      { 
        <tr>
-           <td>@item.Id</td>
-           <td>@item.Name</td>
-           <td><img src="@item.ImagePath" alt="@item.Name Logo" class="border rounded-lg" height="110px"></td>
-           <td>@Html.ActionLink("Edit","Edit","Brand",new {id=item.Id},new {@class="btn btn-danger block"})</td>
-       </tr>  
+           <td>@(i+1)</td>
+           <td>@Model.ElementAt(i).Name</td>
+           <td><img src="@Model.ElementAt(i).ImagePath" alt="@Model.ElementAt(i).Name Logo" class="border rounded-lg brand"></td>
+           <td>@Html.ActionLink("Edit","Edit","Brand",new {id=Model.ElementAt(i).Id},new {@class="btn btn-danger block"})</td>
+       </tr>
      }
   </tbody>
 </table>

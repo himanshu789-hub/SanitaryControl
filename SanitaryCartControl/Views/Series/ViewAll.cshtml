@@ -41,9 +41,9 @@
 <div class="viewItems">
     @if(Model.Series!=null)
     {
+        <p class="text-right">Total Count : @Model.Series.Count()</p>
         @if(Model.Series.Count()>0)
         {
-
     <table class="table table-hover">
         <thead>
             <th>Id</th>
@@ -52,13 +52,13 @@
             <th>Action</th>
         </thead>
         <tbody>
-            @foreach (var item in Model.Series)
+            @for (int i=0;i<Model.Series.Count(); i++)
             {
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Title</td>
-                    <td><img src="@item.ImagPath" class="border rounded" width="160px"/></td>
-                    <td>@Html.ActionLink("Edit","Edit",new {Id=item.Id},new {@class="btn btn-danger"})</td>
+                    <td>@(i+1)</td>
+                    <td>@Model.Series.ElementAt(i).Title</td>
+                    <td><img src="@Model.Series.ElementAt(i).ImagPath" class="border rounded" width="160px"/></td>
+                    <td>@Html.ActionLink("Edit","Edit",new {Id=Model.Series.ElementAt(i).Id},new {@class="btn btn-danger"})</td>
                 </tr>
             }
         </tbody>

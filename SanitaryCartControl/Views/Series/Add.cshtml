@@ -60,7 +60,7 @@
 </div>
   </div>
 }
-<script>
+<script type="text/javascript">
   var elements = {
     fileHolder:"custom-file",
     subForm:'#subForm',
@@ -103,12 +103,22 @@
   const inputName = {
     fileInput:'Image'
   }
+  var validation = {
+    ImageSizeInKB:64,
+    MINImageWidth:280,
+    MINImageHeight:280   
+  }
+  var message = {
+    ImageSizeInKB:'Image File Size Too Long\nMust be Atmost 64KB',
+    ImageResolutionViolation:'Image Dimension Should be atleast 280 x 280',
+  }
+
   const form ={
     filePicker:'#Image',
     fileViewer:$('[name="fileViewer"]'),
     label:'#custom-file-label',
     validation:function(e){
-
+       
     },
     remove:function()
     {
@@ -125,11 +135,11 @@
            const files = e.target.files;
            if(files && files[0])
            {
-             if(Number.parseInt(files[0].size/1024)>28)
+             if(Number.parseInt(files[0].size/1024)>validation.ImageSizeInKB)
              {
-               alert('Image File Size Too Long\nMust be Atmost 28KB');
+               alert(message.ImageSizeInKB);
                form.remove();
-               return false;
+               return;
              }
              const reader = new FileReader();
              reader.onload = function (e) {
@@ -140,16 +150,17 @@
                const height = this.height;
                const width = this.width;
               
-                 if(height<=280 && width<=280)
+                 if(height<validation.MINImageHeight || width<validation.MINImageWidth)
                  {
-                 alert("Image Dimension Should be ateast 280 x 280");
+                 alert(message.ImageResolutionViolation);
                  form.remove();
-                 return false;
+                 return;
                  }
                  $(form.label).text(files[0].name)
-                  $(fileViewer).attr('src', this.src);
+                 $(fileViewer).attr('src', this.src);
              }
             };
+
            reader.readAsDataURL(files[0]);
            }
          });
@@ -165,7 +176,6 @@
         custom_file_label:'#custom-file-label'
     };
 </script>
-
 
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

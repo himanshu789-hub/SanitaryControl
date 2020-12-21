@@ -96,7 +96,7 @@ ViewData["Head"]="Edit A Series";
              {
                alert('Image Fle Size Too Long.\nMust Be Atmost 28KB');
                form.remove();
-               return false;
+               return;
              }
              const reader = new FileReader();
              reader.onload = function (e) {
@@ -107,11 +107,11 @@ ViewData["Head"]="Edit A Series";
                const height = this.height;
                const width = this.width;
               
-                 if(height<=280 && width<=280)
+                 if(height<280 || width<280)
                  {
                  alert("Image Dimension Should be atleast 280 x 280");
                  form.remove();
-                 return false;
+                 return;
                  }
                  $(form.label).text(files[0].name)
                   $(fileViewer)

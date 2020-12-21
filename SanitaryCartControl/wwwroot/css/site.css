@@ -1,7 +1,4 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
+﻿a.navbar-brand {
 	white-space: normal;
 	text-align: center;
 	word-break: break-all;
@@ -97,7 +94,7 @@ body {
 	display: block;
 	width: 100%;
 	position: absolute;
-	top: 0;
+	top:60% ;
 	left: 154px;
 	box-shadow: 0 0 6px 0px #ffffffb8;
 }
@@ -359,4 +356,12 @@ input[type='text']:read-only {
 .footer-bottom{
 	position: absolute;
 	bottom: 0;
+}
+
+img.brand{
+	max-width:250px !important;
+	min-height:100px !important;
+}
+img[src=''].brand{
+	padding:125px
 }
