@@ -82,7 +82,7 @@
                             </tbody>
                         </table>
                     </td>
-                    <td>@Html.Raw(item.Description)</td>
+                    <td><div class="border rounded-lg p-1 overflow descriptionWrapper">@Html.Raw(item.Description)</div></td>
                     <td class="d-flex justify-content-around">
                         @Html.ActionLink("Edit","Edit","Product",new {Id=item.Id},new {@class="btn btn-warning"})
                       <button role="button" onclick="deleteProduct(@Json.Serialize(item.Id))" class="btn btn-danger">Delete</button>    

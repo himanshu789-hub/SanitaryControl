@@ -48,7 +48,7 @@ namespace SanitaryCartControl
                   options.Cookie.SameSite=Microsoft.AspNetCore.Http.SameSiteMode.Strict;
                   options.Cookie.SecurePolicy=Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                   
-});
+            });
             services.AddControllersWithViews(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
         }
@@ -73,7 +73,7 @@ namespace SanitaryCartControl
                 OnPrepareResponse = ctx => {
                     string filePath = ctx.File.PhysicalPath;
                     if(System.Text.RegularExpressions.Regex.Match(filePath,@"lib.*\.(js|css)").Success)
-                    ctx.Context.Response.Headers.Add("Cache-Control","public, max-age=604800, immutable");
+                    ctx.Context.Response.Headers.Add(Microsoft.Net.Http.Headers.HeaderNames.CacheControl,"public, max-age=604800, immutable");
                 }
             });
           //app.UseHttpsRedirection()

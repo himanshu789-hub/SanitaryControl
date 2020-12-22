@@ -41,9 +41,8 @@ namespace SanitaryCartControl.Controllers
                 var result = _signInManager.PasswordSignInAsync(logIn.UserName, logIn.Password, false, false).Result;
                 if (result.Succeeded)
                 {
-                    if (returnUrl != null && !returnUrl.Contains(@"/Account/LogOut"))
+                    if (returnUrl != null && !returnUrl.Contains(@"/Account/LogOut")&&Url.IsLocalUrl(returnUrl))
                         return LocalRedirect(returnUrl);
-
                     return LocalRedirect(@"/Home/Index");
                 }
             }

@@ -162,7 +162,7 @@ namespace SanitaryCartControl.Controllers
             if (ModelState.IsValid)
             {
                 string Description = productViewModel.Product.Description ;
-                productViewModel.Product.Description = Description.Replace("\"","\'");
+                productViewModel.Product.Description = Description.Replace("\'","\"");
                 int productId = _productService
                 .Add(Converters.ToProductBLL(productViewModel.Product,
                 productViewModel.Attributes,

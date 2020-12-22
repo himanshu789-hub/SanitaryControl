@@ -237,7 +237,7 @@
         },
         theme: 'snow'
     });
-    quill.root.innerHTML = "@Html.Raw(@Model.Product.Description.ToString().Replace("\".*\""," "))";
+    quill.root.innerHTML = '@Html.Raw(Model.Product.Description)'
     quill.root.setAttribute('spellcheck', false)
     quill.on('text-change', function (delta, oldDelta, source) {
         $(elements.textAreaId).val(quill.container.firstChild.innerHTML);

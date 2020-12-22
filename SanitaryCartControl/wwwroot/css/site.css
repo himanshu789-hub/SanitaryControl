@@ -70,10 +70,9 @@ body {
 	min-height: 100px;
 }
 
-ul#menu
-{
+ul#menu {
 	height: auto;
-    padding: 0;
+	padding: 0;
 }
 
 #menu li {
@@ -99,7 +98,7 @@ ul#menu
 	display: block;
 	width: 100%;
 	position: absolute;
-	top:60% ;
+	top: 60%;
 	left: 154px;
 	box-shadow: 0 0 6px 0px #ffffffb8;
 }
@@ -133,7 +132,7 @@ ul#menu
 	left: 100%;
 	top: 0;
 	margin-left: 1px;
-} 
+}
 #menu li:hover {
 	background-color: #95b4ca !important;
 }
@@ -198,7 +197,7 @@ input[type='text']:read-only {
 	cursor: not-allowed;
 }
 .card-header {
-	background: #315d93;
+	background: #315d93 !important;
 	color: white;
 	font-weight: 400 !important;
 }
@@ -251,6 +250,7 @@ input[type='text']:read-only {
 	background: url(https://images.unsplash.com/photo-1557683304-673a23048d34?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=243&q=80);
 	background-size: cover;
 	background-repeat: no-repeat;
+	width: 100%;
 }
 
 .main-ul i {
@@ -294,82 +294,88 @@ input[type='text']:read-only {
 	font-size: 38px;
 }
 
-
-    .vibrate-1:hover {
+.vibrate-1:hover {
 	-webkit-animation: vibrate-1 0.3s linear infinite both;
-	        animation: vibrate-1 0.3s linear infinite both;
+	animation: vibrate-1 0.3s linear infinite both;
 }
 
 @-webkit-keyframes vibrate-1 {
-  0% {
-    -webkit-transform: translate(0);
-            transform: translate(0);
-  }
-  20% {
-    -webkit-transform: translate(-2px, 2px);
-            transform: translate(-2px, 2px);
-  }
-  40% {
-    -webkit-transform: translate(-2px, -2px);
-            transform: translate(-2px, -2px);
-  }
-  60% {
-    -webkit-transform: translate(2px, 2px);
-            transform: translate(2px, 2px);
-  }
-  80% {
-    -webkit-transform: translate(2px, -2px);
-            transform: translate(2px, -2px);
-  }
-  100% {
-    -webkit-transform: translate(0);
-            transform: translate(0);
-  }
+	0% {
+		-webkit-transform: translate(0);
+		transform: translate(0);
+	}
+	20% {
+		-webkit-transform: translate(-2px, 2px);
+		transform: translate(-2px, 2px);
+	}
+	40% {
+		-webkit-transform: translate(-2px, -2px);
+		transform: translate(-2px, -2px);
+	}
+	60% {
+		-webkit-transform: translate(2px, 2px);
+		transform: translate(2px, 2px);
+	}
+	80% {
+		-webkit-transform: translate(2px, -2px);
+		transform: translate(2px, -2px);
+	}
+	100% {
+		-webkit-transform: translate(0);
+		transform: translate(0);
+	}
 }
 @keyframes vibrate-1 {
-  0% {
-    -webkit-transform: translate(0);
-            transform: translate(0);
-  }
-  20% {
-    -webkit-transform: translate(-2px, 2px);
-            transform: translate(-2px, 2px);
-  }
-  40% {
-    -webkit-transform: translate(-2px, -2px);
-            transform: translate(-2px, -2px);
-  }
-  60% {
-    -webkit-transform: translate(2px, 2px);
-            transform: translate(2px, 2px);
-  }
-  80% {
-    -webkit-transform: translate(2px, -2px);
-            transform: translate(2px, -2px);
-  }
-  100% {
-    -webkit-transform: translate(0);
-            transform: translate(0);
-  }
+	0% {
+		-webkit-transform: translate(0);
+		transform: translate(0);
+	}
+	20% {
+		-webkit-transform: translate(-2px, 2px);
+		transform: translate(-2px, 2px);
+	}
+	40% {
+		-webkit-transform: translate(-2px, -2px);
+		transform: translate(-2px, -2px);
+	}
+	60% {
+		-webkit-transform: translate(2px, 2px);
+		transform: translate(2px, 2px);
+	}
+	80% {
+		-webkit-transform: translate(2px, -2px);
+		transform: translate(2px, -2px);
+	}
+	100% {
+		-webkit-transform: translate(0);
+		transform: translate(0);
+	}
 }
-.logInHead{
+.logInHead {
 	font-family: 'Exo 2', sans-serif;
-    font-weight: 900;
-    color: #62a686;
+	font-weight: 900;
+	color: #62a686;
 }
-.footer-bottom{
+.footer-bottom {
 	position: absolute;
 	bottom: 0;
 }
 
-img.brand{
-	max-width:250px !important;
-	min-height:100px !important;
+img.brand {
+	max-width: 250px!important;
+    height: 100px!important;
 }
-img[src=''].brand{
-	padding:125px
+}
+img[src=''].brand {
+	padding: 125px;
 }
 
-.validation-summary-errors>ul{
+.validation-summary-errors > ul {
 	list-style: square;
+}
+.descriptionWrapper {
+	    width: 290px;
+    max-height: 190px;
+    overflow-y: auto;
+    word-break: break-word;
 }

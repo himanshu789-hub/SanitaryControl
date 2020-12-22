@@ -10,7 +10,7 @@ namespace SanitaryCartControl.DTOModels
         public byte Id {get;set;}
         [Required]
         [Remote("CheckName","Brand",ErrorMessage="Name already in Use")]
-        [RegularExpression(@"^[A-Z^0-9][a-z]+$",ErrorMessage="Name not valid")]
+        [RegularExpression(@"^[A-Z^0-9][a-z]+$",ErrorMessage=@"Name must be single word with first letter capital")]
         [MaxLength(50,ErrorMessage="Maximum Length Exceed")]
         public string Name{get;set;}
         [Required]

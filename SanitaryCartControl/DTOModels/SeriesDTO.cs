@@ -9,6 +9,7 @@ namespace SanitaryCartControl.DTOModels
         [BindRequired]
          public int Id{get;set;}
          [Required(ErrorMessage="Name Required")]
+         [RegularExpression(@"^\b(?:[A-Z]\w+\b(?:\s*)?)+$",ErrorMessage="First Letter of Each Word Must Be Capital")]
          [Remote("CheckNameExistsUnderParentIdAndBrandId","Series",AdditionalFields="ParentId,Brand_Id_Fk,Id",HttpMethod="POST",ErrorMessage="Name Already Exists")]
          [MaxLength(25,ErrorMessage="Must Be Atmost 25 Character")]
          public string Name{get;set;}
