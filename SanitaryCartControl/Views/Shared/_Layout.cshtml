@@ -4,7 +4,6 @@
 @inject UserManager<ApplicationUser> _userManager;
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,7 +29,7 @@
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     
     @RenderSection("Styles",false)
-
+    @RenderSection("Scripts", required: false)
 </head>
 <body>
     <header>
@@ -167,8 +166,6 @@
    <environment include="Production">
    <script src="~/js/site.min.js" asp-append-version="true"></script>
    </environment>
-    @RenderSection("Scripts", required: false)
-
 </body>
 
 </html>

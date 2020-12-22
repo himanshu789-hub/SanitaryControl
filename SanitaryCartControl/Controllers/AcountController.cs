@@ -33,7 +33,7 @@ namespace SanitaryCartControl.Controllers
         [HttpPost]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public IActionResult LogIn([FromForm]LogInViewModel logIn, string returnUrl = null)
+        public IActionResult LogIn([FromForm]LogInViewModel logIn,[FromQuery] string returnUrl = null)
         {
             
             if (ModelState.IsValid)
@@ -41,8 +41,9 @@ namespace SanitaryCartControl.Controllers
                 var result = _signInManager.PasswordSignInAsync(logIn.UserName, logIn.Password, false, false).Result;
                 if (result.Succeeded)
                 {
-                    if (returnUrl != null)
+                    if (returnUrl != null && !returnUrl.Contains(@"/Account/LogOut"))
                         return LocalRedirect(returnUrl);
+
                     return LocalRedirect(@"/Home/Index");
                 }
             }
@@ -52,10 +53,8 @@ namespace SanitaryCartControl.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult LogIn(string returnUrl = null)
+        public IActionResult LogIn()
         {
-            if (returnUrl != null)
-                return LocalRedirect(returnUrl);
             return View();
         }
         

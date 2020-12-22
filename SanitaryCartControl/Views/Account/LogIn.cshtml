@@ -8,7 +8,7 @@
 
 <h2 class="font-italic w-100 text-center font-weight-bold p-3 logInHead">LogIn To @Constants.PortalName</h2>
 
-@using (Html.BeginForm("LogIn", "Account", FormMethod.Post, new { @class = "d-flex justify-content-center",@spellcheck="false"}))
+@using (Html.BeginForm("LogIn", "Account",new {ReturnUrl=Context.Request.Query["returnUrl"].ToString()}, FormMethod.Post,true,new { @class = "d-flex justify-content-center",@spellcheck="false"}))
 {
 
     <div class="w-25">

@@ -39,12 +39,12 @@ namespace SanitaryCartControl
             services.AddServicesExtensionsWithIConfiguration(Configuration);
             services.AddAntiforgery(options =>
             {
-                  options.FormFieldName = "AntiforgeryASP.NETGKLEnterprises";
+                  options.FormFieldName = "_AntiForgeryVerification";
                   options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
                   options.SuppressXFrameOptionsHeader =true;
                   options.Cookie.HttpOnly=true;
                   options.Cookie.Expiration=new TimeSpan(0,30,0);
-                  options.Cookie.Name="AnyiforgeryGKLEnterprise";
+                  options.Cookie.Name="_AntiForgeryVerification";
                   options.Cookie.SameSite=Microsoft.AspNetCore.Http.SameSiteMode.Strict;
                   options.Cookie.SecurePolicy=Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                   
@@ -71,12 +71,12 @@ namespace SanitaryCartControl
     
             app.UseStaticFiles(new StaticFileOptions{
                 OnPrepareResponse = ctx => {
-                    string fileName = ctx.File.Name;
-                    if(fileName.Contains("bootstrap") || fileName.Contains("jquery"))
+                    string filePath = ctx.File.PhysicalPath;
+                    if(System.Text.RegularExpressions.Regex.Match(filePath,@"lib.*\.(js|css)").Success)
                     ctx.Context.Response.Headers.Add("Cache-Control","public, max-age=604800, immutable");
                 }
             });
-          //  app.UseHttpsRedirection()
+          //app.UseHttpsRedirection()
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
