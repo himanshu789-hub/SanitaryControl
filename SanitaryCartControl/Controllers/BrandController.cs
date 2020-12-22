@@ -16,16 +16,15 @@ using System.Threading;
 namespace SanitaryCartControl.Controllers
 {
     [Authorize(Roles=ApplicationRoles.Both)]
-    public class BrandController : Controller
+    public class BrandController :  BaseController
     {
         IBrandService _brandService;
         IHostEnvironment _host;
         ILogger _logger;
-        public BrandController(IBrandService brandService, ILogger<BrandController> logger, IHostEnvironment host)
+        public BrandController(IBrandService brandService, ILogger<BrandController> logger, IHostEnvironment host):base(host)
         {
             _brandService = brandService;
             _logger = logger;
-            _host = host;
         }
         [HttpGet]
         public IActionResult Edit(int Id)
@@ -42,15 +41,7 @@ namespace SanitaryCartControl.Controllers
         }
 
         const string brandPath = @"/images/brand";
-        [NonAction]
-        public void RemoveFile(string filePath)
-        {
-            string absoluetPath = Path.Join(_host.ContentRootPath, "wwwroot", filePath);
-            if (System.IO.File.Exists(absoluetPath))
-            {
-                System.IO.File.Delete(absoluetPath);
-            }
-        }
+
         [HttpPost]
         public IActionResult Edit(BrandViewModel brandView)
         {
@@ -69,9 +60,8 @@ namespace SanitaryCartControl.Controllers
             {
                 if (brandView.Logo != null)
                 {
-                    new Thread(()=>this.RemoveFile(brandView.Brand.ImagePath)).Start();
-                    this.RemoveFile(brandView.Brand.ImagePath);
-                    string path = this.UploadFile(brandView.Logo);
+                    this.DeleteImage(brandView.Brand.ImagePath);
+                    string path = this.AddImage(brandView.Logo,brandPath);
                     brandView.Brand.ImagePath = path;
                 }
                 _brandService.Update(new BrandBLL() { Id = brandView.Brand.Id, ImagePath = brandView.Brand.ImagePath, Name = brandView.Brand.Name });
@@ -97,25 +87,7 @@ namespace SanitaryCartControl.Controllers
             return Json(!result);
         }
 
-        [NonAction]
-        string UploadFile(IFormFile logo)
-        {
-
-            var getRelativePath = Path.Combine(brandPath, System.Guid.NewGuid().ToString() + Path.GetExtension(logo.FileName));
-            var FilePath = Path.Join(_host.ContentRootPath, "wwwroot", getRelativePath);
-            try
-            {
-                using (var stream = new FileStream(FilePath, FileMode.Create))
-                {
-                    logo.CopyTo(stream);
-                }
-            }
-            catch (System.Exception e)
-            {
-                throw new System.Exception("There was error while uploading file", e);
-            }
-            return getRelativePath;
-        }
+        
         [HttpGet]
         public IActionResult Add()
         {
@@ -133,7 +105,7 @@ namespace SanitaryCartControl.Controllers
             if (ModelState.IsValid)
             {
                 
-                string path = this.UploadFile(brandView.Logo);
+                string path = this.AddImage(brandView.Logo,brandPath);
                 _brandService.Create(new BrandBLL() { ImagePath = path, Name = brandView.Brand.Name });
                 return Redirect(@"\Brand\GetAll");
             }
