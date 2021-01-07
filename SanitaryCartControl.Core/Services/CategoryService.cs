@@ -84,37 +84,42 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                var sqlParameter = new SqlParameter("Id",categoryId);
-                var ImmediateParent = context.Categories.FromSqlRaw<Category>("EXECUTE GetImmediateNode {0}",categoryId).AsEnumerable().FirstOrDefault();
+                var sqlParameter = new SqlParameter("Id", categoryId);
+                var ImmediateParent = context.Categories.FromSqlRaw<Category>("EXECUTE GetImmediateNode {0}", categoryId).AsEnumerable().FirstOrDefault();
                 return ImmediateParent.Id;
             }
 
         }
 
-        public IEnumerable<CategoryBLL> GetCategoryList(int brandId)
+        public IEnumerable<CategoryBLL> GetCategoryList(int? brandId = null)
         {
             using (var context = new SanitaryCartContext(_con))
             {
                 IList<CategoryBLL> CategoryBLLs = new List<CategoryBLL>();
                 int[] SeriesHolderIds = context.SeriesHolderCategories.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();
 
-                var list = context.Categories.AsNoTracking().Include(e => e.SeriesBrand).Include(e => e.SeriesHolderCategories).ToList().Where(e =>
+                var list = context.Categories.AsNoTracking().Include(e => e.SeriesBrand).Include(e => e.SeriesHolderCategories).ToList().AsEnumerable();
+                if (brandId != null)
                 {
-                    if (e.SeriesBrand != null)
+                    list = list.Where(e =>
+                     {
+                         if (e.SeriesBrand != null)
+                         {
+                             if (e.SeriesBrand.BrandIdFk == brandId)
+                                 return true;
+                             else
+                                 return false;
+                         }
+                         else
+                             return true;
+                     }).ToList();
+                    foreach (var item in SeriesHolderIds)
                     {
-                        if (e.SeriesBrand.BrandIdFk == brandId)
-                            return true;
-                        else
-                            return false;
+                        if (list.Where(e => e.ParentId == item).Count() == 0)
+                            list = list.Where(e => e.Id != item);
                     }
-                    else
-                        return true;
-                });
-                foreach (var item in SeriesHolderIds)
-                {
-                    if (list.Where(e => e.ParentId == item).Count() == 0)
-                        list = list.Where(e => e.Id != item);
                 }
+
                 foreach (var item in list)
                 {
                     CategoryBLLs.Add(new CategoryBLL() { Id = item.Id, ParentId = item.ParentId, Title = item.Titlle, Categories = null });
@@ -134,5 +139,33 @@ namespace SanitaryCartControl.Core.Services
             }).ToList();
         }
 
+        public IEnumerable<CategoryInfo> GetChildren(int Id, int Page, int Count)
+        {
+            ICollection<CategoryInfo> categoryInfos = new List<CategoryInfo>();
+            string sql = "SELECT c1.Id AS Id,c1.Titlle AS Title,IIF(COUNT(*)>1,1,0) AS IsSubCategory FROM Category AS c1 LEFT JOIN Category AS c2 ON c2.ParentId = c1.Id WHERE c1.ParentId = @Id GROUP BY c1.Id,c1.Titlle";
+            using (var con = new SqlConnection(_con))
+            {
+                using (var cmd = new SqlCommand(sql))
+                {
+                    con.Open();
+                    cmd.Parameters.Add(new SqlParameter{ Value = Id, ParameterName = "@Id" });
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            categoryInfos.Add(new CategoryInfo()
+                            {
+                                Id = reader.GetInt32(0),
+                                IsSubCategory = reader.GetBoolean(2),
+                                Title = reader.GetString(1)
+                            });
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            return categoryInfos;
+        }
     }
 }

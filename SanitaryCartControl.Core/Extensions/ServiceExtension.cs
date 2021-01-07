@@ -26,9 +26,9 @@ namespace SanitaryCartControl.Core.Extensions
 
             services.ConfigureApplicationCookie(options =>
                {
-                   options.LoginPath = "/Account/LogIn";
-                   options.LogoutPath = "/Account/Logut";
-                   options.AccessDeniedPath = "/Account/AccessDenied";
+                   options.LoginPath = "/Cms/Account/LogIn";
+                   options.LogoutPath = "/Cms/Account/Logut";
+                   options.AccessDeniedPath = "/Cms/Account/AccessDenied";
                    options.ReturnUrlParameter="returnUrl";
                    
                   

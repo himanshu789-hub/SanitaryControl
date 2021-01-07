@@ -142,5 +142,6 @@ namespace SanitaryCartControl.Core.Helpher
                 ImagPath = item.CategoryIdFkNavigation.ImagePath
             };
         }
+
     }
 }

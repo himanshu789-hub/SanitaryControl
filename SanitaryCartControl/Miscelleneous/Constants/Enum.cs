@@ -1,0 +1,4 @@
+namespace SanitaryCartControl.Miscelleneous.Constnants
+{
+    
+}

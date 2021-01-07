@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using SanitaryCartControl.ViewModels;
 using System.Threading.Tasks;
-namespace SanitaryCartControl.Controllers
+namespace SanitaryCartControl.Areas.Controllers
 {
 
     public abstract class BaseController : Controller

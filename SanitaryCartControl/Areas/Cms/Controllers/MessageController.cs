@@ -3,7 +3,7 @@ using SanitaryCartControl.ViewModels;
 
 namespace SanitaryCartControl
 {
-    public class MessageController:Controller
+    public abstract class MessageController:Controller
     {
         [NonAction]
         protected IActionResult Success(string link)

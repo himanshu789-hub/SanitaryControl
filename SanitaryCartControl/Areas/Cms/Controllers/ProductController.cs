@@ -19,8 +19,11 @@ using Microsoft.Extensions.Hosting;
 using X.PagedList;
 using X.PagedList.Mvc;
 using Microsoft.AspNetCore.Authorization;
-namespace SanitaryCartControl.Controllers
+namespace SanitaryCartControl.Areas.Controllers
 {
+
+
+    [Area("Cms")]
     [Authorize(Roles = ApplicationRoles.Both)]
     public class ProductController : BaseController
     {

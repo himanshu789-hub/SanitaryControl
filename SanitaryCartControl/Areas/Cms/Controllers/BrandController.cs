@@ -13,8 +13,10 @@ using SanitaryCartControl.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using SanitaryCartControl.Core.Entities.Enums;
 using System.Threading;
-namespace SanitaryCartControl.Controllers
+namespace SanitaryCartControl.Areas.Controllers
 {
+
+    [Area("Cms")]
     [Authorize(Roles=ApplicationRoles.Both)]
     public class BrandController :  BaseController
     {
@@ -37,7 +39,7 @@ namespace SanitaryCartControl.Controllers
                     Logo = null
                 });
             else
-                return Redirect("/Brand/GetAll");
+                return Redirect("/Cms/Brand/GetAll");
         }
 
         const string brandPath = @"/images/brand";
@@ -65,7 +67,7 @@ namespace SanitaryCartControl.Controllers
                     brandView.Brand.ImagePath = path;
                 }
                 _brandService.Update(new BrandBLL() { Id = brandView.Brand.Id, ImagePath = brandView.Brand.ImagePath, Name = brandView.Brand.Name });
-                return Redirect("/Brand/GetAll");
+                return Redirect("/Cms/Brand/GetAll");
             }
             return View(brandView);
         }
@@ -107,7 +109,7 @@ namespace SanitaryCartControl.Controllers
                 
                 string path = this.AddImage(brandView.Logo,brandPath);
                 _brandService.Create(new BrandBLL() { ImagePath = path, Name = brandView.Brand.Name });
-                return Redirect(@"\Brand\GetAll");
+                return Redirect(@"\Cms\Brand\GetAll");
             }
             return View(brandView);
         }

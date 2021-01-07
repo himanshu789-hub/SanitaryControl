@@ -186,5 +186,18 @@ namespace SanitaryCartControl.Core.Services
                 return false;
             }
         }
+
+        public IEnumerable<ProductInfoBLL> GetProductsByCategoryId(int CategoryId,int Page,int Count)
+        {
+            using (var context = new SanitaryCartContext())
+            {
+               IEnumerable<ProductInfoBLL> products = context.Products.AsNoTracking().Where(e => e.CategoryId == CategoryId).Include(e=>e.Images).Take(10).Skip(Page * 10).Select(e=>new ProductInfoBLL{
+                   Id=e.Id,
+                   Name=e.Name,
+                   ImagePath=e.Images.Count>0?e.Images.First().Path:null
+               });
+               return products;
+            }
+        }
     }
 }

@@ -374,7 +374,7 @@ img[src=''].brand {
 	list-style: square;
 }
 .descriptionWrapper {
-	    width: 290px;
+	width: 290px;
     max-height: 190px;
     overflow-y: auto;
     word-break: break-word;

@@ -81,18 +81,26 @@ namespace SanitaryCartControl
             app.UseRouting();
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id:int?}");
+                    name: "WithAreas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id:int?}");
             });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id:guid?}");
+                    name: "WithAreas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id:guid?}");
             });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id:int?}");
+            });
+
         }
     }
 }

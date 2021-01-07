@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using SanitaryCartControl.Core.Entities.Enums;
 using System.Linq;
-namespace SanitaryCartControl.Controllers
+
+namespace SanitaryCartControl.Areas.Controllers
 {
 
+    [Area("Cms")]
     public class AccountController : MessageController
     {
        private readonly SignInManager<ApplicationUser> _signInManager;
@@ -43,7 +45,7 @@ namespace SanitaryCartControl.Controllers
                 {
                     if (returnUrl != null && !returnUrl.Contains(@"/Account/LogOut")&&Url.IsLocalUrl(returnUrl))
                         return LocalRedirect(returnUrl);
-                    return LocalRedirect(@"/Home/Index");
+                    return LocalRedirect(@"/Cms/Home/Index");
                 }
             }
             ModelState.Clear();

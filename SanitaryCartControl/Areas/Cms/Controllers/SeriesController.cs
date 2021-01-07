@@ -15,8 +15,10 @@ using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.Enums;
 using Microsoft.AspNetCore.Http;
 using SanitaryCartControl.Core.Entities.BLLModels;
-namespace SanitaryCartControl.Controllers
+namespace SanitaryCartControl.Areas.Controllers
 {
+
+    [Area("Cms")]
 
     [Authorize(Roles = ApplicationRoles.Both)]
     public class SeriesController : BaseController

@@ -1,0 +1,88 @@
+﻿<html>
+
+<head>
+    @RenderSection("Styles",false)
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" href="~/dist/site.css" />
+    <script src="~/dist/bootstrap_js.entry.js"></script>
+
+</head>
+<div class="d-none d-lg-flex justify-content-center align-content-center">
+    <img src="./images/site/download.jpg" class="navbar-brand" width="100px" />
+    <nav class="d-md-block navbar navbar-light bg-dark" style="height: 40px;" id="desktop-nav">
+        <ul class="navbar" id="menu">
+
+        </ul>
+    </nav>
+</div>
+
+<nav class="d-flex d-lg-none" id="mobile-nav">
+    <div id="nav-icon1">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="logo d-none"><img src="" /></div>
+    <div class="collapse" id="navigation">
+        <ul id="menu"></ul>
+    </div>
+</nav>
+@RenderBody()
+<script>
+    var requestUrl = @Json.Serialize(Url.Action("Get","Item"))
+</script>
+<script>
+        var IsOpen = false;
+
+       var appendEvents = function () {
+        $('#nav-icon1').click(function (e) {
+            if (!IsOpen)
+                IsOpen = true;
+            else
+                IsOpen = false;
+
+            $(this).toggleClass('open');
+            $('#mobile-nav #navigation').toggleClass('show')
+            $('.logo').toggleClass('d-none')
+        });
+        $(function () {
+            $('#desktop-nav li[data-level="0"]').hover(function (e) {
+                const ulList = $(this).find('>ul#child');
+                if (ulList.find('>li.parent').length)
+                    $(this).find('>ul#child').addClass('makeBold')
+            });
+
+            $('#mobile-nav ul#child>li').click(function (e) {
+                e.stopPropagation();
+            })
+            $('#mobile-nav li.parent span.expand').click(function (e) {
+                const li = $(this).parents('li.parent').first();
+                const level = li.data('level');
+
+                const liList = li.siblings().filter(function (index, value) {
+                    return $(value).hasClass('parent') && value != li[0];
+                });
+                const array = $.grep(liList, function (value) {
+                    return $(value).find('ul#child.showList').length > 0;
+                });
+                array.forEach(element => {
+                    $(element).find('>ul#child.showList').removeClass('showList');
+                    $(element).find('>a>span>i').removeClass('fa-minus')
+                });
+                li.find('>ul#child').first().toggleClass('showList')
+                li.find('>span>span.expand i').toggleClass('fa-minus')
+                e.stopPropagation();
+                e.preventDefault();
+            });
+        })
+
+    }
+</script>
+<script src="~/dist/client.entry.js"></script>
+
+@RenderSection("Scripts",false)
+
+</html>
