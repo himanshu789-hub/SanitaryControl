@@ -7,5 +7,6 @@ namespace SanitaryCartControl.ViewModels
         public bool IsSubCategory { get; set; }
         public IEnumerable<CategoryInfo> CategoryInfos{get;set;}
         public IEnumerable<ProductInfoBLL> ProductInfos{get;set;}
+        public int ParentId{get;set;}
     }
 }

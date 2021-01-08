@@ -24,6 +24,7 @@ namespace SanitaryCartControl.Controllers
                 if (Item.IsSubCategory)
                 {
                     ItemViewModel ItemViewModel = new ItemViewModel();
+                    ItemViewModel.ParentId = Item.Id;
                     ItemViewModel.IsSubCategory = true;
                     ItemViewModel.CategoryInfos = _categoryService.GetChildren(Item.Id, Item.Page, 10);
                     return View(ItemViewModel);
@@ -32,7 +33,7 @@ namespace SanitaryCartControl.Controllers
                 {
                     ItemViewModel ItemViewModel = new ItemViewModel();
                     ItemViewModel.IsSubCategory = false;
-
+                    ItemViewModel.ParentId = Item.Id;
                     IEnumerable<ProductInfoBLL> productInfos = _productService.GetProductsByCategoryId(Item.Id, Item.Page, 10);
                     ItemViewModel.ProductInfos = productInfos;
                     if (Item.Page == 0)
@@ -43,5 +44,14 @@ namespace SanitaryCartControl.Controllers
             }
             return BadRequest();
         }
+        public ActionResult GetProduct(int Id)
+        {
+            if (ModelState.IsValid)
+            {
+                return View();
+            }
+            return BadRequest();
+        }
+        
     }
 }

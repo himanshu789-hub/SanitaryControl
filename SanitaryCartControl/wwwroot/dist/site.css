@@ -10315,6 +10315,9 @@ list-style:  none;
 }
 #navigation.show{
 transform: translateX(0px);
+
+    z-index: 1;
+    background-color: wheat;
 }
 #nav-icon1 {
   width: 12vw;
@@ -10434,6 +10437,7 @@ color:black;
 border-bottom: 1px dashed white;
 font-weight: 400;
 }
+
 #mobile-nav .showList{
   max-height:1000px !important;
   border-bottom: 1px solid #67aa8d;
@@ -10503,7 +10507,14 @@ nav#desktop-nav li.parent:not([data-level="0"]):not([data-level="1"])>ul#child{
   max-height: 0;
   overflow:hidden;
 }
-
+span.expand .fa-angle-up:before{
+  content: "\f106" !important;
+}
+span.expand{
+  color:chocolate;
+  padding:0px 3px;
+  vertical-align: center;
+}
 nav#desktop-nav li.parent:not([data-level="0"]):not([data-level="1"]):hover>ul#child{
   max-height: 200px;
 }
@@ -10551,5 +10562,114 @@ nav#mobile-nav{
 }
 
 
+#Item-Wrapper {
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.itemHolder {
+	width: 170px;
+	height: 200px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.itemHolder > .title{
+  text-align: center;
+}
+.itemHolder > .imageHolder {
+	height: 80%;
+  width: 80%;
+  display: block;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	overflow: hidden;
+}
+.itemHolder > .imageHolder > img {
+	height: 100%;
+	transition: all 1s ease-in-out;
+	display: block;
+}
+.itemHolder > .imageHolder > .link {
+	opacity: 0;
+	position: absolute;
+	box-shadow: 1px 1px 2px 1px black;
+	padding: 1px 9px;
+	text-decoration: none !important;
+	border-radius: 30px;
+	background: #ffffffdb;
+	color: black;
+	transition: all 1s ease-in-out;
+	outline: none;
+	bottom: 0%;
+}
+.itemHolder > .imageHolder:hover > .link {
+	opacity: 1;
+	bottom: 5%;
+}
+.itemHolder > .imageHolder:hover > img {
+	-webkit-transform: scale(1.2) ;
+	-moz-transform: scale(1.2) ;
+	-ms-transform: scale(1.2) ;
+	-o-transform: scale(1.2) ;
+	transform: scale(1.2) ;
+	filter: opacity(50%);
+}
+@media (orientation: portrait) {
+	.itemHolder {
+		width: 50%;
+	}
+}
+@media (orientation: landscape) {
+	.itemHolder
+	{
+		width: 180px;
+		margin:6px;
+	}
+}
+
+
+.brand-marquee
+{
+  width:100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.brand-marquee>.m-imageHolder
+{
+   width:150px;
+   height:100px;
+   display:flex;
+   justify-content: center;
+   float:left;
+   transition: transform .5s ease-out;
+}
+.brand-marquee>.m-imageHolder:hover
+{
+  transform: scale(1.5);
+  transition: transform 1s ease-in-out;
+}
+.jump:after{
+  content:'\21F2';
+  font-size: .8em;
+  opacity: 0.7;
+  transition: opacity .8s ease-in-out;
+  display: inline-block;
+  
+}
+.jump::after:hover{
+  opacity: 1;
+}
+.brand-marquee>.m-imageHolder>img
+{
+  height: 100%;
+  min-width: 100px;
+  max-width: 150px;
+  
+}
 
 /*# sourceMappingURL=site.css.map*/

@@ -7,7 +7,8 @@ module.exports = {
         bootstrap_js: './src/js/bootstrap_js.js',
         validation: './src/js/validation.js',
         client: './src/js/client.js',
-        jquery:'./src/js/jquery.js'
+        jquery:'./src/js/jquery.js',
+        item:'./src/js/item.js'
     },
     output: {
         filename: '[name].entry.js',

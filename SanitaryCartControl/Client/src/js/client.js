@@ -20,8 +20,8 @@ if (!$('ul#menu')) {
 
 			if (this.categories && this.categories.length > 0) {
 				a.attr('href', window.requestUrl + `?Page=0&IsSubCategory=true&Id=${this.id}`);
-                			span.append('<span class="expand"><i class="fa fa-plus"></i></span>');
-                li.addClass('parent');
+				span.append('<span class="expand"><i class="fa fa-angle-down"></i></span>');
+				li.addClass('parent');
 				var ul = $('<ul></ul>').attr('id', 'child');
 				ul.appendTo(li);
 				buildMenu(ul, this.categories, level + 1);

@@ -31,12 +31,10 @@
     </div>
 </nav>
 @RenderBody()
-<script>
-    var requestUrl = @Json.Serialize(Url.Action("Get","Item"))
-</script>
-<script>
-        var IsOpen = false;
 
+<script>
+    var IsOpen = false;
+    var requestUrl = @Json.Serialize(Url.Action("Get","Item",new {id=""}))
        var appendEvents = function () {
         $('#nav-icon1').click(function (e) {
             if (!IsOpen)
@@ -48,13 +46,26 @@
             $('#mobile-nav #navigation').toggleClass('show')
             $('.logo').toggleClass('d-none')
         });
+
         $(function () {
             $('#desktop-nav li[data-level="0"]').hover(function (e) {
                 const ulList = $(this).find('>ul#child');
                 if (ulList.find('>li.parent').length)
                     $(this).find('>ul#child').addClass('makeBold')
             });
-
+            $('#desktop-nav li.parent[data-level="1"]').each(function (index, element) {
+                const i = $(this).find('>span>span.expand>i');
+                i.removeClass(function (index, name) {
+                    const classes = name.split(" ");
+                    let result = "";
+                    classes.forEach(function (value) {
+                        if (new RegExp('^fa-').test(value))
+                            result = result.concat(value+" ");
+                    })
+                    return result;
+                })
+                $(this).find('>span>a').addClass('jump p-1')
+            })
             $('#mobile-nav ul#child>li').click(function (e) {
                 e.stopPropagation();
             })
@@ -66,23 +77,22 @@
                     return $(value).hasClass('parent') && value != li[0];
                 });
                 const array = $.grep(liList, function (value) {
-                    return $(value).find('ul#child.showList').length > 0;
+                    return $(value).find('>ul#child.showList').length > 0;
                 });
                 array.forEach(element => {
                     $(element).find('>ul#child.showList').removeClass('showList');
-                    $(element).find('>a>span>i').removeClass('fa-minus')
+                    $(element).find('>span>span.expand>i').removeClass('fa-angle-up')
                 });
                 li.find('>ul#child').first().toggleClass('showList')
-                li.find('>span>span.expand i').toggleClass('fa-minus')
+                li.find('>span>span.expand>i').toggleClass('fa-angle-up')
                 e.stopPropagation();
                 e.preventDefault();
             });
         })
-
     }
+
 </script>
 <script src="~/dist/client.entry.js"></script>
-
 @RenderSection("Scripts",false)
 
 </html>

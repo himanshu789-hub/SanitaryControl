@@ -1,0 +1,13 @@
+@model HomeViewModel;
+@if (Model.Brands != null && Model.Brands.Count() > 0)
+{
+    <h3 class="text-center p-2 m-2">Brands</h3>
+    <marquee behavior="scroll" direction="left" scrollamount="6" class="brand-marquee">
+        @foreach (var item in Model.Brands)
+        {
+                    <div class="m-imageHolder p-2 m-2 ml-5">
+                <img src="@item.Value" alt="@item.Key" />
+            </div>
+        }
+    </marquee>
+}

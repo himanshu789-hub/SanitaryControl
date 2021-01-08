@@ -142,10 +142,10 @@ namespace SanitaryCartControl.Core.Services
         public IEnumerable<CategoryInfo> GetChildren(int Id, int Page, int Count)
         {
             ICollection<CategoryInfo> categoryInfos = new List<CategoryInfo>();
-            string sql = "SELECT c1.Id AS Id,c1.Titlle AS Title,IIF(COUNT(*)>1,1,0) AS IsSubCategory FROM Category AS c1 LEFT JOIN Category AS c2 ON c2.ParentId = c1.Id WHERE c1.ParentId = @Id GROUP BY c1.Id,c1.Titlle";
+            string sql = "SELECT c1.Id AS Id,c1.Titlle AS Title,IIF(COUNT(*)>1,1,0) AS IsSubCategory,c1.ImagePath FROM Category AS c1 LEFT JOIN Category AS c2 ON c2.ParentId = c1.Id WHERE c1.ParentId = @Id GROUP BY c1.Id,c1.Titlle,c1.ImagePath";
             using (var con = new SqlConnection(_con))
             {
-                using (var cmd = new SqlCommand(sql))
+                using (var cmd = new SqlCommand(sql,con))
                 {
                     con.Open();
                     cmd.Parameters.Add(new SqlParameter{ Value = Id, ParameterName = "@Id" });
@@ -157,15 +157,16 @@ namespace SanitaryCartControl.Core.Services
                             categoryInfos.Add(new CategoryInfo()
                             {
                                 Id = reader.GetInt32(0),
-                                IsSubCategory = reader.GetBoolean(2),
-                                Title = reader.GetString(1)
+                                IsSubCategory = reader.GetInt32(2)!=0,
+                                Title = reader.GetString(1),
+                                ImagePath=reader["ImagePath"] as string
                             });
                         }
                     }
                     con.Close();
                 }
             }
-            return categoryInfos;
+            return categoryInfos.Skip(Page*Count).Take(Count);
         }
     }
 }
