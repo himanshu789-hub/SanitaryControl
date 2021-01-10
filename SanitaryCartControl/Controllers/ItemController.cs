@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using SanitaryCartControl.Helphers.Converters;
 using SanitaryCartControl.ViewModels;
 using SanitaryCartControl.DTOModels;
 using SanitaryCartControl.Core.Contracts.Services;
 using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.BLLModels;
+
 namespace SanitaryCartControl.Controllers
 {
     public class ItemController : Controller
@@ -48,10 +50,10 @@ namespace SanitaryCartControl.Controllers
         {
             if (ModelState.IsValid)
             {
-                return View();
+                return View(_productService.GetById(Id));
             }
             return BadRequest();
         }
-        
+
     }
 }

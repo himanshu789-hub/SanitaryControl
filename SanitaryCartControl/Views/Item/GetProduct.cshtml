@@ -1,1 +1,32 @@
-<h1>Product Details</h1>
+@model SanitaryCartControl.Core.Entities.BLLModels.ProductBLL
+
+<div id="product-wrapper" class="d-flex  flex-sm-column flex-md-row">
+   <div class="d-none d-md-flex justify-content-around" id="desktop-gallery">
+       <div class="gallery">
+       @foreach (var item in Model.Images)
+       {
+         <img src="@item" class="product-image"/>
+       }
+       </div>
+       <div class="image-wrapper"><img id="image-view"/></div>
+        <script type="text/javascript">
+           const imageWrapper = document.getElementsByClassName('image-wrapper')[0];
+           const images = document.getElementsByClassName('product-image').item;
+           if(images && images.length>0)
+           {
+               Array.from(images).map(element=>{
+                    element.addEventListener('click',function(e){
+                     const src = e.target.getAttribute('src')
+                     document.getElementById('image-view').setAttribute('src',src);
+                     e.preventDefault();
+                    })
+               })
+           }
+        </script>     
+   </div>
+   <div class="d-md-none" id="mobile-gallery"></div>
+   <div id="info" class="d-flex">
+       <h4>@Model.Name</h4>
+       
+   </div>
+</div>

@@ -1,0 +1,5 @@
+{
+  "port": 43393,
+  "protocol": "http",
+  "path": "../SanitaryCartControl/bin/Debug/netcoreapp3.1/SanitaryCartControl.exe"
+}
