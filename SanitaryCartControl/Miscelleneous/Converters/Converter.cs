@@ -4,7 +4,7 @@ using SanitaryCartControl.Core.Entities.BLLModels;
 using System.Linq;
 namespace SanitaryCartControl.Helphers.Converters
 {
-    public class Converters
+    public sealed class Converters
     {
         public static ProductDTO ToProductDTO(ProductBLL product)
         {
@@ -19,6 +19,16 @@ namespace SanitaryCartControl.Helphers.Converters
             productDTO.DateAdded = product.DateAdded;
             productDTO.DateUpdated = product.DateUpdated;
             return productDTO;
+        }
+        public static string[] ToCategoryPathArray(AncestorCategoryBLL ancestorCategoryBLLs)
+        {
+            ICollection<string> categoryPathResult = new List<string>();
+            foreach (var item in ancestorCategoryBLLs.Ancestors.Reverse())
+            {
+                categoryPathResult.Add(item.Title);
+            }
+            categoryPathResult.Add(ancestorCategoryBLLs.Title);
+            return categoryPathResult.ToArray();
         }
         public static IEnumerable<AttributeDTO> ToAttributeDTOList(IEnumerable<AttributeBLL> attributeBLLs)
         {

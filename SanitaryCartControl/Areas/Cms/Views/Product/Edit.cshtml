@@ -1,5 +1,5 @@
 @using System.Text.Json;
-
+@using SanitaryCartControl.Miscelleneous.Utlities;
 @model ProductEditViewModel
 @{
     ViewData["Head"] = "Edit Product : " + Model.Product.Code;
@@ -81,21 +81,7 @@
                     @if(Model.Product.Type!=(byte)ProductType.NoneVariable)
                     {
                      <div class="col-3 form-group">
-                        <label>@switch(Model.Product.Type)
-                                        {
-                                            case ((byte)ProductType.ColorVariable):
-                                            <span>Color</span>
-                                                break;
-                                            case ((byte)ProductType.SizeVariable):
-                                            <span>Size</span>
-                       
-                                                break;
-                                            case ((byte)ProductType.TypeVaribale):
-                                            <span>Type</span>
-                                                break;
-                                            default:
-                                                break;
-                                        } </label>
+                        <label>@Utilities.GetAttributeNameByType(Model.Product.Type) </label>
                     @Html.TextBoxFor(e=>e.Attributes[i].Value,"",new {@class="form-control pointer-none",@readonly="readonly"})
                      </div>
                   

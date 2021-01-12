@@ -1,0 +1,10 @@
+@model string[]
+<nav >
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><i class="fa fa-home m-auto"></i></li>
+        @foreach (var ancestorPath in Model)
+        {
+            <li class="breadcrumb-item">@ancestorPath</li>
+        }
+    </ol>
+</nav>

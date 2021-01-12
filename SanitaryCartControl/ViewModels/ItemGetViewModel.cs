@@ -8,5 +8,6 @@ namespace SanitaryCartControl.ViewModels
         public IEnumerable<CategoryInfo> CategoryInfos{get;set;}
         public IEnumerable<ProductInfoBLL> ProductInfos{get;set;}
         public int ParentId{get;set;}
+        public string[] Breadcrumps;
     }
 }

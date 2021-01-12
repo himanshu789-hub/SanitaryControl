@@ -1,32 +1,93 @@
 @model SanitaryCartControl.Core.Entities.BLLModels.ProductBLL
+@using SanitaryCartControl.Miscelleneous.Utlities;
+@using SanitaryCartControl.Core.Entities.Enums;
 
-<div id="product-wrapper" class="d-flex  flex-sm-column flex-md-row">
-   <div class="d-none d-md-flex justify-content-around" id="desktop-gallery">
-       <div class="gallery">
-       @foreach (var item in Model.Images)
-       {
-         <img src="@item" class="product-image"/>
-       }
-       </div>
-       <div class="image-wrapper"><img id="image-view"/></div>
-        <script type="text/javascript">
-           const imageWrapper = document.getElementsByClassName('image-wrapper')[0];
-           const images = document.getElementsByClassName('product-image').item;
-           if(images && images.length>0)
-           {
-               Array.from(images).map(element=>{
-                    element.addEventListener('click',function(e){
-                     const src = e.target.getAttribute('src')
-                     document.getElementById('image-view').setAttribute('src',src);
-                     e.preventDefault();
-                    })
-               })
-           }
-        </script>     
-   </div>
-   <div class="d-md-none" id="mobile-gallery"></div>
-   <div id="info" class="d-flex">
-       <h4>@Model.Name</h4>
-       
-   </div>
-</div>
+@Html.Partial("_Breadcrumb",Model.GetBreadCrumps().ToArray())
+    <div class="row no-gutters">
+        <div class="col-sm-12 col-md-5 d-flex flex-column p-1 pt-sm-2 pl-sm-2" id="lightbox-wrapper">
+            <div class="d-flex justify-content-center align-items-center" id="first-image-holder" onclick="show();">
+                <img class="img-fluid" src="@Model.Images?.First()" />
+                <span id="overlay" class="fa-stack fa-3x"><i class="fa fa-caret-down fa-stack-2x"></i><i
+                        class="fa fa-expand fa-inverse fa-stack-1x"></i></span>
+                <span class="text">Click To Expand</span>
+            </div>
+            <div class="d-flex justify-content-start align-items-center" id="lightbox-gallery">
+                <a class="m-1" id="first" href="./image/basin.jpg" data-lightbox="photos"><img src="./image/basin.jpg"
+                        class="img-fluid" /></a>
+                @foreach (var item in Model.Images.Where(e=>e!=Model.Images.First()))
+                {
+                <a class="m-1" href="@item" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>       
+                }
+             </div>
+        </div>
+        <div class="col-sm-12 col-md-7 p-2">
+            <h4 class="mb-md-4">@Model.Name</h4>
+            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row ">
+                 <label style="width: 100px;display: table;" class="font-weight-bold"> <u>Description</u></label>
+                <div class="pl-3 pr-1 text-up text-justify">@Html.Raw(Model.Description) </div>
+            </div>
+
+            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row ">
+              @{
+                bool  IsProductOfNoneType  = Model.Type==(byte)ProductType.NoneVariable;
+              }
+                <label style="width: 100px;display: table;" class="align-middle font-weight-bold"><u>@IsProductOfNoneType?Price : @Utilities.GetAttributeNameByType(Model.Type)</u></label>
+                <div class="pl-3 pr-1 text-justify">
+            @if(Model.Type!=(byte)ProductType.NoneVariable)
+            {
+                 <span class="d-inline-flex justify-content-start">
+        <select onchange="price(this)" class="form-control">   
+                        @foreach (var item in Model.AttributeBLLs)
+                        {
+                          if(item.IsActive){
+                          <option value="@item.Price">@item.Value</option>
+                          }
+                        }
+                        </select>
+                </span>
+                    <label class="price"><span class="price-text"></span></label>
+                
+            }
+            else 
+            {
+              <label class="price show"><span class="price-text">@Model.AttributeBLLs.First().Price</span></label> 
+            }
+                </div>
+            </div>
+        
+            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row ">
+                <label style="width: 100px;display: table;" class="align-middle font-weight-bold"><u>Code</u></label>
+                <div class="pl-3 pr-1 text-justify">
+                    @Model.Code
+                </div>
+            </div>    
+        </div>
+    </div>
+    @section Scripts
+    {
+       <style src="~/lib/lightbox/js/lightbox-plus-jquery.min.js"></style>
+    }
+    @section Styles
+    {
+     <link rel="stylesheet" href="~/lib/lightbox/css/lightbox.min.css"/>
+    }
+    <script>
+        if($)
+        {
+        function show() {
+            $('#first').click();
+        }
+        function price(e) {
+            $('.price').removeClass('show')
+            setTimeout(function () {
+                $('.price-text').html(e.value)
+                $('.price').addClass('show')
+            }, 100)
+
+        }
+       $(lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': false
+        }));
+        }
+    </script>

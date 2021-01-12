@@ -6,7 +6,6 @@ using SanitaryCartControl.DTOModels;
 using SanitaryCartControl.Core.Contracts.Services;
 using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.BLLModels;
-
 namespace SanitaryCartControl.Controllers
 {
     public class ItemController : Controller
@@ -23,19 +22,19 @@ namespace SanitaryCartControl.Controllers
         {
             if (ModelState.IsValid)
             {
+                ItemViewModel ItemViewModel = new ItemViewModel();
+                ItemViewModel.Breadcrumps = Converters.ToCategoryPathArray(_categoryService.GetAllAncestors(Item.Id));
+                ItemViewModel.ParentId = Item.Id;
+
                 if (Item.IsSubCategory)
                 {
-                    ItemViewModel ItemViewModel = new ItemViewModel();
-                    ItemViewModel.ParentId = Item.Id;
                     ItemViewModel.IsSubCategory = true;
                     ItemViewModel.CategoryInfos = _categoryService.GetChildren(Item.Id, Item.Page, 10);
                     return View(ItemViewModel);
                 }
                 else
                 {
-                    ItemViewModel ItemViewModel = new ItemViewModel();
                     ItemViewModel.IsSubCategory = false;
-                    ItemViewModel.ParentId = Item.Id;
                     IEnumerable<ProductInfoBLL> productInfos = _productService.GetProductsByCategoryId(Item.Id, Item.Page, 10);
                     ItemViewModel.ProductInfos = productInfos;
                     if (Item.Page == 0)

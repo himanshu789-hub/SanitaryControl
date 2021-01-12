@@ -67,6 +67,7 @@ namespace SanitaryCartControl.Extensions
             if (modelSate.ContainsKey(key))
                 modelSate.Remove(key);  
         }
+        
 
     }
 }

@@ -1,4 +1,5 @@
 @model ItemViewModel
+@Html.Partial("_Breadcrumb",Model.Breadcrumps)
 <div id="Item-Wrapper"> 
 <script type="text/javascript"> 
     window.parentId = @Model.ParentId;

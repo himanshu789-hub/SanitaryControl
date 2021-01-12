@@ -8,7 +8,8 @@
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <link rel="stylesheet" href="~/dist/site.css" />
     <script src="~/dist/bootstrap_js.entry.js"></script>
-
+    <link rel="stylesheet" href="~/dist/item.css" />
+    
 </head>
 <div class="d-none d-lg-flex justify-content-center align-content-center">
     <img src="./images/site/download.jpg" class="navbar-brand" width="100px" />
@@ -31,7 +32,6 @@
     </div>
 </nav>
 @RenderBody()
-
 <script>
     var IsOpen = false;
     var requestUrl = @Json.Serialize(Url.Action("Get","Item",new {id=""}))
