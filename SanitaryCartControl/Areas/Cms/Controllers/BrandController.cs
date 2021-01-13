@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using SanitaryCartControl.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using SanitaryCartControl.Core.Entities.Enums;
-using System.Threading;
 namespace SanitaryCartControl.Areas.Controllers
 {
 

@@ -60,6 +60,12 @@
                             <i class="fa fa-home"></i>
                             <span class="d-inline">Home</span></a>
                     </li>
+                      <li class="nav-item  ">
+                        <a class="nav-link text-truncate" asp-area="Cms" asp-controller="Category" asp-action="GetNonSeriesHolder">
+                            <i class="fa fa-sitemap"></i>
+                            <span class="d-inline">View Category</span></a>
+                    </li>
+                    <hr style=" width: 94%;z-index: 1;border: 1px solid white;"/>
                     <li class="nav-item ">
                         <a class="nav-link collapsed text-truncate" data-target="#Brand" data-toggle="collapse">
                             <i class="fa fa-building"></i>
@@ -82,7 +88,7 @@
                     </li>
                     <li class="nav-item  ">
                         <a class="nav-link collapsed text-truncate" data-target="#Product" data-toggle="collapse">
-                            <i class="fa fa-sitemap" aria-hidden="true"></i>
+                            <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                             <span class="d-inline">Product</span></a>
                         <div class="collapse" id="Product" aria-expanded="false">
                             <ul class="flex-column pl-4 nav sub-ul">
@@ -139,8 +145,7 @@
                     </li>
                 </ul>
             </div>
-            <style>
-            </style>
+            
             <div class="col pt-2">
                 <label class="body-header">
                     <img src="/images/site/icon.png" width="50px" height="50px" class="pr-1" /> <span
@@ -166,6 +171,7 @@
    <environment include="Production">
    <script src="~/js/site.min.js" asp-append-version="true"></script>
    </environment>
+@RenderSection("BodyInvokedScripts",false)
 </body>
 
 </html>

@@ -6,10 +6,11 @@ using SanitaryCartControl.Core.Entities.BLLModels;
 using System.Linq;
 using SanitaryCartControl.Helphers.Converters;
 using SanitaryCartControl.ViewModels;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Http;
 namespace SanitaryCartControl.Areas.Controllers
 {
-
+    [Area("Cms")]
     public class CategoryController : BaseController
     {
         readonly ICategoryService _categoryService;

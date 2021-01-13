@@ -13,13 +13,20 @@
     <tbody>
         @for(int position=1;position<=Model.Length;position++)
         {
-                CategoryBreadcrumbInfo item = Model[position];
-            
-           
+                CategoryBreadcrumbInfo item = Model[position-1];
+                string appendedClass ="";
+                string imagePath = item.ImagePath ;
+                if(imagePath==null)
+                {
+                      imagePath =   "/images/site/image-not-found.png";
+                 appendedClass ="append-class";
+                }
+
             <tr>
                 <td>@position</td>
                 <td>@item.Breadcrumps</td>
-                <td><img src="@item.ImagePath" class="border rounded-lg brand img-perfect"/></td>
+                <td><img src='@imagePath' class="border rounded-lg brand img-perfect @appendedClass"/></td>
+                <td>@Html.ActionLink("","Edit","Category",new {Area="{areaname}",Id=item.Id},new {@class="fa fa-pencil fa-2x text-info"})</td>
             </tr>
         }
     </tbody>
@@ -28,11 +35,11 @@
 @section Styles
 {
     <style>
-               img.img-perfect[src='']
+               img.img-perfect,
                {
                    position:relative;
                }
-               img.img-perfect[src='']::after{
+               img.img-perfect:not([src])::after{
                    position:absolute;
                    top:50%;
                    left:50%;
@@ -43,4 +50,20 @@
                }
                
     </style>
+    
 }
+
+@section BodyInvokedScripts
+    {
+    <script>
+        if($)
+        {
+            $(setTimeout(function(){
+                $('.append-class').addClass('swing-in-top-fwd');
+               setTimeout(function(){
+                   $('.append-class').addClass('fade-in')
+               },3000)
+            },1000));
+        }
+    </script>
+    }

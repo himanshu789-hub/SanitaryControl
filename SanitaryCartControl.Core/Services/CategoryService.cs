@@ -184,7 +184,7 @@ namespace SanitaryCartControl.Core.Services
                     cmd.Parameters.Add(new SqlParameter
                     {
                         Value = '>',
-                        TypeName = "@Seperator",
+                        ParameterName = "@Seperator",
                         SqlDbType = System.Data.SqlDbType.NChar
                     });
                     SqlDataReader sqlDataReader = cmd.ExecuteReader();
