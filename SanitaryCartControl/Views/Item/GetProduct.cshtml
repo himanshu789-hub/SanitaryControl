@@ -31,12 +31,23 @@
               @{
                 bool  IsProductOfNoneType  = Model.Type==(byte)ProductType.NoneVariable;
               }
-                <label style="width: 100px;display: table;" class="align-middle font-weight-bold"><u>@IsProductOfNoneType?Price : @Utilities.GetAttributeNameByType(Model.Type)</u></label>
+                <label style="width: 100px;display: table;" class="align-middle font-weight-bold">
+                <u>
+                    @if(IsProductOfNoneType)  
+                    {
+                        <span>Price</span>
+                    } 
+                    else  
+                    {
+                      <span> @Utilities.GetAttributeNameByType(Model.Type)</span>
+                    }
+                </u></label>
                 <div class="pl-3 pr-1 text-justify">
             @if(Model.Type!=(byte)ProductType.NoneVariable)
             {
                  <span class="d-inline-flex justify-content-start">
         <select onchange="price(this)" class="form-control">   
+                       <option value="" disabled selected>-- Select Your Option --</option>
                         @foreach (var item in Model.AttributeBLLs)
                         {
                           if(item.IsActive){
@@ -63,13 +74,13 @@
             </div>    
         </div>
     </div>
-    @section Scripts
+    @section HeadInvokeScripts
     {
-       <style src="~/lib/lightbox/js/lightbox-plus-jquery.min.js"></style>
+       <style src="~/lib/lightbox/dist/js/lightbox-plus-jquery.min.js"></style>
     }
     @section Styles
     {
-     <link rel="stylesheet" href="~/lib/lightbox/css/lightbox.min.css"/>
+     <link rel="stylesheet" href="~/lib/lightbox/dist/css/lightbox.min.css"/>
     }
     <script>
         if($)

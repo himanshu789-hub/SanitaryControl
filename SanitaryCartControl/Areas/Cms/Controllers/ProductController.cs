@@ -47,7 +47,7 @@ namespace SanitaryCartControl.Areas.Controllers
         [HttpGet]
         public IActionResult GetCategory([FromQuery][BindRequired] int brandId)
         {
-            return Json(_categoryService.GetCategoryList(brandId));
+            return Json(_categoryService.GetCategoryListByBrandIdOption(brandId));
         }
         public IActionResult GetProductType([FromQuery][BindRequired] int CategoryId)
         {

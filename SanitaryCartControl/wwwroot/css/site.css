@@ -365,7 +365,6 @@ img.brand {
 	max-width: 250px!important;
     height: 100px!important;
 }
-}
 img[src=''].brand {
 	padding: 125px;
 }

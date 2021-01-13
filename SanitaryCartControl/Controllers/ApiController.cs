@@ -12,7 +12,7 @@ namespace SanitaryCartControl.Controllers
         }
       public JsonResult GetAllCategory()
       {
-          return Json(_categoryService.GetCategoryList());
+          return Json(_categoryService.GetCategoryListByBrandIdOption());
       }
     }
 }

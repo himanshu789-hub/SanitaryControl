@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/dist/site.css" />
     <script src="~/dist/bootstrap_js.entry.js"></script>
     <link rel="stylesheet" href="~/dist/item.css" />
-    
+    @RenderSection("HeadInvokeScripts",false)
 </head>
 <div class="d-none d-lg-flex justify-content-center align-content-center">
     <img src="./images/site/download.jpg" class="navbar-brand" width="100px" />
@@ -93,6 +93,6 @@
 
 </script>
 <script src="~/dist/client.entry.js"></script>
-@RenderSection("Scripts",false)
+@RenderSection("BodyInvokeScripts",false)
 
 </html>

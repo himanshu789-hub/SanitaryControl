@@ -91,16 +91,16 @@ namespace SanitaryCartControl.Core.Services
 
         }
 
-        public IEnumerable<CategoryBLL> GetCategoryList(int? brandId = null)
+        public IEnumerable<CategoryBLL> GetCategoryListByBrandIdOption(int? brandId = null)
         {
             using (var context = new SanitaryCartContext(_con))
             {
                 IList<CategoryBLL> CategoryBLLs = new List<CategoryBLL>();
-                int[] SeriesHolderIds = context.SeriesHolderCategories.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();
-
                 var list = context.Categories.AsNoTracking().Include(e => e.SeriesBrand).Include(e => e.SeriesHolderCategories).ToList().AsEnumerable();
+
                 if (brandId != null)
                 {
+                    int[] SeriesHolderIds = context.SeriesHolderCategories.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();
                     list = list.Where(e =>
                      {
                          if (e.SeriesBrand != null)
@@ -118,6 +118,7 @@ namespace SanitaryCartControl.Core.Services
                         if (list.Where(e => e.ParentId == item).Count() == 0)
                             list = list.Where(e => e.Id != item);
                     }
+
                 }
 
                 foreach (var item in list)
@@ -145,10 +146,10 @@ namespace SanitaryCartControl.Core.Services
             string sql = "SELECT c1.Id AS Id,c1.Titlle AS Title,IIF(COUNT(*)>1,1,0) AS IsSubCategory,c1.ImagePath FROM Category AS c1 LEFT JOIN Category AS c2 ON c2.ParentId = c1.Id WHERE c1.ParentId = @Id GROUP BY c1.Id,c1.Titlle,c1.ImagePath";
             using (var con = new SqlConnection(_con))
             {
-                using (var cmd = new SqlCommand(sql,con))
+                using (var cmd = new SqlCommand(sql, con))
                 {
                     con.Open();
-                    cmd.Parameters.Add(new SqlParameter{ Value = Id, ParameterName = "@Id" });
+                    cmd.Parameters.Add(new SqlParameter { Value = Id, ParameterName = "@Id" });
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
@@ -157,16 +158,82 @@ namespace SanitaryCartControl.Core.Services
                             categoryInfos.Add(new CategoryInfo()
                             {
                                 Id = reader.GetInt32(0),
-                                IsSubCategory = reader.GetInt32(2)!=0,
+                                IsSubCategory = reader.GetInt32(2) != 0,
                                 Title = reader.GetString(1),
-                                ImagePath=reader["ImagePath"] as string
+                                ImagePath = reader["ImagePath"] as string
                             });
                         }
                     }
                     con.Close();
                 }
             }
-            return categoryInfos.Skip(Page*Count).Take(Count);
+            return categoryInfos.Skip(Page * Count).Take(Count);
+        }
+
+        public IEnumerable<CategoryBreadcrumbInfo> GetNonSeriesHolderBreadcrumps()
+        {
+            ICollection<CategoryBreadcrumbInfo> categoryBreadcrumbInfos = new List<CategoryBreadcrumbInfo>();
+            using (var con = new SqlConnection(_con))
+            {
+                using (var cmd = new SqlCommand())
+                {
+                    con.Open();
+                    string sql = "EXECUTE GetNonSeriesHolderCategoryBreadcrumb @Seperator";
+                    cmd.Connection = con;
+                    cmd.CommandText = sql;
+                    cmd.Parameters.Add(new SqlParameter
+                    {
+                        Value = '>',
+                        TypeName = "@Seperator",
+                        SqlDbType = System.Data.SqlDbType.NChar
+                    });
+                    SqlDataReader sqlDataReader = cmd.ExecuteReader();
+
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                            categoryBreadcrumbInfos.Add(new CategoryBreadcrumbInfo
+                            {
+                                Id = sqlDataReader.GetInt32(0),
+                                Breadcrumps = sqlDataReader.GetString(1) as string,
+                                ImagePath = sqlDataReader["ImagePath"] as string
+                            });
+                    }
+                }
+            }
+            return categoryBreadcrumbInfos;
+        }
+
+        public CategoryBLL GetById(int Id)
+        {
+            using (var context = new SanitaryCartContext(_con))
+            {
+                Category category = context.Categories.FirstOrDefault(e => e.Id == Id);
+                if (category == null)
+                    return null;
+
+                return new CategoryBLL()
+                {
+                    Id = category.Id,
+                    ParentId = category.ParentId,
+                    Title = category.Titlle,
+                    Categories = null
+                };
+            }
+        }
+
+        public bool UpdateImageById(int Id, string newImagePath)
+        {
+            using (var context = new SanitaryCartContext(_con))
+            {
+
+                Category category = context.Categories.FirstOrDefault(e => e.Id == Id);
+                if (category == null)
+                    return false;
+                category.ImagePath = newImagePath;
+                context.SaveChanges();
+                return true;
+            }
         }
     }
 }
