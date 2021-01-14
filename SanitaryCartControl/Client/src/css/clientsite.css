@@ -224,7 +224,10 @@ nav#desktop-nav li.parent[data-level="0"]>ul#child{
   pointer-events: none;
   transition: transform .8s ease-out;
   transition: border .3s ease-out;
+  
+  border-radius: 0% 0% 46% 51% / 0% 0% 6% 5% ;
   transform: translateY(-10px);
+  
 }
 
 nav#desktop-nav li[data-level="0"]:hover>ul#child{

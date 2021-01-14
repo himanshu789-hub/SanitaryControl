@@ -1,5 +1,5 @@
 using SanitaryCartControl.Core.Entities.Enums;
-namespace SanitaryCartControl.Miscelleneous.Utlities
+namespace SanitaryCartControl.Miscelleneous.Utilities
 {
   public sealed class Utilities
     {
@@ -21,6 +21,11 @@ namespace SanitaryCartControl.Miscelleneous.Utlities
                     break;
             }
             return result;
+        
+        }
+        public static string InsertImageIfNull(string imagePath)
+        {
+            return imagePath==null?"/images/site/image-not-found.png":imagePath;
         }
     }
 }

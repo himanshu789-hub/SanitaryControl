@@ -69,14 +69,14 @@ namespace SanitaryCartControl
              //   app.UseHsts();
             }
     
-            app.UseStaticFiles(new StaticFileOptions{
+          app.UseStaticFiles(new StaticFileOptions{
                 OnPrepareResponse = ctx => {
                     string filePath = ctx.File.PhysicalPath;
-                    if(System.Text.RegularExpressions.Regex.Match(filePath,@"lib.*\.(js|css)").Success)
-                    ctx.Context.Response.Headers.Add(Microsoft.Net.Http.Headers.HeaderNames.CacheControl,"public, max-age=604800, immutable");
+                if(System.Text.RegularExpressions.Regex.Match(filePath,@"lib.*\.(js|css)").Success)
+                    ctx.Context.Response.Headers.Add(Microsoft.Net.Http.Headers.HeaderNames.CacheControl,"public, max-age=200, immutable");       
                 }
             });
-          //app.UseHttpsRedirection()
+    //       //app.UseHttpsRedirection()
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();

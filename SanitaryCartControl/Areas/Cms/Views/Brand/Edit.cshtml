@@ -19,9 +19,9 @@
 <input type="submit" class="btn btn-success block w-25" value="Update"/>
 <button role="button" class="btn btn-outline-danger" onclick="history.back()">Cancel</button>
 }
-
-<img src="@Model.Brand.ImagePath" name="fileViewer" class="border rounded-lg brand"/>
-
+<div class="img-perfect">
+<img src="@Utilities.InsertImageIfNull(Model.Brand.ImagePath)" name="fileViewer" class="border rounded-lg"/>
+</div>
 </div>
 <script>
 

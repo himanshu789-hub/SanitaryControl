@@ -1,7 +1,10 @@
 @using SanitaryCartControl.Core.Entities.BLLModels;
 @model CategoryBreadcrumbInfo[];
-
-<table class="table table-striped table-hover">
+@{
+    ViewData["Head"] = "View All Category";
+}
+<input type="text" class="form-control mb-1 mt-1" style="width:230px" id="search-box" placeholder="Search Box . . ."/>
+<table class="table table-striped table-hover" id="table-breadcrumb">
     <thead>
        <tr>
            <th>#</th>
@@ -16,54 +19,51 @@
                 CategoryBreadcrumbInfo item = Model[position-1];
                 string appendedClass ="";
                 string imagePath = item.ImagePath ;
+                string targetName = "image-"+position;
                 if(imagePath==null)
                 {
                       imagePath =   "/images/site/image-not-found.png";
                  appendedClass ="append-class";
                 }
 
+   
             <tr>
                 <td>@position</td>
                 <td>@item.Breadcrumps</td>
-                <td><img src='@imagePath' class="border rounded-lg brand img-perfect @appendedClass"/></td>
-                <td>@Html.ActionLink("","Edit","Category",new {Area="{areaname}",Id=item.Id},new {@class="fa fa-pencil fa-2x text-info"})</td>
+                <td>
+                    <div class="img-perfect">
+                    <a href="#@targetName"><img src='@imagePath' class="border rounded-lg img-perfect @appendedClass"/></a>
+                     <div class="lb-overlay" id="@targetName">
+                      <img src="@imagePath" />
+                      <a class="text-danger lb-close" href="#page">X</a>
+                      <p>@item.Breadcrumps</p>
+                    </div>
+                    </div>
+                </td>
+                <td><a asp-action="Edit" asp-area="Cms" asp-route-id="@item.Id"><i class="fa fa-pencil fa-2x text-info"></i></a></td>
             </tr>
         }
     </tbody>
 </table>
 
-@section Styles
-{
-    <style>
-               img.img-perfect,
-               {
-                   position:relative;
-               }
-               img.img-perfect:not([src])::after{
-                   position:absolute;
-                   top:50%;
-                   left:50%;
-                   transform:translate(-50%,-50%);
-                   content:'\f05e';
-                   font-family: 'FontAwesome';
-                   font-size:20px;
-               }
-               
-    </style>
-    
-}
-
 @section BodyInvokedScripts
     {
     <script>
+        const elements = {
+            searchBox:'#search-box',
+            table:'#table-breadcrumb'  
+        };
         if($)
         {
             $(setTimeout(function(){
-                $('.append-class').addClass('swing-in-top-fwd');
-               setTimeout(function(){
                    $('.append-class').addClass('fade-in')
-               },3000)
             },1000));
+            $(elements.searchBox).keyup(function(e){
+                const value = $(elements.searchBox).val().toLowerCase();
+                $(`${elements.table}>tbody>tr`).map(function(index,row){
+                 $(row).toggle($(row).text().toLowerCase().indexOf(value)>-1);
+                });
+            });
         }
     </script>
     }

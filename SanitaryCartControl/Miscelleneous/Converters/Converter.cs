@@ -65,7 +65,7 @@ namespace SanitaryCartControl.Helphers.Converters
                     Price = item.Price,
                     Quantity = item.Quantity,
                     Value = item.Value,
-                    IsActive=item.IsActive
+                    IsActive = item.IsActive
                 });
             }
             return Attributes;
@@ -84,8 +84,8 @@ namespace SanitaryCartControl.Helphers.Converters
                 Type = attribute.ElementAt(0).AttributeId,
                 RootPath = new AncestorCategoryBLL() { Id = productDTO.Category_Id_FK },
                 DateAdded = productDTO.DateAdded,
-                Id=productDTO.Id,
-                DateUpdated=productDTO.DateUpdated
+                Id = productDTO.Id,
+                DateUpdated = productDTO.DateUpdated
             };
             return product;
         }
@@ -95,12 +95,23 @@ namespace SanitaryCartControl.Helphers.Converters
             {
                 BrandId = (byte)series.Brand_Id_Fk,
                 Category = null,
-                Parent=new KeyValuePair<int, string>(series.ParentId.Value,null),
+                Parent = new KeyValuePair<int, string>(series.ParentId.Value, null),
                 Id = series.Id,
                 ImagPath = series.ImagePath,
                 Title = series.Name,
 
             };
+        }
+        public static string[] ToBreadcrumbByCategoryBLL(CategoryBLL category)
+        {
+            int breadcrumbLength = category.Categories?.Count()??0 + 1;
+            string[] breadcrumb = new string[breadcrumbLength];
+            int index = breadcrumbLength - 1;
+            breadcrumb[index] = category.Title;
+            if(category.Categories!=null)
+            foreach (var item in category.Categories)
+                breadcrumb[index--] = item.Title;
+            return breadcrumb;
         }
     }
 }

@@ -1,1 +1,82 @@
+@using SanitaryCartControl.Helphers.Converters;
 @model CategoryBLL
+@{
+   string[] pathToRoot = Converters.ToBreadcrumbByCategoryBLL(Model);
+   string breadcrumbs = "";
+   for (int i = 0; i < pathToRoot.Count(); i++)
+   {
+      breadcrumbs += pathToRoot[i];
+      if (pathToRoot.Count() == 1 || i == pathToRoot.Count())
+         continue;
+      breadcrumbs += " > ";
+   }
+}
+
+<span class="alert alert-danger d-none" id="show-category-form-error">&#9632; Please Upload A Image <i
+      class="fa fa-close"  onclick="removeError()"></i></span>
+<label role="textbox" class="border rounded p-3" style="min-width: 50%;" >@breadcrumbs</label>
+
+@using(Html.BeginForm("Edit","Category",FormMethod.Post,new{@enctype="multipart/form-data",@id="category-update-form"}))
+{
+       @Html.HiddenFor(e=>e.Id)
+<div class="form-inline">
+   <div class="img-perfect">
+      <a href="#image-1"> <img src="@Utilities.InsertImageIfNull(Model.ImagePath)" class="border rounded brand"
+            id="category-image-tag" /></a>
+      <div class="lb-overlay" id="image-1">
+         <img src="@Utilities.InsertImageIfNull(Model.ImagePath)" />
+         <a href="#page" class="lb-close">X</a>
+      </div>
+   </div>
+   <button type="button" class="btn btn-danger" onclick="showUpdateButton(this)">Change</button>
+   <input type="file" name="Image" class="btn btn-info invisible" id="upload-button" placeholder="Select Image To Upload . . ."/>
+   <button type="submit" class="btn btn-success invisible" id="update-button" >Update</button>
+</div>
+}
+<script>
+
+   const elements = {
+      image: '#category-image-tag',
+      updateButton: '#update-button',
+      uploadButton: '#upload-button',
+      form: 'form#category-update-form',
+      errorViewer: '#show-category-form-error',
+      lighboxImageHolder:'#image-1'
+   };
+
+   var isImageUpdated = false;
+   if ($) {
+      function showUpdateButton(element) {
+         $(elements.uploadButton).removeClass('invisible');
+         $(element).remove();
+      };
+      
+      $(document).on("submit", elements.form, function (e) {
+         if (!isImageUpdated) {
+            $(elements.errorViewer).removeClass('d-none');
+            return false;
+         }
+         this.submit();
+         e.preventDefault();
+      });
+      $(elements.uploadButton).change(function (eventObject)
+      {
+         const files = eventObject.target.files;
+         if (files && files[0]) {
+            let fileReader = new FileReader();
+            fileReader.onload = function (e) {
+               const src = e.target.result;
+               $(elements.image).attr('src', src)
+               $(elements.lighboxImageHolder+'>img').attr('src',src);
+               isImageUpdated = true;
+               $(elements.uploadButton).addClass('invisible');
+               $(elements.updateButton).removeClass('invisible');
+            };
+            fileReader.readAsDataURL(files[0]);
+         }
+      });
+      function removeError() {
+         $(elements.errorViewer).addClass('d-none');
+      }
+   }
+</script>

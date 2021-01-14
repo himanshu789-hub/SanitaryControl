@@ -7,10 +7,15 @@ using System.Linq;
 using SanitaryCartControl.Helphers.Converters;
 using SanitaryCartControl.ViewModels;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Http;
+using SanitaryCartControl.Core.Entities.Enums;
+using Microsoft.AspNetCore.Authorization;
+
 namespace SanitaryCartControl.Areas.Controllers
 {
     [Area("Cms")]
+    [Authorize(Roles = ApplicationRoles.Both)]
     public class CategoryController : BaseController
     {
         readonly ICategoryService _categoryService;
@@ -23,22 +28,30 @@ namespace SanitaryCartControl.Areas.Controllers
         {
             return View(_categoryService.GetNonSeriesHolderBreadcrumps().ToArray());
         }
-        public IActionResult Edit(int Id)
+        public IActionResult Edit([Microsoft.AspNetCore.Mvc.ModelBinding.BindRequired] int Id)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
             string[] categoryToRootTitle = Converters.ToCategoryPathArray(_categoryService.GetAllAncestors(Id));
             ViewData.Add("CategoryToRootTitle", categoryToRootTitle);
             return View(_categoryService.GetById(Id));
         }
         [HttpPost]
-        public IActionResult Edit(int? Id, IFormFile image)
+        public IActionResult Edit(int? Id, [FromForm] IFormFile Image)
         {
             if (ModelState.IsValid)
             {
                 string prevImagePath = _categoryService.GetById(Id.Value).ImagePath;
                 if (prevImagePath != null)
                     this.DeleteImage(prevImagePath);
-                string NewImagePath = this.AddImage(image, _imagePath);
-                _categoryService.UpdateImageById(Id.Value, NewImagePath);
+                string NewImagePath = this.AddImage(Image, _imagePath);
+                bool IsUpdatedSuccesfull = _categoryService.UpdateImageById(Id.Value, NewImagePath);
+                if (IsUpdatedSuccesfull)
+                    return View("Success", new MessageViewModel()
+                    {
+                        IsSuccess = true,
+                        Link = Url.Action("GetNonSeriesHolder", "Category", new { Areas = "Cms" })
+                    });
             }
             IDictionary<string, object> dict = null;
             if (Id != null)
@@ -47,7 +60,7 @@ namespace SanitaryCartControl.Areas.Controllers
                 dict.Add("Id", Id);
             }
 
-            return View("Sucess", new MessageViewModel()
+            return View("Success", new MessageViewModel()
             {
                 IsSuccess = false,
                 Params = dict,
