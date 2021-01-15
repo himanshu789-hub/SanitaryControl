@@ -10992,7 +10992,7 @@ if (!jquery__WEBPACK_IMPORTED_MODULE_0__('ul#menu')) {
 } else {
 	function buildMenu(parent, items, level) {
 		jquery__WEBPACK_IMPORTED_MODULE_0__["each"](items, function (index, item) {
-			var li = jquery__WEBPACK_IMPORTED_MODULE_0__('<li><a>' + this.title + '</a></li>');
+			var li = jquery__WEBPACK_IMPORTED_MODULE_0__('<li><a class="p-1">' + this.title + '</a></li>');
 			li.appendTo(parent);
 			li.attr('data-level', level);
 			var span = jquery__WEBPACK_IMPORTED_MODULE_0__('<span></span>');
@@ -11000,7 +11000,12 @@ if (!jquery__WEBPACK_IMPORTED_MODULE_0__('ul#menu')) {
 			a.text(this.title);
 			span.append(a);
 			li.append(span);
+			if(level==1)
+			{
 
+			 li.addClass('col-3 col-sm-12');
+			
+			}
 			if (this.categories && this.categories.length > 0) {
 				a.attr('href', window.requestUrl + `?Page=0&IsSubCategory=true&Id=${this.id}`);
 				span.append('<span class="expand"><i class="fa fa-angle-down"></i></span>');

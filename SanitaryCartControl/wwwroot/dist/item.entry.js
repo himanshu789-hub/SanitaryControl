@@ -10970,17 +10970,6 @@ return jQuery;
 
 /***/ }),
 
-/***/ "./src/css/clientsite.css":
-/*!********************************!*\
-  !*** ./src/css/clientsite.css ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "./src/js/item.js":
 /*!************************!*\
   !*** ./src/js/item.js ***!
@@ -10990,21 +10979,18 @@ return jQuery;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _css_clientsite_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../css/clientsite.css */ "./src/css/clientsite.css");
-/* harmony import */ var _css_clientsite_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_css_clientsite_css__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 if(!(window.isSubCategory!=undefined && window.parentId && window.itemRequestUrl))
 {
   console.error('variable not found')
 }
 
-
 let elements = {
     ItemWrapper : '#Item-Wrapper',
     loading:'#loading'
 }
-if(!jquery__WEBPACK_IMPORTED_MODULE_1__(elements.ItemWrapper))
+if(!jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper))
 {
     console.error('Item Wrapper Element Not Found')
 }
@@ -11012,32 +10998,32 @@ let page = 0;
 function buildItems(data)
 {
   data.forEach(function (item) {
-            const itemHolder = jquery__WEBPACK_IMPORTED_MODULE_1__('<div>').addClass('itemHolder');
+            const itemHolder = jquery__WEBPACK_IMPORTED_MODULE_0__('<div>').addClass('itemHolder');
             let imageHolder ;
             if(!isSubCategory)
-            imageHolder=jquery__WEBPACK_IMPORTED_MODULE_1__('<a>').addClass('imageHolder');
+            imageHolder=jquery__WEBPACK_IMPORTED_MODULE_0__('<a>').addClass('imageHolder');
             else 
-            imageHolder =jquery__WEBPACK_IMPORTED_MODULE_1__('<div>').addClass('imageHolder');
+            imageHolder =jquery__WEBPACK_IMPORTED_MODULE_0__('<div>').addClass('imageHolder');
 
-            const img = jquery__WEBPACK_IMPORTED_MODULE_1__('<img>').attr("src", item.Image);
-            const link = jquery__WEBPACK_IMPORTED_MODULE_1__('<a>').text('View Details').addClass('link').attr('href','#')
+            const img = jquery__WEBPACK_IMPORTED_MODULE_0__('<img>').attr("src", item.Image);
+            const link = jquery__WEBPACK_IMPORTED_MODULE_0__('<a>').text('View Details').addClass('link').attr('href','#')
             imageHolder.append(img)
             if(!isSubcategory)
             imageHolder.append(link)
-            const text = jquery__WEBPACK_IMPORTED_MODULE_1__('<text>').text(item.Name).addClass('title');
+            const text = jquery__WEBPACK_IMPORTED_MODULE_0__('<text>').text(item.Name).addClass('title');
             itemHolder.append([imageHolder, text])
-            jquery__WEBPACK_IMPORTED_MODULE_1__(elements.ItemWrapper).append(itemHolder);
+            jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper).append(itemHolder);
         })
 }
 
 
-jquery__WEBPACK_IMPORTED_MODULE_1__(window).scroll(function () {
-	if (jquery__WEBPACK_IMPORTED_MODULE_1__(window).scrollTop() == jquery__WEBPACK_IMPORTED_MODULE_1__(document).height() - jquery__WEBPACK_IMPORTED_MODULE_1__(window).height()) {
+jquery__WEBPACK_IMPORTED_MODULE_0__(window).scroll(function () {
+	if (jquery__WEBPACK_IMPORTED_MODULE_0__(window).scrollTop() == jquery__WEBPACK_IMPORTED_MODULE_0__(document).height() - jquery__WEBPACK_IMPORTED_MODULE_0__(window).height()) {
     const url = window.itemRequestUrl+`?page=${++page}&IsSubcategory=${window.isSubcategory}&Id=${window.id}`;
-        jquery__WEBPACK_IMPORTED_MODULE_1__["ajax"]({
+        jquery__WEBPACK_IMPORTED_MODULE_0__["ajax"]({
             url,
             method:'GET',success:function(res){
-                jquery__WEBPACK_IMPORTED_MODULE_1__(elements.loading).remove(); 
+                jquery__WEBPACK_IMPORTED_MODULE_0__(elements.loading).remove(); 
                 if(res.length==0)
                  {
                      window.removeEventListener('scroll')
@@ -11048,8 +11034,8 @@ jquery__WEBPACK_IMPORTED_MODULE_1__(window).scroll(function () {
             },
             beforeSend:function()
             {
-                const loadingSpan = jquery__WEBPACK_IMPORTED_MODULE_1__('<span>').attr('id','loading')
-                jquery__WEBPACK_IMPORTED_MODULE_1__(elements.ItemWrapper).append(loadingSpan);
+                const loadingSpan = jquery__WEBPACK_IMPORTED_MODULE_0__('<span>').attr('id','loading')
+                jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper).append(loadingSpan);
             }
     });
     }

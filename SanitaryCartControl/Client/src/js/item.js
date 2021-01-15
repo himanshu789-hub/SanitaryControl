@@ -2,7 +2,6 @@ if(!(window.isSubCategory!=undefined && window.parentId && window.itemRequestUrl
 {
   console.error('variable not found')
 }
-import './../css/clientsite.css';
 import * as $ from 'jquery';
 let elements = {
     ItemWrapper : '#Item-Wrapper',

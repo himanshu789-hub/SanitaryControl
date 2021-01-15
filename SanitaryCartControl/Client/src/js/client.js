@@ -9,7 +9,7 @@ if (!$('ul#menu')) {
 } else {
 	function buildMenu(parent, items, level) {
 		$.each(items, function (index, item) {
-			var li = $('<li><a>' + this.title + '</a></li>');
+			var li = $('<li><a class="p-1">' + this.title + '</a></li>');
 			li.appendTo(parent);
 			li.attr('data-level', level);
 			var span = $('<span></span>');
@@ -17,7 +17,12 @@ if (!$('ul#menu')) {
 			a.text(this.title);
 			span.append(a);
 			li.append(span);
+			if(level==1)
+			{
 
+			 li.addClass('col-3 col-sm-12');
+			
+			}
 			if (this.categories && this.categories.length > 0) {
 				a.attr('href', window.requestUrl + `?Page=0&IsSubCategory=true&Id=${this.id}`);
 				span.append('<span class="expand"><i class="fa fa-angle-down"></i></span>');

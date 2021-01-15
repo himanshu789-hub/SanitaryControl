@@ -1,98 +1,111 @@
 ﻿<html>
 
 <head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
     @RenderSection("Styles",false)
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
     <script src="~/lib/jquery/dist/jquery.js"></script>
-    <link rel="stylesheet" href="~/dist/site.css" />
     <script src="~/dist/bootstrap_js.entry.js"></script>
-    <link rel="stylesheet" href="~/dist/item.css" />
+    <script src="~/dist/site.entry.js"></script>
+    <link rel="stylesheet" href="~/dist/site.css"/>
     @RenderSection("HeadInvokeScripts",false)
 </head>
-<div class="d-none d-lg-flex justify-content-center align-content-center">
-    <img src="./images/site/download.jpg" class="navbar-brand" width="100px" />
-    <nav class="d-md-block navbar navbar-light bg-dark" style="height: 40px;" id="desktop-nav">
-        <ul class="navbar" id="menu">
 
-        </ul>
-    </nav>
-</div>
+<body>
+    <div style="position: relative;" id="navigation-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" style="width:100%;z-index: -10;"
+            viewBox="0 0 1440 210">
+            <path fill="#00cba9" fill-opacity="1"
+                d="M0,192L60,186.7C120,181,240,171,360,144C480,117,600,75,720,53.3C840,32,960,32,1080,42.7C1200,53,1320,75,1380,85.3L1440,96L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z">
+            </path>
+        </svg>
+        <div style="position:absolute;width:100%">
+            <div class="d-none d-lg-flex justify-content-center align-content-center">
+                <img src="/images/site/download.jpg" class="navbar-brand" width="100px" />
+                <nav class="d-md-block navbar" style="height: 40px;" id="desktop-nav">
+                    <ul class="navbar" id="menu">
 
-<nav class="d-flex d-lg-none" id="mobile-nav">
-    <div id="nav-icon1">
-        <span></span>
-        <span></span>
-        <span></span>
+                    </ul>
+                </nav>
+            </div>
+
+            <nav class="d-flex d-lg-none" id="mobile-nav">
+                <div id="nav-icon1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="logo d-none"><img src="/images/site/download.jpg" /></div>
+                <div class="collapse" id="navigation">
+                    <ul id="menu"></ul>
+                </div>
+            </nav>
+        </div>
     </div>
-    <div class="logo d-none"><img src="" /></div>
-    <div class="collapse" id="navigation">
-        <ul id="menu"></ul>
-    </div>
-</nav>
-@RenderBody()
-<script>
-    var IsOpen = false;
-    var requestUrl = @Json.Serialize(Url.Action("Get","Item",new {id=""}))
+    @RenderBody()
+    <script>
+        var IsOpen = false;
+        var requestUrl = @Json.Serialize(Url.Action("Get","Item",new {id=""}))
        var appendEvents = function () {
-        $('#nav-icon1').click(function (e) {
-            if (!IsOpen)
-                IsOpen = true;
-            else
-                IsOpen = false;
+            $('#nav-icon1').click(function (e) {
+                if (!IsOpen)
+                    IsOpen = true;
+                else
+                    IsOpen = false;
 
-            $(this).toggleClass('open');
-            $('#mobile-nav').toggleClass('show')
-            $('.logo').toggleClass('d-none')
-        });
-
-        $(function () {
-            $('#desktop-nav li[data-level="0"]').hover(function (e) {
-                const ulList = $(this).find('>ul#child');
-                if (ulList.find('>li.parent').length)
-                    $(this).find('>ul#child').addClass('makeBold')
+                $(this).toggleClass('open');
+                $('#mobile-nav').toggleClass('show')
+                $('.logo').toggleClass('d-none')
             });
-            $('#desktop-nav li.parent[data-level="1"]').each(function (index, element) {
-                const i = $(this).find('>span>span.expand>i');
-                i.removeClass(function (index, name) {
-                    const classes = name.split(" ");
-                    let result = "";
-                    classes.forEach(function (value) {
-                        if (new RegExp('^fa-').test(value))
-                            result = result.concat(value+" ");
+
+            $(function () {
+                $('#desktop-nav li[data-level="0"]').hover(function (e) {
+                    const ulList = $(this).find('>ul#child');
+                    if (ulList.find('>li.parent').length)
+                        $(this).find('>ul#child').addClass('makeBold')
+                });
+                $('#desktop-nav li.parent[data-level="1"]').each(function (index, element) {
+                    const i = $(this).find('>span>span.expand>i');
+                    i.removeClass(function (index, name) {
+                        const classes = name.split(" ");
+                        let result = "";
+                        classes.forEach(function (value) {
+                            if (new RegExp('^fa-').test(value))
+                                result = result.concat(value + " ");
+                        })
+                        return result;
                     })
-                    return result;
+                    $(this).find('>span>a').addClass('jump p-1')
                 })
-                $(this).find('>span>a').addClass('jump p-1')
-            })
-            $('#mobile-nav ul#child>li').click(function (e) {
-                e.stopPropagation();
-            })
-            $('#mobile-nav li.parent span.expand').click(function (e) {
-                const li = $(this).parents('li.parent').first();
-                const level = li.data('level');
+                $('#mobile-nav ul#child>li').click(function (e) {
+                    e.stopPropagation();
+                })
+                $('#mobile-nav li.parent span.expand').click(function (e) {
+                    const li = $(this).parents('li.parent').first();
+                    const level = li.data('level');
 
-                const liList = li.siblings().filter(function (index, value) {
-                    return $(value).hasClass('parent') && value != li[0];
+                    const liList = li.siblings().filter(function (index, value) {
+                        return $(value).hasClass('parent') && value != li[0];
+                    });
+                    const array = $.grep(liList, function (value) {
+                        return $(value).find('>ul#child.showList').length > 0;
+                    });
+                    array.forEach(element => {
+                        $(element).find('>ul#child.showList').removeClass('showList');
+                        $(element).find('>span>span.expand>i').removeClass('fa-angle-up')
+                    });
+                    li.find('>ul#child').first().toggleClass('showList')
+                    li.find('>span>span.expand>i').toggleClass('fa-angle-up')
+                    e.stopPropagation();
+                    e.preventDefault();
                 });
-                const array = $.grep(liList, function (value) {
-                    return $(value).find('>ul#child.showList').length > 0;
-                });
-                array.forEach(element => {
-                    $(element).find('>ul#child.showList').removeClass('showList');
-                    $(element).find('>span>span.expand>i').removeClass('fa-angle-up')
-                });
-                li.find('>ul#child').first().toggleClass('showList')
-                li.find('>span>span.expand>i').toggleClass('fa-angle-up')
-                e.stopPropagation();
-                e.preventDefault();
-            });
-        })
-    }
+            })
+        }
 
-</script>
-<script src="~/dist/client.entry.js"></script>
-@RenderSection("BodyInvokeScripts",false)
+    </script>
+    <script src="~/dist/client.entry.js"></script>
+    @RenderSection("BodyInvokeScripts",false)
+</body>
 
 </html>
