@@ -4,7 +4,7 @@ using SanitaryCartControl.Core.Contracts.Services;
 using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.BLLModels;
 using System.Linq;
-using SanitaryCartControl.Helphers.Converters;
+using SanitaryCartControl.Miscellaneous.Converters;
 using SanitaryCartControl.ViewModels;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -24,6 +24,7 @@ namespace SanitaryCartControl.Areas.Controllers
         {
             _categoryService = categoryService;
         }
+        
         public IActionResult GetNonSeriesHolder()
         {
             return View(_categoryService.GetNonSeriesHolderBreadcrumps().ToArray());
@@ -32,8 +33,6 @@ namespace SanitaryCartControl.Areas.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-            string[] categoryToRootTitle = Converters.ToCategoryPathArray(_categoryService.GetAllAncestors(Id));
-            ViewData.Add("CategoryToRootTitle", categoryToRootTitle);
             return View(_categoryService.GetById(Id));
         }
         [HttpPost]

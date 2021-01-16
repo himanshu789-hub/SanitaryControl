@@ -15,7 +15,6 @@ namespace SanitaryCartControl.Core
             Kinds = new HashSet<Kind>();
             Materials = new HashSet<Material>();
             Products = new HashSet<Product>();
-            SeriesHolderCategories = new HashSet<SeriesHolderCategory>();
             Sizes = new HashSet<Size>();
         }
 
@@ -33,7 +32,7 @@ namespace SanitaryCartControl.Core
         public virtual ICollection<Kind> Kinds { get; set; }
         public virtual ICollection<Material> Materials { get; set; }
         public virtual ICollection<Product> Products { get; set; }
-        public virtual ICollection<SeriesHolderCategory> SeriesHolderCategories { get; set; }
+        public virtual SeriesHolderCategory SeriesHolderCategory { get; set; }
         public virtual ICollection<Size> Sizes { get; set; }
     }
 }

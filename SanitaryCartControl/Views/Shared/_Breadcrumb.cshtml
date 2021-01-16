@@ -1,10 +1,11 @@
-@model string[]
+@using SanitaryCartControl.Miscellaneous.Struct;
+@model BreadcrumbInfo[];
 <nav >
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><i class="fa fa-home m-auto"></i></li>
-        @foreach (var ancestorPath in Model)
+        <li class="breadcrumb-item"><a href="/Home/Index"><i class="fa fa-home m-auto"></i></a></li>
+        @foreach (BreadcrumbInfo breadcrumbItem in Model)
         {
-            <li class="breadcrumb-item">@ancestorPath</li>
+            <li class="breadcrumb-item"><a href="@breadcrumbItem.Link">@breadcrumbItem.Name</a></li>
         }
     </ol>
 </nav>

@@ -1,4 +1,4 @@
-if(!(window.isSubCategory!=undefined && window.parentId && window.itemRequestUrl))
+if(!(window.categoryId && window.productRequestUrl))
 {
   console.error('variable not found')
 }

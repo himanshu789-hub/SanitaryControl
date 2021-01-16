@@ -11,7 +11,7 @@ using SanitaryCartControl.Core.Entities.Enums;
 using SanitaryCartControl.DTOModels;
 using SanitaryCartControl.Core.Entities.BLLModels;
 using SanitaryCartControl.ViewModels;
-using SanitaryCartControl.Helphers.Converters;
+using SanitaryCartControl.Areas.Miscellaneous;
 using SanitaryCartControl.Core.Contracts.Services;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SanitaryCartControl.Extensions;
@@ -47,7 +47,7 @@ namespace SanitaryCartControl.Areas.Controllers
         [HttpGet]
         public IActionResult GetCategory([FromQuery][BindRequired] int brandId)
         {
-            return Json(_categoryService.GetCategoryListByBrandIdOption(brandId));
+            return Json(_categoryService.GetCategoryListByBrandIdOptionally(brandId));
         }
         public IActionResult GetProductType([FromQuery][BindRequired] int CategoryId)
         {

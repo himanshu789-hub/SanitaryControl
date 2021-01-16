@@ -15,7 +15,7 @@ namespace SanitaryCartControl.Controllers
         }
       public JsonResult GetAllCategory()
       {
-          return Json(_categoryService.GetCategoryListByBrandIdOption());
+          return Json(_categoryService.GetCategoryListByBrandIdOptionally());
       }
     }
 }

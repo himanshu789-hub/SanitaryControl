@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using SanitaryCartControl.Core.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using SanitaryCartControl.Core.Entities.DALModels;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
 using Microsoft.Extensions.Configuration;
 using SanitaryCartControl.Core.Helpher;
 using Microsoft.Extensions.Options;
@@ -62,19 +60,49 @@ namespace SanitaryCartControl.Core.Services
         // }
         public AncestorCategoryBLL GetAllAncestors(int Id)
         {
-            using (var context = new SanitaryCartContext(_con))
+            AncestorCategoryBLL ancestorCategoryBLL = new AncestorCategoryBLL();
+            using (var con = new SqlConnection(_con))
             {
-                var categories = context.Categories.FromSqlRaw<Category>("GetRootPath @Id={0}", Id).ToList();
-                var first = categories.First();
-                AncestorCategoryBLL ancestorCategoryBLL = new AncestorCategoryBLL
-                {
-                    Ancestors = new List<AncestorCategoryBLL>(),
-                    Title = first.Titlle,
-                    Id = first.Id
-                };
-                foreach (var item in categories.Where(e => e.Id != Id))
-                    ancestorCategoryBLL.Ancestors.Add(new AncestorCategoryBLL() { Id = item.Id, Title = item.Titlle, Ancestors = null });
 
+                string sql = "EXECUTE GetRootPath @Id";
+                SqlParameter paremeter = new SqlParameter
+                {
+                    Value = Id,
+                    ParameterName = "@Id",
+                    DbType = System.Data.DbType.Int32
+                };
+                using (var cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.Add(paremeter);
+                    con.Open();
+                    SqlDataReader sqlDataReader = cmd.ExecuteReader();
+                    int count = 0;
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            if (count == 0)
+                            {
+                                ancestorCategoryBLL.IsEndCategory = !sqlDataReader.GetBoolean(1);//true if element has no children
+                                ancestorCategoryBLL.Title = sqlDataReader["Title"] as string;
+                                ancestorCategoryBLL.Id = sqlDataReader.GetInt32(0);
+                                ancestorCategoryBLL.Ancestors = new List<AncestorCategoryBLL>();
+                            }
+                            else
+                            {
+                                ancestorCategoryBLL.Ancestors.Add(new AncestorCategoryBLL
+                                {
+                                    Ancestors = null,
+                                    Id = sqlDataReader.GetInt32(0),
+                                    Title = sqlDataReader["Title"] as string,
+                                    IsEndCategory = sqlDataReader.GetBoolean(1)
+                                });
+                            }
+                            count++;
+                        }
+
+                    }
+                }
                 return ancestorCategoryBLL;
             }
         }
@@ -90,45 +118,46 @@ namespace SanitaryCartControl.Core.Services
             }
 
         }
-
-        public IEnumerable<CategoryBLL> GetCategoryListByBrandIdOption(int? brandId = null)
+        public IEnumerable<CategoryBLL> GetCategoryListByBrandIdOptionally(int? brandId = null)
         {
             using (var context = new SanitaryCartContext(_con))
             {
                 IList<CategoryBLL> CategoryBLLs = new List<CategoryBLL>();
-                var list = context.Categories.AsNoTracking().Include(e => e.SeriesBrand).Include(e => e.SeriesHolderCategories).ToList().AsEnumerable();
+
+                var list = context.Categories.AsNoTracking().Include(e => e.SeriesBrand).ToList().AsEnumerable();
+                IEnumerable<int> SeriesHolderIds = context.SeriesHolderCategories.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();
 
                 if (brandId != null)
                 {
-                    int[] SeriesHolderIds = context.SeriesHolderCategories.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();
+
                     list = list.Where(e =>
-                     {
-                         if (e.SeriesBrand != null)
                          {
-                             if (e.SeriesBrand.BrandIdFk == brandId)
-                                 return true;
+                             if (e.SeriesBrand != null)
+                             {
+                                 if (e.SeriesBrand.BrandIdFk == brandId)
+                                     return true;
+                                 else
+                                     return false;
+                             }
                              else
-                                 return false;
-                         }
-                         else
-                             return true;
-                     }).ToList();
+                                 return true;
+                         }).ToList();
+
                     foreach (var item in SeriesHolderIds)
                     {
                         if (list.Where(e => e.ParentId == item).Count() == 0)
                             list = list.Where(e => e.Id != item);
                     }
-
                 }
-
                 foreach (var item in list)
                 {
-                    CategoryBLLs.Add(new CategoryBLL() { Id = item.Id, ParentId = item.ParentId, Title = item.Titlle, Categories = null });
+                    bool IsEndPoint = list.Where(e => e.ParentId == item.Id).Count() > 0 ? false : (!SeriesHolderIds.Contains(item.Id));
+                    CategoryBLLs.Add(new CategoryBLL() { Id = item.Id, ParentId = item.ParentId, Title = item.Titlle, IsEndPoint = IsEndPoint, Categories = null });
                 }
                 return GetTree(CategoryBLLs, null);
             }
-
         }
+
         ICollection<CategoryBLL> GetTree(ICollection<CategoryBLL> categories, int? parentId = null)
         {
             return categories.Where(e => e.ParentId == parentId).Select(e => new CategoryBLL()
@@ -136,11 +165,12 @@ namespace SanitaryCartControl.Core.Services
                 Id = e.Id,
                 Title = e.Title,
                 ParentId = e.ParentId,
-                Categories = GetTree(categories, parentId: e.Id).ToList()
+                Categories = e.IsEndPoint ? null : GetTree(categories, e.Id),
+                IsEndPoint = e.IsEndPoint
             }).ToList();
         }
 
-        public IEnumerable<CategoryInfo> GetChildren(int Id, int Page, int Count)
+        public IEnumerable<CategoryInfo> GetChildren(int Id)
         {
             ICollection<CategoryInfo> categoryInfos = new List<CategoryInfo>();
             string sql = "SELECT c1.Id AS Id,c1.Titlle AS Title,IIF(COUNT(*)>1,1,0) AS IsSubCategory,c1.ImagePath FROM Category AS c1 LEFT JOIN Category AS c2 ON c2.ParentId = c1.Id WHERE c1.ParentId = @Id GROUP BY c1.Id,c1.Titlle,c1.ImagePath";
@@ -158,7 +188,7 @@ namespace SanitaryCartControl.Core.Services
                             categoryInfos.Add(new CategoryInfo()
                             {
                                 Id = reader.GetInt32(0),
-                                IsSubCategory = reader.GetInt32(2) != 0,
+                                HoldChildren = reader.GetInt32(2) != 0,
                                 Title = reader.GetString(1),
                                 ImagePath = reader["ImagePath"] as string
                             });
@@ -167,7 +197,7 @@ namespace SanitaryCartControl.Core.Services
                     con.Close();
                 }
             }
-            return categoryInfos.Skip(Page * Count).Take(Count);
+            return categoryInfos;
         }
 
         public IEnumerable<CategoryBreadcrumbInfo> GetNonSeriesHolderBreadcrumps()
@@ -208,7 +238,8 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                Category category = context.Categories.FirstOrDefault(e => e.Id == Id);
+                Category category = context.Categories.Include(e => e.SeriesHolderCategory).Include(e => e.InverseParent).FirstOrDefault(e => e.Id == Id);
+
                 if (category == null)
                     return null;
 
@@ -235,5 +266,6 @@ namespace SanitaryCartControl.Core.Services
                 return true;
             }
         }
+
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-
 namespace SanitaryCartControl.Core.Entities.BLLModels
 {
     public class ProductBLL 
@@ -16,15 +15,5 @@ namespace SanitaryCartControl.Core.Entities.BLLModels
         public string[] Images{get;set;}
         public IEnumerable<AttributeBLL> AttributeBLLs{get;set;} 
         public AncestorCategoryBLL RootPath{get;set;}
-
-        public IEnumerable<string> GetBreadCrumps()
-        {
-            ICollection<string> breadcrumps = new List<string>();
-            foreach (var ancestor in RootPath.Ancestors)
-            {
-                  breadcrumps.Add(ancestor.Title);     
-            }
-            return breadcrumps;
-        }
     }
 }

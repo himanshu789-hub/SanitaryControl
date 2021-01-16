@@ -5,9 +5,9 @@ namespace SanitaryCartControl.DTOModels
     public class ItemDTO
     {
         [Required]
-        public bool IsSubCategory{get;set;}
-        [BindRequired]
-        public int Id{get;set;}
-        public int Page{get;set;}
+        public bool? IsEndCategory{get;set;}
+        [Required]
+        public int? CategoryId{get;set;}
+        public int? Page{get;set;}
     }
 }

@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.BLLModels;
+using SanitaryCartControl.Miscellaneous.Struct;
 namespace SanitaryCartControl.ViewModels
 {
     public class ItemViewModel
     {
-        public bool IsSubCategory { get; set; }
+        public bool IsEndCategory { get; set; }
         public IEnumerable<CategoryInfo> CategoryInfos{get;set;}
         public IEnumerable<ProductInfoBLL> ProductInfos{get;set;}
         public int ParentId{get;set;}
-        public string[] Breadcrumps;
+        public BreadcrumbInfo[] Breadcrumps;
     }
 }

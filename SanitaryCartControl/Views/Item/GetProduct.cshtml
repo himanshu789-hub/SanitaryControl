@@ -1,7 +1,20 @@
 @model SanitaryCartControl.Core.Entities.BLLModels.ProductBLL
 @using SanitaryCartControl.Core.Entities.Enums;
+@using SanitaryCartControl.Miscellaneous.Converters;
+@using SanitaryCartControl.Miscellaneous.Struct;
+@{
+     BreadcrumbInfo[] categoryBreadcrumbInfo = Converters.GetBreadcrumbsFromAncestorsBLL(Model.RootPath);
+               BreadcrumbInfo[] productBreadcrumb = new BreadcrumbInfo[categoryBreadcrumbInfo.Length+1];
+               int index = 0;
+               foreach(BreadcrumbInfo breadcrumb in categoryBreadcrumbInfo)
+                {
+                  productBreadcrumb[index] = categoryBreadcrumbInfo[index];
+                  index++;
+                }
+                productBreadcrumb[index] = new BreadcrumbInfo(Model.Name,Utilities.GetActionLinkForCategoryOrProduct(Model.Id,false,true));
 
-@Html.Partial("_Breadcrumb",Model.GetBreadCrumps().ToArray())
+}
+@Html.Partial("_Breadcrumb",productBreadcrumb)
     <div class="row no-gutters">
         <div class="col-sm-12 col-md-5 d-flex flex-column p-1 pt-sm-2 pl-sm-2" id="lightbox-wrapper">
             <div class="d-flex justify-content-center align-items-center" id="first-image-holder" onclick="show();">

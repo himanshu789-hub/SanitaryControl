@@ -5,6 +5,7 @@ namespace SanitaryCartControl.Core.Entities.BLLModels
     {
       public int Id{get;set;}
       public string Title{get;set;}
+      public bool IsEndCategory{get;set;}
       public ICollection<AncestorCategoryBLL> Ancestors{get;set;}
     }
 }

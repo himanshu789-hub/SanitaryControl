@@ -11002,20 +11002,22 @@ if (!jquery__WEBPACK_IMPORTED_MODULE_0__('ul#menu')) {
 			li.append(span);
 			if(level==1)
 			{
-
-			 li.addClass('col-3 col-sm-12');
-			
+			 li.addClass('col-12 col-lg-3');
 			}
+		   a.attr('href', window.requestUrl + GetQueryString(this.isEndPoint,this.id));
+		
 			if (this.categories && this.categories.length > 0) {
-				a.attr('href', window.requestUrl + `?Page=0&IsSubCategory=true&Id=${this.id}`);
 				span.append('<span class="expand"><i class="fa fa-angle-down"></i></span>');
 				li.addClass('parent');
 				var ul = jquery__WEBPACK_IMPORTED_MODULE_0__('<ul></ul>').attr('id', 'child');
 				ul.appendTo(li);
 				buildMenu(ul, this.categories, level + 1);
-            } else
-             a.attr('href', window.requestUrl + `?Page=0&IsSubCategory=false&Id=${this.id}`);
+			} 
 		});
+	}
+	function GetQueryString(IsEndPoint,Id)
+	{
+		return `?IsEndCategory=${IsEndPoint}&CategoryId=${Id}&Page=0`;
 	}
 	jquery__WEBPACK_IMPORTED_MODULE_0__["ajax"]({
 		url: '/api/getallcategory',

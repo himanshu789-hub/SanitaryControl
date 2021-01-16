@@ -310,11 +310,15 @@ namespace SanitaryCartControl.Core.Context
             {
                 entity.ToTable("SeriesHolder.Category");
 
+
+                entity.HasIndex(e => e.CategoryIdFk, "IX_SeriesHolder.Category")
+                    .IsUnique();
+
                 entity.Property(e => e.CategoryIdFk).HasColumnName("CategoryId_Fk");
 
                 entity.HasOne(d => d.CategoryIdFkNavigation)
-                    .WithMany(p => p.SeriesHolderCategories)
-                    .HasForeignKey(d => d.CategoryIdFk)
+                    .WithOne(p => p.SeriesHolderCategory)
+                    .HasForeignKey<SeriesHolderCategory>(d => d.CategoryIdFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SeriesHolder.Category_Category");
             });

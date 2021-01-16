@@ -9,7 +9,6 @@ namespace SanitaryCartControl.Core
     {
         public int Id { get; set; }
         public int CategoryIdFk { get; set; }
-
         public virtual Category CategoryIdFkNavigation { get; set; }
     }
 }

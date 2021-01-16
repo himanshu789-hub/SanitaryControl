@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using SanitaryCartControl.Helphers.Converters;
 using SanitaryCartControl.ViewModels;
 using SanitaryCartControl.DTOModels;
 using SanitaryCartControl.Core.Contracts.Services;
 using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.BLLModels;
+using SanitaryCartControl.Miscellaneous.Struct;
+using SanitaryCartControl.Miscellaneous.Converters;
+using SanitaryCartControl.Miscellaneous.Utilities;
 namespace SanitaryCartControl.Controllers
 {
     public class ItemController : Controller
@@ -23,24 +24,29 @@ namespace SanitaryCartControl.Controllers
             if (ModelState.IsValid)
             {
                 ItemViewModel ItemViewModel = new ItemViewModel();
-                ItemViewModel.Breadcrumps = Converters.ToCategoryPathArray(_categoryService.GetAllAncestors(Item.Id));
-                ItemViewModel.ParentId = Item.Id;
+                ItemViewModel.ParentId = Item.CategoryId.Value;
+                BreadcrumbInfo[] categoryBreadcrumbWithLink = Converters.GetBreadcrumbsFromAncestorsBLL(_categoryService.GetAllAncestors(Item.CategoryId.Value));
+                ItemViewModel.Breadcrumps = categoryBreadcrumbWithLink;
+                ItemViewModel.IsEndCategory = Item.IsEndCategory.Value;
 
-                if (Item.IsSubCategory)
+                if (Item.IsEndCategory.Value)
                 {
-                    ItemViewModel.IsSubCategory = true;
-                    ItemViewModel.CategoryInfos = _categoryService.GetChildren(Item.Id, Item.Page, 10);
-                    return View(ItemViewModel);
+                    if (Item.Page.HasValue)
+                    {
+                        const int NUMBER_OF_PRODUCT_AT_A_TIME = 10;
+                        ItemViewModel.ParentId = Item.CategoryId.Value;
+                        IEnumerable<ProductInfoBLL> productInfos = _productService.GetProductsByCategoryId(Item.CategoryId.Value, Item.Page.Value, NUMBER_OF_PRODUCT_AT_A_TIME);
+                        ItemViewModel.ProductInfos = productInfos;
+                        if (Item.Page == 0)
+                            return View(ItemViewModel);
+                        else
+                            return new JsonResult(productInfos);
+                    }
                 }
                 else
                 {
-                    ItemViewModel.IsSubCategory = false;
-                    IEnumerable<ProductInfoBLL> productInfos = _productService.GetProductsByCategoryId(Item.Id, Item.Page, 10);
-                    ItemViewModel.ProductInfos = productInfos;
-                    if (Item.Page == 0)
-                        return View(ItemViewModel);
-                    else
-                        return new JsonResult(productInfos);
+                    ItemViewModel.CategoryInfos = _categoryService.GetChildren(ItemViewModel.ParentId);
+                    return View(ItemViewModel);
                 }
             }
             return BadRequest();
@@ -49,7 +55,9 @@ namespace SanitaryCartControl.Controllers
         {
             if (ModelState.IsValid)
             {
-                return View(_productService.GetById(Id));
+               ProductBLL product =  _productService.GetById(Id);
+              
+                return View();
             }
             return BadRequest();
         }

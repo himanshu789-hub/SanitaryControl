@@ -1,15 +1,7 @@
-@using SanitaryCartControl.Helphers.Converters;
+@using SanitaryCartControl.Areas.Miscellaneous;
 @model CategoryBLL
 @{
-   string[] pathToRoot = Converters.ToBreadcrumbByCategoryBLL(Model);
-   string breadcrumbs = "";
-   for (int i = 0; i < pathToRoot.Count(); i++)
-   {
-      breadcrumbs += pathToRoot[i];
-      if (pathToRoot.Count() == 1 || i == pathToRoot.Count())
-         continue;
-      breadcrumbs += " > ";
-   }
+   string breadcrumbs = Converters.ToBreadcrumbByCategoryBLL(Model,'>');
 }
 
 <span class="alert alert-danger d-none" id="show-category-form-error">&#9632; Please Upload A Image <i

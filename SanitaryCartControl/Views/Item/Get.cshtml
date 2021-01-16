@@ -1,25 +1,29 @@
 @model ItemViewModel
+
 @Html.Partial("_Breadcrumb",Model.Breadcrumps)
+
 <div id="Item-Wrapper"> 
-<script type="text/javascript"> 
-    window.parentId = @Model.ParentId;
-    window.itemRequestUrl =@Json.Serialize(@Url.Action("Get","Item",new {Id=""}));      
-</script>
-@if(Model.IsSubCategory)
+
+@if(!Model.IsEndCategory)
 {
+   if(Model.CategoryInfos.Count()>0)
+   {
+    
   foreach (var item in Model.CategoryInfos)
   {
       <div class="itemHolder">
-              <a class="imageHolder" href='@Url.Action("Get","Item",new {IsSubCategory=Json.Serialize(item.IsSubCategory),Id=item.Id})'>
+              <a class="imageHolder" href='@Utilities.GetActionLinkForCategoryOrProduct(item.Id,item.HoldChildren,false)'>
                 <img src="@item?.ImagePath"/>
               </a>
               <text class="title">@item.Title</text>
       </div>
-  }
-      <script type="text/javascript">
-         isSubCategory =true;
-      </script>
-  
+  } 
+   }
+   else
+   {
+     <h3>No Item Added</h3>
+   }
+
 }
 else
 {
@@ -30,7 +34,7 @@ else
       <div class="itemHolder">
         <div class="imageHolder">
           <img src="@item?.ImagePath" />
-          <a class="link" href='@Url.Action("GetProduct","Item",new {Id=@item.Id})'>View Details</a>
+          <a class="link" href='@Utilities.GetActionLinkForCategoryOrProduct(item.Id,false,true)'>View Details</a>
         </div>
         <text class="title">@item.Name<text>
       </div>
@@ -40,10 +44,11 @@ else
   {
      <h3>No Product Found</h3>
   }
+  <script type="text/javascript"> 
+    window.categoryId = @Model.ParentId;
+    window.productRequestUrl =@Json.Serialize(@Url.Action("Get","Item",new {Id=""}));       
+  </script>
 }
-      <script type="text/javascript">
-        var isSubCategory =false;
-      </script>
 </div>
 
 <script src="~/dist/item.entry.js"></script>
