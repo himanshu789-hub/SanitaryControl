@@ -57,7 +57,7 @@ namespace SanitaryCartControl.Controllers
             {
                ProductBLL product =  _productService.GetById(Id);
               
-                return View();
+                return View(product);
             }
             return BadRequest();
         }

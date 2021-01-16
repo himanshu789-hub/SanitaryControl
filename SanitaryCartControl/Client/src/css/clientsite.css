@@ -544,8 +544,9 @@ display: block;
 .breadcrumb li a
 {
   color:black;
+  z-index:3;
 }
-@media screen and (min-width:600px)
+@media screen and (min-width:976px)
 {
 
 .breadcrumb {
@@ -554,11 +555,6 @@ display: block;
 .breadcrumb-item{
   position: relative;
   padding:0px 10px;
-}
-.breadcrumb-item a
-{
-  z-index:3;
-  text-decoration: none;
 }
 .breadcrumb .breadcrumb-item::before,
 .breadcrumb .breadcrumb-item::after {
@@ -589,10 +585,6 @@ display: block;
 {
   display: none !important;
 }
-.breadcrumb li:nth-of-type(1) a { color: hsl(0, 0%, 70%); } 
-.breadcrumb li:nth-of-type(2) a { color: hsl(0, 0%, 65%); } 
-.breadcrumb li:nth-of-type(3) a { color: hsl(0, 0%, 50%); } 
-.breadcrumb li:nth-of-type(4) a { color: hsl(0, 0%, 45%); }  
 }
 
 
