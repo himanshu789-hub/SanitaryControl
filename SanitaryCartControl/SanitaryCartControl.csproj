@@ -48,6 +48,8 @@
   </Target>
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <Exec WorkingDirectory="$(MpaRoot)" Command="npm run build:prod" />
+
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(WWWRoot)dist\**" />

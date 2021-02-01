@@ -1,13 +1,82 @@
 @model HomeViewModel;
-@if (Model.Brands != null && Model.Brands.Count() > 0)
-{
-    <h3 class="text-center p-2 m-2">Brands</h3>
-    <marquee behavior="scroll" direction="left" scrollamount="6" class="brand-marquee">
-        @foreach (var item in Model.Brands)
+
+@{
+    bool IsImagesAvalaible = Model.Images!=null && Model.Images.Count()>0;
+}
+<section id="slider-wrapper">
+    <div id="prev" class="control" onclick=""><img src="~/images/site/prev.png" /></div>
+    <div id="slider">
+        @if(IsImagesAvalaible)
         {
-                    <div class="m-imageHolder p-2 m-2 ml-5">
-                <img src="@item.Value" alt="@item.Key" />
+            foreach (var item in Model.Images)
+            {
+                <img src="@item" class="slide"/>
+            }
+        }
+        else
+        {
+            <div class="slide no-image-available" style="width: 100%;">
+                 <span class="no-image-sign"><i class="fa fa-picture-o fa-3x"></i></span>
             </div>
         }
-    </marquee>
+    </div>
+    <div id="next" class="control"><img src="~/images/site/next.png" /></div>
+</section>
+<section class="d-flex flex-column" id="main">
+    <section id="home-categories">
+        <h3 class="head d-block text-center"><span class="border-line">Products</span></h3>
+        <div class="d-flex justify-content-center">
+            
+            <div class="d-flex flex-wrap" id="home-product-wrapper">
+               @if(Model.BaseCategories!=null)
+            {
+                @foreach (var item in Model.BaseCategories)
+                {
+                <div class="category">
+                    <a href="@Utilities.GetActionLinkForCategoryOrProduct(item.Id,item.HoldChildren,false)" class="category-content" style="--background-image:url('./image/faucetjpg.jpg')">
+                        <span class="text">
+                            <p class="name">@item.Title</p>
+                            <p class="link">View Products &#187;</p>
+                        </span>
+                    </a>
+                </div>
+                    
+                }
+            }
+            </div>
+        </div>
+    </section>
+    <section class="mt-1" id="home-brands">
+        <h3 class="head text-center"><span class="border-line">Brands</span></h3>
+        <div class="d-flex justify-content-center  brand-wrapper-holder">
+            <ul class="brand-wrapper">
+                @if (Model.Brands != null && Model.Brands.Count() > 0)
+                {
+                    foreach (var item in Model.Brands)
+                    {
+                        <li><img src="@item.Value" alt="@item.Key" /></li>
+                    }
+                }
+            </ul>
+        </div>
+    </section>
+</section>
+@if(IsImagesAvalaible)
+@section BodyInvokeScripts
+{
+    <script>
+        $(function () {
+            const elements = {
+                sliderWrapper: '#slider-wrapper',
+                slider: '#slider'
+            }
+            Array.from(images).forEach(function (value, index) {
+                const slideWrapper = $('<div>').addClass('slide-wrapper')
+                const slide = $('<div>').addClass('slide').css('background-image', `url(${value})`)
+                slideWrapper.append(slide)
+                $(elements.slider).append(slideWrapper).css('width', `${images.length * 100}%`);
+            });
+            activateSlider(elements.slider, elements.sliderWrapper, false)
+        }) 
+    </script>
 }

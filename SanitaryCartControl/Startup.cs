@@ -66,7 +66,7 @@ namespace SanitaryCartControl
             else
             {
                 app.UseCustomExceptionHandler();
-             //   app.UseHsts();
+                app.UseHsts();
             }
     
           app.UseStaticFiles(new StaticFileOptions{
@@ -76,7 +76,7 @@ namespace SanitaryCartControl
                     ctx.Context.Response.Headers.Add(Microsoft.Net.Http.Headers.HeaderNames.CacheControl,"public, max-age=200, immutable");       
                 }
             });
-    //       //app.UseHttpsRedirection()
+            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();

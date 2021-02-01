@@ -90,7 +90,7 @@ namespace SanitaryCartControl.Areas.Controllers
             return View("Success", new MessageViewModel()
             {
                 IsSuccess = false,
-                Link = Url.Action("Edit", productEditDTO.Product.Id)
+                Link = Url.Action("/Cms/Edit", productEditDTO.Product.Id)
             });
 
         }

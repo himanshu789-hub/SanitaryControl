@@ -122,7 +122,7 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                IList<CategoryBLL> CategoryBLLs = new List<CategoryBLL>();
+                IEnumerable<CategoryBLL> CategoryBLLs = new List<CategoryBLL>();
 
                 var list = context.Categories.AsNoTracking().Include(e => e.SeriesBrand).ToList().AsEnumerable();
                 IEnumerable<int> SeriesHolderIds = context.SeriesHolderCategories.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();
@@ -149,23 +149,22 @@ namespace SanitaryCartControl.Core.Services
                             list = list.Where(e => e.Id != item);
                     }
                 }
-                foreach (var item in list)
-                {
-                    bool IsEndPoint = list.Where(e => e.ParentId == item.Id).Count() > 0 ? false : (!SeriesHolderIds.Contains(item.Id));
-                    CategoryBLLs.Add(new CategoryBLL() { Id = item.Id, ParentId = item.ParentId, Title = item.Titlle, IsEndPoint = IsEndPoint, Categories = null });
-                }
+                CategoryBLLs = Helpher.HelpherMethods.ToCatgeoryBLL(list, SeriesHolderIds.ToArray());
                 return GetTree(CategoryBLLs, null);
             }
         }
-
-        ICollection<CategoryBLL> GetTree(ICollection<CategoryBLL> categories, int? parentId = null)
+        bool IsEndPoint(IEnumerable<Category> categories, int[] SeriesHolderIds, int ItemId)
+        {
+            return categories.Where(e => e.ParentId == ItemId).Count() > 0 ? false : (!SeriesHolderIds.Contains(ItemId));
+        }
+        IEnumerable<CategoryBLL> GetTree(IEnumerable<CategoryBLL> categories, int? parentId = null)
         {
             return categories.Where(e => e.ParentId == parentId).Select(e => new CategoryBLL()
             {
                 Id = e.Id,
                 Title = e.Title,
                 ParentId = e.ParentId,
-                Categories = e.IsEndPoint ? null : GetTree(categories, e.Id),
+                Categories = e.IsEndPoint ? null : (ICollection<CategoryBLL>)GetTree(categories, e.Id),
                 IsEndPoint = e.IsEndPoint
             }).ToList();
         }
@@ -178,6 +177,7 @@ namespace SanitaryCartControl.Core.Services
             {
                 using (var cmd = new SqlCommand(sql, con))
                 {
+
                     con.Open();
                     cmd.Parameters.Add(new SqlParameter { Value = Id, ParameterName = "@Id" });
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -207,9 +207,9 @@ namespace SanitaryCartControl.Core.Services
             {
                 using (var cmd = new SqlCommand())
                 {
+                    cmd.Connection = con;
                     con.Open();
                     string sql = "EXECUTE GetNonSeriesHolderCategoryBreadcrumb @Seperator";
-                    cmd.Connection = con;
                     cmd.CommandText = sql;
                     cmd.Parameters.Add(new SqlParameter
                     {
@@ -266,6 +266,41 @@ namespace SanitaryCartControl.Core.Services
                 return true;
             }
         }
+        int[] GetSeriesHoldersIdsFromContext(SanitaryCartContext context)
+        {
+            return context.SeriesHolderCategories.AsNoTracking().Select(e => e.CategoryIdFk).ToArray();
+        }
 
+        public IEnumerable<CategoryBLL> GetCategoryListUptoFirstLevel()
+        {
+            using (var context = new SanitaryCartContext(_con))
+            {
+                IEnumerable<Category> categories = context.Categories.FromSqlRaw<Category>("EXEC GetNodeTillFirstLevel").ToList();
+                IEnumerable<int> SeriesHolderIds = GetSeriesHoldersIdsFromContext(context);
+                return GetTree(HelpherMethods.ToCatgeoryBLL(categories, SeriesHolderIds.ToArray()), null);
+            }
+        }
+
+        public IEnumerable<CategoryInfo> GetBaseCategories()
+        {
+            using (var context = new SanitaryCartContext(_con))
+            {
+                IEnumerable<Category> categories = context.Categories.Where(e => e.ParentId == null).AsNoTracking().ToList();
+
+                ICollection<CategoryInfo> categoryInfos = new List<CategoryInfo>();
+                //assuming all category having parentId NULL.Thus Automatically SeriesHolder For Now Case As I Known All Root Have Children
+                foreach (var item in categories)
+                {
+                    categoryInfos.Add(new CategoryInfo()
+                    {
+                        HoldChildren = true,
+                        Id = item.Id,
+                        ImagePath = item.ImagePath,
+                        Title = item.Titlle
+                    });
+                }
+                return categoryInfos;
+            }
+        }
     }
 }

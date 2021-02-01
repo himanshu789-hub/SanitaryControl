@@ -12,7 +12,7 @@ namespace SanitaryCartControl.Extensions
 {
     public static class ApplicationExtensionsMethods
     {
-        public async static void SeedRolesAndAdmin(IServiceProvider serviceProvider,IConfiguration configuration)
+        public async static void SeedRolesAndAdmin(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             const string firstname = "Naresh";
@@ -40,35 +40,64 @@ namespace SanitaryCartControl.Extensions
 
             if (userManager.Users.FirstOrDefault(e => e.FirstName.Equals(firstname) && e.LastName.Equals(lastname)) == null)
             {
-                    ApplicationUser user = new ApplicationUser()
-                    {
-                        LastName = lastname,
-                        FirstName = firstname,
-                        UserName=userName,
-                        ImagePath = Path.Combine(@"/images/site", "administration.svg")
-                    };
-               var createResult =   await  userManager.CreateAsync(user, "NL@1crt8");
-               if(createResult.Succeeded)
-               {
-                   var roleUser =  await userManager.AddToRoleAsync(user, ApplicationRoles.Administration);
-                   if(roleUser.Succeeded)
-                    System.Console.WriteLine("Admin Created and Assigned");
+                ApplicationUser user = new ApplicationUser()
+                {
+                    LastName = lastname,
+                    FirstName = firstname,
+                    UserName = userName,
+                    ImagePath = Path.Combine(@"/images/site", "administration.svg")
+                };
+                var createResult = await userManager.CreateAsync(user, "NL@1crt8");
+                if (createResult.Succeeded)
+                {
+                    var roleUser = await userManager.AddToRoleAsync(user, ApplicationRoles.Administration);
+                    if (roleUser.Succeeded)
+                        System.Console.WriteLine("Admin Created and Assigned");
                 }
-                
+
             }
         }
         public static void UseCustomExceptionHandler(this IApplicationBuilder app)
         {
-            app.UseExceptionHandler("/Home/Error");
+            app.UseExceptionHandler(new ExceptionHandlerOptions
+            {
+                ExceptionHandler = (context) =>
+                {
+                    bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith("/Cms");
+
+                    if (IsRequestFormCms)
+                    {
+                        context.Response.Redirect("/Cms/Home/Error");
+                    }
+                    else
+                        context.Response.Redirect("/Home/Error");
+                    return System.Threading.Tasks.Task.CompletedTask;
+                }
+            });
+
+            //             app.UseExceptionHandler(errorApp =>
+            //             {
+            //                 errorApp.Run(async context =>
+            // {
+            //     bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith("/Cms");
+
+            //     if (IsRequestFormCms)
+            //     {
+            //         context.Response.Redirect("/Cms/Home/Error");
+            //     }
+            //     else
+            //         context.Response.Redirect("/Home/Error");
+            // });
+            // });
 
         }
         public static void RemoveIfPresent(this Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary modelSate, string key)
         {
             if (modelSate.ContainsKey(key))
-                modelSate.Remove(key);  
+                modelSate.Remove(key);
         }
-        
-        
+
+
 
     }
 }

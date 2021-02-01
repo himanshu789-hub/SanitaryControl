@@ -192,7 +192,7 @@ state.count=0;
         $('.loading').removeClass("d-none")
         $.ajax({
             method: 'GET',
-            url: '/Product/GetCategory?brandId=' + value,
+            url: '/Cms/Product/GetCategory?brandId=' + value,
             accepts: 'application/json',
             success: function (data) {
                 buildMenu($(elements.menuId), data,0)
@@ -241,7 +241,7 @@ state.count=0;
                     $.ajax({
                         method: 'GET',
                         async: false,
-                        url: '/Product/GetProductType?CategoryId=' + state.categoryId,
+                        url: '/Cms/Product/GetProductType?CategoryId=' + state.categoryId,
                         success: function (data) {
                             if(!data || data==-1)
                             {

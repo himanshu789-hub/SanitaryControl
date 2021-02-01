@@ -1,0 +1,124 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    @RenderSection("Styles",false)
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <environment exclude="development">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <link href="~/dist/client.min.entry.js" />
+    </environment>
+    <environment names="development">
+        <link href="~/dist/client.entry.js" rel="stylesheet" />
+    </environment>
+
+    @RenderSection("HeadInvokeScripts",false)
+</head>
+
+<body>
+    <section id="header" class="row no-gutters">
+        <div id="logo" class="col-4 col-lg-2">
+            <img src="~/" alt="" />
+        </div>
+        <div id="top-nav" class="col-8 col-lg-10 d-flex align-items-end justify-content-end">
+            <div id="nav-icon1" class="d-lg-none">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="navigation" class="mobile-nav">
+                <ul id="menu">
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+
+    @RenderBody()
+
+
+    <div id="copyright-bar">&#64;2021 All Rights Reserved</div>
+
+    <script>
+        var IsOpen = false;
+        $('#nav-icon1').click(function (e) {
+            if (!IsOpen)
+                IsOpen = true;
+            else
+                IsOpen = false;
+
+            $(this).toggleClass('open');
+            $('#navbar').toggleClass('show')
+        });
+        window.appendEvents = function () {
+            $('#desktop-nav li[data-level="0"]').hover(function (e) {
+                const ulList = $(this).find('>ul#child');
+                if (ulList.find('>li.parent').length)
+                    $(this).find('>ul#child').addClass('makeBold')
+            });
+            $('#desktop-nav li.parent[data-level="1"]').each(function (index, element) {
+                const i = $(this).find('>span>span.expand>i');
+                i.removeClass(function (index, name) {
+                    const classes = name.split(" ");
+                    let result = "";
+                    classes.forEach(function (value) {
+                        if (new RegExp('^fa-').test(value))
+                            result = result.concat(value + " ");
+                    })
+                    return result;
+                })
+                $(this).find('>span>a').addClass('jump p-1')
+            })
+            $('nav ul#child>li').click(function (e) {
+                e.stopPropagation();
+            })
+            $('nav li.parent:not([data-level="0"])').hover(function () {
+                if ($(window).width() > 992) {
+
+                    const subMenu = $(this).find('>ul#child')
+                    const offSetLeft = $(subMenu).offset().left;
+                    const width = $(subMenu).width();
+                    const parentMenu = $(this).parent();
+                    const parentWidth = $(this).width();
+                    if (offSetLeft + width > $(window).width()) {
+                        $(subMenu).css({ 'right': `100%` })
+                    }
+                }
+            })
+            $('nav ul#menu').mouseleave(function (e) {
+                $('li.parent.active').removeClass('active')
+            })
+
+            $('nav li.parent span.expand').click(function (e) {
+                const li = $(this).parents('li.parent').first();
+                const level = li.data('level');
+                const liList = li.siblings().filter(function (index, value) {
+                    return $(value).hasClass('parent') && value != li[0];
+                });
+                const array = $.grep(liList, function (value) {
+                    return $(value).find('>ul#child.showList').length > 0;
+                });
+                array.forEach(element => {
+                    $(element).find('>ul#child.showList').removeClass('showList');
+                    $(element).find('>span>span.expand>i').removeClass('fa-angle-up')
+                });
+
+                li.find('>ul#child').first().toggleClass('showList')
+                li.toggleClass('active')
+                li.find('>span>span.expand>i').toggleClass('fa-angle-up')
+                e.stopPropagation();
+                e.preventDefault();
+            });
+        }
+    </script>
+
+    @RenderSection("BodyInvokeScripts",false)
+
+</body>
+
+</html>

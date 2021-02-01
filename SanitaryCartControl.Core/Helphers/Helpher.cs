@@ -42,7 +42,16 @@ namespace SanitaryCartControl.Core.Helpher
             productBLL.AttributeBLLs = HelpherMethods.ToAttributeBLL(product.TypeProductQuantities);
             return productBLL;
         }
-
+        public static IEnumerable<CategoryBLL> ToCatgeoryBLL(IEnumerable<Category> categories,int[] SeriesHolderIds)
+        {
+            ICollection<CategoryBLL>  categoryBLLs = new List<CategoryBLL>();
+            foreach (var item in categories)
+            {
+                bool IsEndPoint = categories.Where(e => e.ParentId == item.Id).Count() > 0 ? false : (!SeriesHolderIds.Contains(item.Id));
+                categoryBLLs.Add(new CategoryBLL() { Id = item.Id, ParentId = item.ParentId, Title = item.Titlle, IsEndPoint = IsEndPoint, Categories = null });
+            }
+            return categoryBLLs;
+        }
         public static IEnumerable<ProductBLL> ToProductBLLs(IQueryable<Product> products)
         {
             if (products == null || products.Where(e => e.BrandIdFkNavigation == null || e.TypeProductQuantities == null || e.BrandIdFkNavigation == null).Count() > 0)
