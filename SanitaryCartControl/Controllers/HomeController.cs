@@ -27,14 +27,17 @@ namespace SanitaryCartControl.Controllers
             HomeViewModel homeViewModel = new HomeViewModel();
 
             homeViewModel.Brands = _brandService.GetBrands().Select(e => new KeyValuePair<string, string>(e.Name, e.ImagePath)).ToList();
-            string[] Images = null;
-            _config.GetSection(Constants.HomePageImages).Bind(Images);
+            string[] Images = _config.GetSection("SliderImages").Get<string[]>();
             if (Images == null)
             {
                 throw new System.Exception("HomeSliderImage AppSetting Value Cannot Be Null");
             }
             homeViewModel.BaseCategories = _categoryService.GetBaseCategories();
             return View(homeViewModel);
+        }
+        public IActionResult AboutUs()
+        {
+            return View();
         }
 
     }

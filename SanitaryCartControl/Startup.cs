@@ -50,7 +50,6 @@ namespace SanitaryCartControl
                   
             });
             services.AddControllersWithViews(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,13 +68,6 @@ namespace SanitaryCartControl
                 app.UseHsts();
             }
     
-          app.UseStaticFiles(new StaticFileOptions{
-                OnPrepareResponse = ctx => {
-                    string filePath = ctx.File.PhysicalPath;
-                if(System.Text.RegularExpressions.Regex.Match(filePath,@"lib.*\.(js|css)").Success)
-                    ctx.Context.Response.Headers.Add(Microsoft.Net.Http.Headers.HeaderNames.CacheControl,"public, max-age=200, immutable");       
-                }
-            });
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseRouting();

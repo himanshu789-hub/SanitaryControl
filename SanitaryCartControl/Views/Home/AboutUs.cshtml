@@ -1,0 +1,95 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration config;
+@using Microsoft.Extensions.Configuration;
+@using SanitaryCartControl.Miscellaneous.Constnants;
+@{
+    
+    string[] SliderImages = config.GetSection(Constants.AboutUsImages).Get<string[]>();
+       bool IsImagesPresent  = SliderImages!=null;
+}
+<section id="about-us" class="mr-1 ml-1 row">
+    <div class="col-12 col-md-6">
+        <h2 class="head"><span class="bottom-line">About Us</span></h2>
+        <p>At GOKUL ENTERPRISES (GE), Our Purpose Is Simple : To WORK And Deliver SATISFACTION.</p>
+        <p>Gokul Enterprises is winning Hearts, since last 18 years, of Millions in Homes who seek comfort with
+            looks. Gokul
+            Enterprises is one of the leading household product company operating in sanitary ware, faucets,
+            showers, accessories, &
+            fittings, with our headquarter in Raipur ( c.g.) Our Products are known for Reliability, Usability,
+            Design, Finishing
+            and Durability. We hope that in the future people won't realize us as a seller of bathroom ware.
+            Instead, they'll know
+            GOKUL ENTERPRISES as a service company that just happens to sell comfort & satisfaction.</p>
+        <p>By The Support And Trust Of Our Millions Of Consumers We Been Able To Grow From Scratch To This. Since
+            Its Foundation In
+            2002, GE Has Come A Long Way To Become One Of The Leading Seller & Manufacturer Of Bathroom Ware
+            Products In
+            Chhattisgarh, Our Ultimate Goal Is To Be One Of The Best Sanitary & Faucet's Ware Company To Trade On
+            Indian & Other
+            Territories.</p>
+    </div>
+    <div class="col-12 col-md-6 d-flex">
+        <div id="slider-wrapper">
+            <div id="prev" class="control" onclick=""><img src="./images/prev.png" /></div>
+            <div id="slider">
+              @if(IsImagesPresent)
+              {
+                foreach (var item in Model.Images)
+                {
+                    <img src="@item"/>
+                }
+              }
+              else
+              {
+                  <partial name="_NoImage"></partial>
+              }
+            </div>
+            <div id="next" class="control"><img src="./images/next.png" /></div>
+        </div>
+    </div>
+</section>
+<section id="infographics" class="d-flex flex-wrap justify-content-start justify-content-lg-between">
+    <div class="d-flex graphic">
+        <span class="fa-stack"><i class="fa fa-circle fa-stack-2x back"></i><i
+                class="fa fa-leaf fa-stack-1x fa-inverse front"></i></span>
+        <div class="content">
+            <p class="head">Nature Of Business</p>
+            <p>Manufacturer & Dealer</p>
+        </div>
+    </div>
+    <div class="d-flex graphic">
+        <span class="fa-stack"><i class="fa fa-circle fa-stack-2x back"></i><i
+                class="fa fa-building fa-stack-1x fa-inverse front"></i></span>
+        <div class="content">
+            <p class="head">Year Of Establishment</p>
+            <p>2002</p>
+        </div>
+    </div>
+    <div class="d-flex graphic">
+        <span class="fa-stack"><i class="fa fa-circle fa-stack-2x back"></i><i
+                class="fa fa-gavel fa-stack-1x fa-inverse front"></i></span>
+        <div class="content">
+            <p class="head">Legal Status Of Firm</p>
+            <p>Trading Firm</p>
+        </div>
+    </div>
+    <div class="d-flex graphic">
+        <span class="fa-stack"><i class="fa fa-circle fa-stack-2x back"></i><i
+                class="fa fa-money fa-stack-1x fa-inverse front"></i></span>
+        <div class="content">
+            <p class="head">Annual Turnover</p>
+            <p>+10 Crore</p>
+        </div>
+    </div>
+    <div class="d-flex graphic">
+        <span class="fa-stack"><i class="fa fa-circle fa-stack-2x back"></i><i
+                class="fa fa-id-card fa-stack-1x fa-inverse front"></i></span>
+        <div class="content">
+            <p class="head">GST Number</p>
+            <p>22ABBPL0197R1ZE</p>
+        </div>
+    </div>
+</section>
+@section BodyInvokeScripts
+{
+<script>buildSlider('#slider', '#slider-wrapper', true)</script>
+}

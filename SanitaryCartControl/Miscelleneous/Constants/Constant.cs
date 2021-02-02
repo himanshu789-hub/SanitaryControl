@@ -6,5 +6,6 @@ namespace SanitaryCartControl.Miscellaneous.Constnants
         public const string PortalHead = "Gokul Enterprises";
         public const string AdminArea = "Cms";
         public const string HomePageImages="Home:SliderImages";
+        public const string AboutUsImages="About:SliderImages";
     }
 }
