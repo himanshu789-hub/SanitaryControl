@@ -1,10 +1,7 @@
-@inject Microsoft.Extensions.Configuration.IConfiguration config;
-@using Microsoft.Extensions.Configuration;
-@using SanitaryCartControl.Miscellaneous.Constnants;
+@model string[];
 @{
     
-    string[] SliderImages = config.GetSection(Constants.AboutUsImages).Get<string[]>();
-       bool IsImagesPresent  = SliderImages!=null;
+       bool IsImagesPresent  = Model!=null;
 }
 <section id="about-us" class="mr-1 ml-1 row">
     <div class="col-12 col-md-6">
@@ -33,7 +30,7 @@
             <div id="slider">
               @if(IsImagesPresent)
               {
-                foreach (var item in Model.Images)
+                foreach (var item in Model)
                 {
                     <img src="@item"/>
                 }

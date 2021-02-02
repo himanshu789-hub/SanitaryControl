@@ -1,4 +1,5 @@
-function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
+import * as $ from 'jquery';
+export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 	if (!$) {
 		console.error('jQuery not found');
 		return;

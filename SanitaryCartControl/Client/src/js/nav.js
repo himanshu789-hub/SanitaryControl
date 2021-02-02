@@ -1,4 +1,5 @@
-function BuildNavigation() {
+import * as $ from 'jquery';
+export function BuildNavigation() {
 	if (!$) {
 		console.error('jQuery Do Not Exists');
 		return;

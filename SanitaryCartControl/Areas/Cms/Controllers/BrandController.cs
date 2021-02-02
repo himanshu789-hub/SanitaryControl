@@ -21,7 +21,6 @@ namespace SanitaryCartControl.Areas.Controllers
     public class BrandController :  BaseController
     {
         IBrandService _brandService;
-        IHostEnvironment _host;
         ILogger _logger;
         public BrandController(IBrandService brandService, ILogger<BrandController> logger, IHostEnvironment host):base(host)
         {

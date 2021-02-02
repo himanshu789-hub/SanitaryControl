@@ -48,13 +48,17 @@
         <h3 class="head text-center"><span class="border-line">Brands</span></h3>
         <div class="d-flex justify-content-center  brand-wrapper-holder">
             <ul class="brand-wrapper">
+                <li data-level="0"><a asp-action="Index" asp-controller="Home" class="p-1">Home</a></li>
                 @if (Model.Brands != null && Model.Brands.Count() > 0)
                 {
+
                     foreach (var item in Model.Brands)
                     {
                         <li><img src="@item.Value" alt="@item.Key" /></li>
                     }
                 }
+                <li data-level="0"><a asp-action="AboutUs" asp-controller="Home" class="p-1">About Us</a></li>
+                <li data-level="0"><a asp-action="" asp-controller="Home" class="p-1">Contact Us</a></li>
             </ul>
         </div>
     </section>
@@ -68,12 +72,13 @@
                 sliderWrapper: '#slider-wrapper',
                 slider: '#slider'
             }
-            Array.from(images).forEach(function (value, index) {
+            /*Array.from(images).forEach(function (value, index) {
                 const slideWrapper = $('<div>').addClass('slide-wrapper')
                 const slide = $('<div>').addClass('slide').css('background-image', `url(${value})`)
                 slideWrapper.append(slide)
                 $(elements.slider).append(slideWrapper).css('width', `${images.length * 100}%`);
             });
+            */
             activateSlider(elements.slider, elements.sliderWrapper, false)
         }) 
     </script>

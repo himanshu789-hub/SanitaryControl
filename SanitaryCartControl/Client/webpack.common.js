@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 module.exports = {
 	output: {
 		filename: '[name].entry.js',
@@ -13,4 +14,10 @@ module.exports = {
 			{ test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/svg+xml' },
 		],
 	},
+	plugins: [
+		new webpack.ProvidePlugin({
+			$: 'jQuery',
+			jQuery:'jQuery',
+		}),
+	],
 };

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using SanitaryCartControl.Miscellaneous.Constnants;
 using SanitaryCartControl.Core.Contracts.Services;
 using Microsoft.Extensions.Configuration;
+
 namespace SanitaryCartControl.Controllers
 {
     public class HomeController : Controller
@@ -30,12 +31,21 @@ namespace SanitaryCartControl.Controllers
             string[] Images = _config.GetSection("SliderImages").Get<string[]>();
             if (Images == null)
             {
-                throw new System.Exception("HomeSliderImage AppSetting Value Cannot Be Null");
+                throw new System.Exception("Home:SliderImages AppSetting Value Cannot Be Null");
             }
             homeViewModel.BaseCategories = _categoryService.GetBaseCategories();
             return View(homeViewModel);
         }
         public IActionResult AboutUs()
+        {
+            string[] Images = _config.GetSection(Constants.AboutUsImages).Get<string[]>();
+            if(Images==null)
+            {
+                throw new System.Exception("About:SliderImages Cannot Be Null");
+            }
+            return View(Images);
+        }
+        public IActionResult ContactUs()
         {
             return View();
         }
