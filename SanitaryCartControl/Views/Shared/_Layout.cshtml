@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -37,6 +38,19 @@
             </div>
             <nav id="navigation" class="mobile-nav">
                 <ul id="menu">
+                    <li data-level="0"><span><a asp-action="Index" asp-controller="Home" class="p-1">Home</a></span>
+                    </li>
+                    <li data-level="0" class="parent">
+                        <span><a href="#" class="p-1">Products<span class="expand"><i
+                                        class="fa fa-angle-down"></i></span></a></span>
+                        <ul id="child" data-append="true">
+
+                        </ul>
+                    </li>
+                    <li data-level="0"><span><a asp-action="AboutUs" asp-controller="Home" class="p-1">About
+                                Us</a></span></li>
+                    <li data-level="0"><span><a asp-action="ContactUs" asp-controller="Home" class="p-1">Contact
+                                Us</a></span></li>
                 </ul>
             </nav>
         </div>
@@ -59,66 +73,8 @@
             $(this).toggleClass('open');
             $('#navbar').toggleClass('show')
         });
-        window.appendEvents = function () {
-            $('#desktop-nav li[data-level="0"]').hover(function (e) {
-                const ulList = $(this).find('>ul#child');
-                if (ulList.find('>li.parent').length)
-                    $(this).find('>ul#child').addClass('makeBold')
-            });
-            $('#desktop-nav li.parent[data-level="1"]').each(function (index, element) {
-                const i = $(this).find('>span>span.expand>i');
-                i.removeClass(function (index, name) {
-                    const classes = name.split(" ");
-                    let result = "";
-                    classes.forEach(function (value) {
-                        if (new RegExp('^fa-').test(value))
-                            result = result.concat(value + " ");
-                    })
-                    return result;
-                })
-                $(this).find('>span>a').addClass('jump p-1')
-            })
-            $('nav ul#child>li').click(function (e) {
-                e.stopPropagation();
-            })
-            $('nav li.parent:not([data-level="0"])').hover(function () {
-                if ($(window).width() > 992) {
 
-                    const subMenu = $(this).find('>ul#child')
-                    const offSetLeft = $(subMenu).offset().left;
-                    const width = $(subMenu).width();
-                    const parentMenu = $(this).parent();
-                    const parentWidth = $(this).width();
-                    if (offSetLeft + width > $(window).width()) {
-                        $(subMenu).css({ 'right': `100%` })
-                    }
-                }
-            })
-            $('nav ul#menu').mouseleave(function (e) {
-                $('li.parent.active').removeClass('active')
-            })
-
-            $('nav li.parent span.expand').click(function (e) {
-                const li = $(this).parents('li.parent').first();
-                const level = li.data('level');
-                const liList = li.siblings().filter(function (index, value) {
-                    return $(value).hasClass('parent') && value != li[0];
-                });
-                const array = $.grep(liList, function (value) {
-                    return $(value).find('>ul#child.showList').length > 0;
-                });
-                array.forEach(element => {
-                    $(element).find('>ul#child.showList').removeClass('showList');
-                    $(element).find('>span>span.expand>i').removeClass('fa-angle-up')
-                });
-
-                li.find('>ul#child').first().toggleClass('showList')
-                li.toggleClass('active')
-                li.find('>span>span.expand>i').toggleClass('fa-angle-up')
-                e.stopPropagation();
-                e.preventDefault();
-            });
-        }
+        window.buildNavigation();
     </script>
 
     @RenderSection("BodyInvokeScripts",false)

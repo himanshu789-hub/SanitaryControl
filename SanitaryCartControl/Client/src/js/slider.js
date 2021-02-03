@@ -1,4 +1,7 @@
 import * as $ from 'jquery';
+export function removeControls(){
+   $('.control').remove()
+}
 export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 	if (!$) {
 		console.error('jQuery not found');

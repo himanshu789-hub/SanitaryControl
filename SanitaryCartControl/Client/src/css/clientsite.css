@@ -223,7 +223,7 @@ nav ul#child li {
 	font-weight: 400;
 }
 nav li.parent > ul#child.showList {
-	max-height: 1000px !important;
+	max-height: 1000px;
 	margin-bottom: 0.4em;
 }
 
@@ -270,6 +270,7 @@ nav li.parent > ul#child.showList {
 .control {
 	position: absolute;
 	top: 50%;
+	height: 10%;
 	cursor: pointer;
 	transform: translateY(-50%);
 	padding: 0.1rem;
@@ -306,21 +307,19 @@ nav li.parent > ul#child.showList {
 	height: 100%;
 	width: auto;
 }
-.no-sign-available {
+.no-image-available {
+	position: relative;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.no-image-sign {
+	position: relative;
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
-}
-.no-sign-image {
-	position: relative;
-}
-.no-sign-image::before {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	content:'No Image';
 }
 h2 {
 	font-weight: 400;
@@ -798,32 +797,32 @@ h6,
 	nav li.parent {
 		position: relative;
 	}
-	nav ul#child {
+	nav li.parent > ul#child {
 		position: absolute !important;
 		transition: none;
 		display: none !important;
-		max-height: auto;
-		min-width: 150px;
-		overflow: visible !important;
+		min-width: max-content;
+		max-width: 210px;
+		overflow: visible;
 	}
-	nav .showList {
+	nav li.parent > ul#child.showList {
 		border: none;
 		display: block;
 		margin-bottom: 0.4em;
 		border-top: 2px solid var(--color2);
 		z-index: 2;
-		max-height: 1000px !important;
+		max-height: 90vh;
 	}
 
 	nav li.parent[data-level='0']:hover > ul#child {
 		display: block !important;
-		max-height: 1000px !important;
+		max-height: 1000px;
 	}
 	nav li.parent:not([data-level='0']):hover > ul#child {
 		display: block !important;
-		max-height: 1000px !important;
 		left: 100%;
 		margin-left: -10px;
+		max-height: 1000px;
 		top: 0;
 	}
 	.arrow-sign:before {
@@ -863,6 +862,10 @@ h6,
 	}
 	#slider-wrapper {
 		height: 80vh;
+	}
+	.edge-over {
+		overflow-y: scroll !important;
+		max-height: 94vh !important;
 	}
 }
 

@@ -5,19 +5,21 @@
 }
 <section id="slider-wrapper">
     <div id="prev" class="control" onclick=""><img src="~/images/site/prev.png" /></div>
-    <div id="slider">
         @if(IsImagesAvalaible)
         {
-            foreach (var item in Model.Images)
+             <div id="slider">
+   
+            @foreach (var item in Model.Images)
             {
                 <img src="@item" class="slide"/>
             }
+             </div>
+   
         }
         else
         {
             <partial name="_NoImage"></partial>
         }
-    </div>
     <div id="next" class="control"><img src="~/images/site/next.png" /></div>
 </section>
 <section class="d-flex flex-column" id="main">
@@ -46,28 +48,28 @@
     </section>
     <section class="mt-1" id="home-brands">
         <h3 class="head text-center"><span class="border-line">Brands</span></h3>
-        <div class="d-flex justify-content-center  brand-wrapper-holder">
+        <div class="d-flex brand-wrapper-holder">
             <ul class="brand-wrapper">
-                <li data-level="0"><a asp-action="Index" asp-controller="Home" class="p-1">Home</a></li>
+                
                 @if (Model.Brands != null && Model.Brands.Count() > 0)
                 {
-
                     foreach (var item in Model.Brands)
                     {
                         <li><img src="@item.Value" alt="@item.Key" /></li>
                     }
                 }
-                <li data-level="0"><a asp-action="AboutUs" asp-controller="Home" class="p-1">About Us</a></li>
-                <li data-level="0"><a asp-action="" asp-controller="Home" class="p-1">Contact Us</a></li>
+              
             </ul>
         </div>
     </section>
 </section>
-@if(IsImagesAvalaible)
-@section BodyInvokeScripts
-{
-    <script>
-        $(function () {
+
+    @if (IsImagesAvalaible)
+    {
+     @section BodyInvokeScripts
+     {
+         <script>
+         $(function () {
             const elements = {
                 sliderWrapper: '#slider-wrapper',
                 slider: '#slider'
@@ -79,7 +81,17 @@
                 $(elements.slider).append(slideWrapper).css('width', `${images.length * 100}%`);
             });
             */
-            activateSlider(elements.slider, elements.sliderWrapper, false)
-        }) 
-    </script>
-}
+            buildSlider(elements.slider, elements.sliderWrapper, false)
+        })   
+        </script>
+     }
+       
+    }
+    else
+    {
+        @section BodyInvokeScripts
+        {
+          <script>removeControls();</script>
+        }
+    }
+

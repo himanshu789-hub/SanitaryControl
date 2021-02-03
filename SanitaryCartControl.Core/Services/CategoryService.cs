@@ -286,7 +286,7 @@ namespace SanitaryCartControl.Core.Services
             using (var context = new SanitaryCartContext(_con))
             {
                 IEnumerable<Category> categories = context.Categories.Where(e => e.ParentId == null).AsNoTracking().ToList();
-
+                
                 ICollection<CategoryInfo> categoryInfos = new List<CategoryInfo>();
                 //assuming all category having parentId NULL.Thus Automatically SeriesHolder For Now Case As I Known All Root Have Children
                 foreach (var item in categories)

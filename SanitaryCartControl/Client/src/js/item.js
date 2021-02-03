@@ -1,5 +1,5 @@
 import * as $ from 'jquery';
-window.buildItems = function buildItems(data) {
+export function buildItems(data) {
 	if (!(window.categoryId && window.productRequestUrl)) {
 		console.error('variable not found');
 		return;
