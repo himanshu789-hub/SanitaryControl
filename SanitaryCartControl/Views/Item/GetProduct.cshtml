@@ -24,22 +24,36 @@
                 <span class="text">Click To Expand</span>
             </div>
             <div class="d-flex justify-content-start align-items-center" id="lightbox-gallery">
-                <a class="m-1" id="first" href="./image/basin.jpg" data-lightbox="photos"><img src="./image/basin.jpg"
-                        class="img-fluid" /></a>
-                @foreach (var item in Model.Images.Where(e=>e!=Model.Images.First()))
+               @if(Model.Images!=null && Model.Images.Count()>2)
+               {
+@foreach (var item in Model.Images.Where(e=>e!=Model.Images.First()))
                 {
                 <a class="m-1" href="@item" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>       
                 }
+               }
+                
              </div>
         </div>
-        <div class="col-sm-12 col-md-7 p-2">
+        <div class="col-sm-12 col-md-7 p-2" id="product-info-wrapper">
             <h4 class="mb-md-4">@Model.Name</h4>
-            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row ">
+            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
                  <label style="width: 100px;display: table;" class="font-weight-bold"> <u>Description</u></label>
                 <div class="pl-3 pr-1 text-up text-justify">@Html.Raw(Model.Description) </div>
             </div>
-
-            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row ">
+ 
+            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+                <label style="width: 100px;display: table;" class="align-middle font-weight-bold"><u>Code</u></label>
+                <div class="pl-3 pr-1 text-justify">
+                    @Model.Code
+                </div>
+            </div>
+            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+                <label style="width: 100px;display: table;" class="align-middle font-weight-bold"><u>Brand</u></label>
+                <div class="pl-3 pr-1 text-justify">
+                    @Model.Brand.Name
+                </div>
+            </div>
+            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
               @{
                 bool  IsProductOfNoneType  = Model.Type==(byte)ProductType.NoneVariable;
               }
@@ -77,22 +91,16 @@
             }
                 </div>
             </div>
-        
-            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row ">
-                <label style="width: 100px;display: table;" class="align-middle font-weight-bold"><u>Code</u></label>
-                <div class="pl-3 pr-1 text-justify">
-                    @Model.Code
-                </div>
-            </div>    
+           
         </div>
     </div>
     @section HeadInvokeScripts
     {
-       <style src="~/lib/lightbox/dist/js/lightbox-plus-jquery.min.js"></style>
+       <script src="/lib/lightbox/dist/js/lightbox-plus-jquery.min.js"></script>
     }
     @section Styles
     {
-     <link rel="stylesheet" href="~/lib/lightbox/dist/css/lightbox.min.css"/>
+     <link rel="stylesheet" href="/lib/lightbox/dist/css/lightbox.min.css"/>
     }
     <script>
         if($)

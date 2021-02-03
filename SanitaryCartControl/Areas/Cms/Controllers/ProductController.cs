@@ -170,7 +170,7 @@ namespace SanitaryCartControl.Areas.Controllers
                 .Add(Converters.ToProductBLL(productViewModel.Product,
                 productViewModel.Attributes,
                 this.AddImages(productViewModel.Images, imagesPath)));
-                return Redirect(@"/Product/Edit/" + productId);
+                return Redirect(@"/Cms/Product/Edit/" + productId);
             }
             return View("Success", new MessageViewModel()
             {

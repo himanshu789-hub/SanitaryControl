@@ -28,7 +28,9 @@
 <body>
     <section id="header" class="row no-gutters">
         <div id="logo" class="col-4 col-lg-2">
-            <img src="~/" alt="" />
+            <div class="logo-wrapper">
+                <img src="~/images/site/logo.png" class="image-logo" alt="" />
+            </div>
         </div>
         <div id="top-nav" class="col-8 col-lg-10 d-flex align-items-end justify-content-end">
             <div id="nav-icon1" class="d-lg-none">
@@ -55,13 +57,41 @@
             </nav>
         </div>
     </section>
-
-
-    @RenderBody()
-
-
+    <section id="area">
+        @RenderBody()
+    </section>
+    <section id="footer" class="pt-5 pb-2 container-fluid">
+        <div id="footer-content" class="row no-gutters">
+            <div class="col-12 col-md-8 d-flex">
+                <div id="footer-logo-wrapper" class="d-flex align-items-lg-center">
+                    <img src="~/images/site/logo.png" class="image-logo" />
+                </div>
+                <div id="footer-content" class="pl-2">
+                    <label class="head">Information</label>
+                    <table id="info-table">
+                        <tr>
+                            <td><u>Address</u></td>
+                        </tr>
+                        <tr>
+                            <td>8-2-415, 1-5, Rd Number 4, Green Valley, Banjara Hills, Hyderabad, Telangana
+                                500034
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            @* <div class="col-12 col-md-4 mt-2 mt-md-0">
+                <div id="social-icons" class="">
+                <label class="head">Follow Us On</label>
+                <div class="d-flex flex-column flex-sm-row">
+                <a href="#" class="facebook ml-2"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                <a href="#" class="instagram ml-2"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                </div>
+                </div>
+                </div> *@
+        </div>
+    </section>
     <div id="copyright-bar">&#64;2021 All Rights Reserved</div>
-
     <script>
         var IsOpen = false;
         $('#nav-icon1').click(function (e) {

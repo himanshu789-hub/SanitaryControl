@@ -61,6 +61,7 @@ ul#menu ul {
 #nav-icon1.open {
 	transform: translate(-59px, -29px);
 	z-index: 3;
+	position: fixed;
 }
 #navigation {
 	display: flex;
@@ -247,7 +248,7 @@ nav li.parent > ul#child.showList {
 		top: 20px;
 	}
 	#slider-wrapper {
-		height: 60vh;
+		height: 56.25vw;
 	}
 }
 #header {
@@ -260,11 +261,14 @@ nav li.parent > ul#child.showList {
 }
 #logo img {
 	width: 94px;
+}
+#logo>.logo-wrapper
+{
 	padding: 0.4em;
 }
 
+
 #slider-wrapper {
-	height: 40vh;
 	position: relative;
 	overflow: hidden;
 	z-index: 0;
@@ -273,6 +277,7 @@ nav li.parent > ul#child.showList {
 	position: absolute;
 	top: 50%;
 	height: 10%;
+	max-height: 45px;
 	cursor: pointer;
 	transform: translateY(-50%);
 	padding: 0.1rem;
@@ -330,15 +335,16 @@ h2 {
 	background-color: var(--foteer-bg-color);
 	color: var(--footer-text-color);
 }
-#footer-logo-wrapper {
-}
 #footer-content img {
 	width: 67px;
 	height: auto;
 	margin: auto;
-	box-shadow: 0px 0px 3px 4px rgba(0, 0, 0, 0.34);
 }
+.image-logo
+{
+		box-shadow: 0px 0px 3px 4px rgba(0, 0, 0, 0.34);
 
+}
 .gmap_canvas {
 	width: 100% !important;
 }
@@ -646,6 +652,11 @@ h6,
 #about-us .head {
 	color: var(--head-color);
 }
+@media screen and (min-width: 992px) {
+	#about-us #slider-wrapper {
+		height: 400px;
+	}
+}
 .bottom-line {
 	position: relative;
 }
@@ -678,7 +689,7 @@ h6,
 
 #slider-wrapper {
 	width: 100%;
-	height: 400px;
+	height: 56.25vw;
 	position: relative;
 	overflow-x: hidden;
 }
@@ -702,6 +713,11 @@ h6,
 }
 #infographics .graphic {
 	margin: 4px;
+	min-width:180px;
+}
+#area
+{
+	min-height:calc(100vh - 100px);
 }
 @media screen and (max-width: 200px) {
 }
@@ -721,7 +737,6 @@ h6,
 
 @media screen and (max-width: 400px) {
 	#slider-wrapper {
-		height: 200px;
 	}
 }
 
@@ -863,7 +878,7 @@ h6,
 		align-items: flex-end !important;
 	}
 	#slider-wrapper {
-		height: 80vh;
+		height: 56.25vw;
 	}
 	.edge-over {
 		overflow-y: scroll !important;
@@ -962,6 +977,7 @@ h6,
 }
 .itemHolder > .title {
 	text-align: center;
+	font-size:0.7rem;
 }
 .itemHolder > .imageHolder {
 	height: 80%;
@@ -986,13 +1002,22 @@ h6,
 	border-radius: 30px;
 	background: #ffffffdb;
 	color: black;
-	transition: all 1s ease-in-out;
+	transition-property: transform,background-color;
+	transition-duration: 0.5s;
 	outline: none;
-	bottom: 0%;
+	transform: translateY(200px);
+	display: inline-block;
 }
 .itemHolder > .imageHolder:hover > .link {
 	opacity: 1;
-	bottom: 5%;
+	transform: translateY(130px);
+	font-size:0.6rem;
+}
+.itemHolder > .imageHolder>.link:hover
+{
+	background-color:#97cecee3;
+	color:white;
+
 }
 .itemHolder > .imageHolder:hover > img {
 	-webkit-transform: scale(1.2);
@@ -1002,6 +1027,18 @@ h6,
 	transform: scale(1.2);
 	filter: opacity(50%);
 }
+@media screen and (max-width:360px)
+{
+   #Item-wrapper{
+	   display: flex;
+   }
+   #Item-wrapper>.itemHolder
+   {
+	   flex:1 1 50%;
+   }
+}
+
+
 @media (orientation: portrait) {
 	.itemHolder {
 		width: 50%;
@@ -1028,6 +1065,211 @@ h6,
 	min-width: 100px;
 	max-width: 150px;
 }
+body.lb-disable-scrolling {
+	overflow: hidden;
+}
+
+.lightboxOverlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	background-color: black;
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+	opacity: 0.8;
+	display: none;
+}
+
+.lightbox {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	z-index: 10000;
+	text-align: center;
+	line-height: 0;
+	font-weight: normal;
+	outline: none;
+}
+
+.lightbox .lb-image {
+	display: block;
+	height: auto;
+	max-width: inherit;
+	max-height: none;
+	border-radius: 3px;
+
+	/* Image border */
+	border: 4px solid white;
+}
+
+.lightbox a img {
+	border: none;
+}
+
+.lb-outerContainer {
+	position: relative;
+	*zoom: 1;
+	width: 250px;
+	height: 250px;
+	margin: 0 auto;
+	border-radius: 4px;
+
+	/* Background color behind image.
+     This is visible during transitions. */
+	background-color: white;
+}
+
+.lb-outerContainer:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+.lb-loader {
+	position: absolute;
+	top: 43%;
+	left: 0;
+	height: 25%;
+	width: 100%;
+	text-align: center;
+	line-height: 0;
+}
+
+.lb-cancel {
+	display: block;
+	width: 32px;
+	height: 32px;
+	margin: 0 auto;
+	background: url(/images/site/loading.gif) no-repeat;
+}
+
+.lb-nav {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 10;
+}
+
+.lb-container > .nav {
+	left: 0;
+}
+
+.lb-nav a {
+	outline: none;
+	background-image: url('data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+}
+
+.lb-prev,
+.lb-next {
+	height: 100%;
+	cursor: pointer;
+	display: block;
+}
+
+.lb-nav a.lb-prev {
+	width: 34%;
+	left: 0;
+	float: left;
+	background: url(/images/site/prev.png) left 48% no-repeat;
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+	opacity: 0;
+	-webkit-transition: opacity 0.6s;
+	-moz-transition: opacity 0.6s;
+	-o-transition: opacity 0.6s;
+	transition: opacity 0.6s;
+}
+
+.lb-nav a.lb-prev:hover {
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+	opacity: 1;
+}
+
+.lb-nav a.lb-next {
+	width: 64%;
+	right: 0;
+	float: right;
+	background: url(/images/site/next.png) right 48% no-repeat;
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+	opacity: 0;
+	-webkit-transition: opacity 0.6s;
+	-moz-transition: opacity 0.6s;
+	-o-transition: opacity 0.6s;
+	transition: opacity 0.6s;
+}
+
+.lb-nav a.lb-next:hover {
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+	opacity: 1;
+}
+
+.lb-dataContainer {
+	margin: 0 auto;
+	padding-top: 5px;
+	*zoom: 1;
+	width: 100%;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.lb-dataContainer:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+.lb-data {
+	padding: 0 4px;
+	color: #ccc;
+}
+
+.lb-data .lb-details {
+	width: 85%;
+	float: left;
+	text-align: left;
+	line-height: 1.1em;
+}
+
+.lb-data .lb-caption {
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 1em;
+}
+
+.lb-data .lb-caption a {
+	color: #4ae;
+}
+
+.lb-data .lb-number {
+	display: block;
+	clear: left;
+	padding-bottom: 1em;
+	font-size: 12px;
+	color: #999999;
+}
+
+.lb-data .lb-close {
+	display: block;
+	float: right;
+	width: 30px;
+	height: 30px;
+	background: url('/images/site/close.png') top right no-repeat;
+	text-align: right;
+	outline: none;
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
+	opacity: 0.7;
+	-webkit-transition: opacity 0.2s;
+	-moz-transition: opacity 0.2s;
+	-o-transition: opacity 0.2s;
+	transition: opacity 0.2s;
+}
+
+.lb-data .lb-close:hover {
+	cursor: pointer;
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+	opacity: 1;
+}
 
 #first-image-holder {
 	height: 300px;
@@ -1052,6 +1294,92 @@ span.text {
 }
 #first-image-holder > img {
 	max-height: 300px;
+}
+#lightbox-gallery a {
+	width: 100px;
+	display: block;
+}
+#lightbox-gallery img:hover {
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+	opacity: 0.8;
+}
+#lightbox-gallery {
+	overflow-x: scroll;
+}
+#lightbox-gallery img {
+	min-width: 100px;
+	min-height: 60px;
+}
+
+::-webkit-scrollbar {
+	height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+#lightbox-wrapper {
+	overflow: hidden;
+  width: 100%;
+}
+
+@media screen and (min-width: 411px) {
+	.lb-next,
+	.lb-prev {
+		opacity: 1 !important;
+	}
+}
+
+.price {
+	overflow: hidden;
+	overflow: hidden;
+	vertical-align: middle;
+	margin-left: 110px;
+}
+.price-text {
+	position: relative;
+	top: 80px;
+	transition: all 0s ease-in-out;
+}
+.price.show .price-text {
+	top: 0px;
+
+	transition: all 1s ease-in-out;
+}
+.price.show .price-text::before {
+	content: '\f156';
+	font-family: 'FontAwesome';
+}
+
+#first-image-holder {
+	height: 300px;
+	position: relative;
+	padding: 10px;
+}
+ #product-info-wrapper
+{
+
+}
+#product-info-wrapper .product-info,#product-info-wrapper .product-info select
+{
+	font-size:0.7rem !important;
+
+}
+#product-info-wrapper .product-info>label
+{
+	width:100px;
 }
 #lightbox-gallery a {
 	width: 100px;
@@ -1105,7 +1433,7 @@ span.text {
 	overflow: hidden;
 	vertical-align: middle;
 	margin-left: 110px;
-	font-size: 4rem;
+	font-size: 1.3rem;
 }
 .price-text {
 	position: relative;
@@ -1121,6 +1449,10 @@ span.text {
 	font-family: 'FontAwesome';
 }
 
+.breadcrumb-item
+{
+	font-size:0.7rem;
+}
 .breadcrumb li a {
 	color: black;
 	z-index: 3;
@@ -1161,6 +1493,7 @@ span.text {
 		display: none !important;
 	}
 }
+
 
 html {
 	font-size: 19px;

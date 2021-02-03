@@ -38,12 +38,12 @@ export function BuildNavigation() {
 			if ($(window).width() > 992) {
 				const subMenu = $(this).find('>ul#child');
 				const windowHeight = window.innerHeight;
-				const offSetLeft = $(subMenu).offset().left;
-				const width = $(subMenu).width();
+				const offSetLeft = subMenu.offset().left;
+				const width = subMenu.innerWidth();
 				const parentMenu = $(this).parent();
-				const parentWidth = $(this).width();
-				const offSetTop = $(subMenu).offset().top;
-				const height = $(subMenu).height();
+				const parentWidth = $(parentMenu).width();
+				const offSetTop = subMenu.offset().top;
+				const height = subMenu.height();
 
 				if (offSetTop + height > windowHeight && !$(subMenu).hasClass('adjusted')) {
 					if (height == windowHeight) $(subMenu).css('top', `-${offSetTop}px`);
@@ -54,8 +54,9 @@ export function BuildNavigation() {
 							.addClass('edge-over');
 					$(subMenu).addClass('adjusted');
 				}
-				if (offSetLeft + width > $(window).innerWidth()) {
-					$(subMenu).css({ right: `100%` });
+				if (offSetLeft + width > $(window).innerWidth() && !subMenu.hasClass('horizontallyAdjusted')) {
+					$(subMenu).css({ left: `-${Math.abs(subMenu.width() - 10)}px` });
+					subMenu.addClass('horizontallyAdjusted');
 				}
 			}
 		});
@@ -64,11 +65,12 @@ export function BuildNavigation() {
 			clearInterval(intervalId);
 			intervalId = setTimeout(function () {
 				$('ul#menu ul#child').attr('style', '');
+				if ($(window).innerWidth() < 992) {
+					$('ul#menu li.parent.active').removeClass('active')
+				}
 			}, 500);
 		});
-		$('nav ul#menu').mouseleave(function (e) {
-			$('li.parent.active').removeClass('active');
-		});
+
 		$('nav li.parent span.expand').click(function (e) {
 			const li = $(this).parents('li.parent').first();
 			const level = li.data('level');
@@ -88,12 +90,12 @@ export function BuildNavigation() {
 			subMenu.toggleClass('showList');
 			li.find('>span>span.expand>i').toggleClass('fa-angle-up');
 
-			if ((level == 0 && window.innerWidth <= 992)) {
+			if (level == 0 && window.innerWidth <= 992) {
 				if (!subMenu.hasClass('showList')) $('nav ul.showList').removeClass(['showList']).parent().removeClass('active');
 			}
 			e.stopPropagation();
 			e.preventDefault();
-			console.log('Is Propagation Stopped : ',e.isPropagationStopped());
+			console.log('Is Propagation Stopped : ', e.isPropagationStopped());
 		});
 	}
 

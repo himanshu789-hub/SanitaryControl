@@ -1,6 +1,6 @@
 import * as $ from 'jquery';
-export function removeControls(){
-   $('.control').remove()
+export function removeControls() {
+	$('.control').remove();
 }
 export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 	if (!$) {
@@ -26,7 +26,7 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 	}
 
 	const slider = {
-		index: 0,
+		index: -1,
 		length: -1,
 		touchmoveX: 0,
 		touchStartX: 0,
@@ -92,28 +92,36 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 			document.onmousemove = null;
 		},
 		moveSlider: function (position) {
-			if (slider.index == 0 || slider.index == slider.length - 1) applyAnimaton();
+			if (slider.index == -1 || slider.index == slider.length - 1) applyAnimaton();
 
 			if (position == 1) {
 				if (slider.index < slider.length - 1) {
+					console.log('Before Index : ', slider.index);
+
 					slider.index++;
 					$(sliderIdentifier).css('transform', `translateX(${-(slider.index + 1) * slider.slideWidth}px)`);
+					console.log('After Index : ', slider.index);
 				} else {
 					$(sliderIdentifier).css('transform', `translateX(${-(slider.length + 1) * slider.slideWidth}px)`);
 					setTimeout(() => {
 						$(sliderIdentifier).css({ transition: 'unset', transform: `translateX(-${slider.slideWidth}px)` });
 					}, slider.intervalInMs / 4);
-					slider.index = 0;
+					slider.index = -1;
 				}
 			} else if (position == -1) {
 				if (slider.index > 0) {
+					console.log('Back Before Index : ', slider.index);
+
 					$(sliderIdentifier).css('transform', `translateX(${-slider.index * slider.slideWidth}px)`);
+
 					slider.index--;
 				} else {
-					$(sliderIdentifier).css('transform', `translateX(${0}px)`);
+					console.log('Back Before Index : ', slider.index);
+
+					$(sliderIdentifier).css('transform', `translateX(0px)`);
 					slider.index = slider.length - 1;
 					setTimeout(() => {
-						$(sliderIdentifier).css({ transition: 'unset', transform: `translateX(${-slider.length * slider.slideWidth}px)` });
+						$(sliderIdentifier).css({ transition: 'unset', transform: `translateX(-${slider.length * slider.slideWidth}px)` });
 					}, slider.intervalInMs / 4);
 				}
 			}

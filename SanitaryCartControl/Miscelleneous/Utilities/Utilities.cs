@@ -1,18 +1,18 @@
 using SanitaryCartControl.Core.Entities.Enums;
 namespace SanitaryCartControl.Miscellaneous.Utilities
 {
-  public sealed class Utilities
+    public sealed class Utilities
     {
-        public static string GetActionLinkForCategoryOrProduct(int Id,bool IsEndCategory,bool IsProduct)
+        public static string GetActionLinkForCategoryOrProduct(int Id, bool IsEndCategory, bool IsProduct)
         {
-            if(!IsProduct)
+            if (!IsProduct)
             {
-                    return $"/Item/Get?IsEndcategory={IsEndCategory}&CategoryId={Id}&Page=0";
-                
+                return $"/Item/Get?IsEndcategory={IsEndCategory}&CategoryId={Id}&Page=0";
+
             }
             return $"/Item/GetProduct/{Id}?Page=0";
         }
-       public static string GetAttributeNameByType(byte type)
+        public static string GetAttributeNameByType(byte type)
         {
             string result = "";
             switch (type)
@@ -26,15 +26,18 @@ namespace SanitaryCartControl.Miscellaneous.Utilities
                 case ((byte)ProductType.TypeVaribale):
                     result = "Type";
                     break;
+                case ((byte)ProductType.MaterialVariable):
+                    result = "Material";
+                    break;
                 default:
                     break;
             }
             return result;
-        
+
         }
         public static string InsertImageIfNull(string imagePath)
         {
-            return imagePath==null?"/images/site/image-not-found.png":imagePath;
+            return imagePath == null ? "/images/site/image-not-found.png" : imagePath;
         }
     }
 }

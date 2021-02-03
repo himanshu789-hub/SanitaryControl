@@ -113,7 +113,7 @@ namespace SanitaryCartControl.Areas.Miscellaneous
         {
             int breadcrumbLength = (category.Categories == null ? 0 : category.Categories.Count()) + 1;
             StringBuilder breadcrumbBuilder = new StringBuilder();
-
+            if(category.Categories!=null)          
             foreach (var item in category.Categories.Reverse())
             {
                 breadcrumbBuilder.Append(item.Title).Append(seperator+" ");
