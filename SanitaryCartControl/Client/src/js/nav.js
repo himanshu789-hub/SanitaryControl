@@ -34,7 +34,7 @@ export function BuildNavigation() {
 		$('nav ul#child>li').click(function (e) {
 			e.stopPropagation();
 		});
-		$('nav li.parent:not([data-level="0"])').on('mouseover',function () {
+		$('nav li.parent:not([data-level="0"])').on('mouseover', function () {
 			if ($(window).width() > 992) {
 				const subMenu = $(this).find('>ul#child');
 				const windowHeight = window.innerHeight;
@@ -69,7 +69,6 @@ export function BuildNavigation() {
 		$('nav ul#menu').mouseleave(function (e) {
 			$('li.parent.active').removeClass('active');
 		});
-
 		$('nav li.parent span.expand').click(function (e) {
 			const li = $(this).parents('li.parent').first();
 			const level = li.data('level');
@@ -80,15 +79,21 @@ export function BuildNavigation() {
 				return $(value).find('>ul#child.showList').length > 0;
 			});
 			array.forEach(element => {
-				$(element).find('>ul#child.showList').removeClass('showList');
+				$(element).find('>ul#child.showList').removeClass('showList active');
 				$(element).find('>span>span.expand>i').removeClass('fa-angle-up');
+				$(element).removeClass('active');
 			});
-
-			li.find('>ul#child').first().toggleClass('showList');
+			const subMenu = li.find('>ul#child');
 			li.toggleClass('active');
+			subMenu.toggleClass('showList');
 			li.find('>span>span.expand>i').toggleClass('fa-angle-up');
+
+			if ((level == 0 && window.innerWidth <= 992)) {
+				if (!subMenu.hasClass('showList')) $('nav ul.showList').removeClass(['showList']).parent().removeClass('active');
+			}
 			e.stopPropagation();
 			e.preventDefault();
+			console.log('Is Propagation Stopped : ',e.isPropagationStopped());
 		});
 	}
 

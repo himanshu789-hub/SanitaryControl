@@ -177,6 +177,8 @@ nav ul#menu li {
 	box-sizing: border-box;
 	color: var(--menu-color);
 	padding: 0;
+
+	height: max-content;
 }
 nav li[data-level='0'] {
 	padding: 0px 23px;
