@@ -558,12 +558,5 @@ $(elements.breadcrumpLabel).text(withoutRado).removeClass("disabled");
     });
 </script>
 
-@section Styles
-{
-<link href="~/lib/quill/quill.snow.min.css" rel="stylesheet"/>
-}
-@section Scripts{
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/lib/quill/quill.min.js"></script>   
-}
+<partial name="_IncludeAssets.cshtml"></partial>
+

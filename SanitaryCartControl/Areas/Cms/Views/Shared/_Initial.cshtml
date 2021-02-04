@@ -9,23 +9,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,300" rel="stylesheet">
   
-    <environment include="Production">
+    <environment exclude="Developmemnt">
+        
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>   
+        <link rel="stylesheet" href="~/css/site.min.css"/>   
     </environment>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/site.css"/>
         <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>   
    </environment>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-   
     @RenderSection("Scripts", required: false)
     @RenderSection("Styles",false)
 </head>
@@ -55,7 +55,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
 
-   <environment include="Production">
+   <environment exclude="Development">
    <script src="~/js/site.min.js" asp-append-version="true"></script>
    </environment>
 </body>

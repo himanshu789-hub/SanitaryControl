@@ -210,7 +210,8 @@
 }
 
 
-<script>
+<script type="text/javascript">
+
     var elements = {
         textAreaId:'#Product_Description'
     }
@@ -602,7 +603,7 @@ $(".input-number").keydown(function (e) {
         $(elements.productAttriuttesSection).append(attributeWrapper);
     }
 </script>
-<script>
+<script type="text/javascript">
     $(elements.dateField).removeAttr('data-val-required')
     $(elements.dateUpdated).removeAttr('data-val-required')
     $('[type="submit"]').click(function(e){
@@ -611,15 +612,24 @@ $(".input-number").keydown(function (e) {
     });
 </script>
 
+
+<partial name="_IncludeAssets.cshtml"></partial>
+
 @section Styles
                {
-                 <link href="~/lib/quill/quill.snow.min.css" rel="stylesheet"/>
+                 <environment include="Development"> 
                  <link href="~/lib/bootstrap-toggle/bootstrap-toggle.min.css" rel="stylesheet"/>
+                 </environment>  
+                 <environment exclude="Development">
+                <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+                </environment>
                }
 @section Scripts
 {
+<environment exclude="Development">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+</environment>
+<environment include="Development">
 <script src="~/lib/bootstrap-toggle/bootstrap-toggle.min.js"></script>
-<script src="~/lib/quill/quill.min.js"></script>   
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</environment>
 }

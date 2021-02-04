@@ -1,5 +1,10 @@
 import 'bootstrap';
-import 'jquery'
-import 'jquery-validation'
-import 'jquery-validation-unobtrusive'
+import * as $ from 'jquery';
+window.$ = $;
 
+import  'jquery-validation';
+import 'jquery-validation-unobtrusive';
+import './../../css/site.css';
+import {selectMenu} from './../cmssite';
+
+window.selectMenu = selectMenu;

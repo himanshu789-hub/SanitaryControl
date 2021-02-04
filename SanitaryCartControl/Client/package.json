@@ -27,8 +27,8 @@
         "webpack-merge": "^5.7.3"
     },
     "scripts": {
-        "build": "rimraf ./../wwwroot/dist && webpack --config webpack.dev.js",
         "build:prod": "rimraf ./../wwwroot/dist && webpack --config webpack.prod.js",
+        "build": "rimraf ./../wwwroot/dist && webpack --config webpack.dev.js",
         "watch": "rimraf ./../wwwroot/dist && webpack --watch --config webpack.dev.js && gulp watch"
     }
 }

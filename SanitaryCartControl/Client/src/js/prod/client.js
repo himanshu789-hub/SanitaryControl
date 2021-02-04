@@ -1,1 +1,10 @@
+import { BuildNavigation } from './../nav';
+import { activateBuildItems } from './../item';
+import { buildSlider, removeControls } from './../slider';
+import lightbox from './../lightbox';
+window.lightbox  = lightbox;
+window.buildSlider = buildSlider;
+window.activateBuildItems = activateBuildItems;
+window.removeControls = removeControls;
+window.buildNavigation = BuildNavigation;
 import './../../css/clientsite.css';

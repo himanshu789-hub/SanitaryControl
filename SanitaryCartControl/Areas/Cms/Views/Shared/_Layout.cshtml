@@ -10,14 +10,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,300" rel="stylesheet">
     
-    <environment include="Production">
-    <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+    <environment exclude="Development">
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+        integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script> 
+       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">        
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
     </environment>
  
-    <environment names="Development">
+    <environment include="Development">
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -26,7 +28,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    
+
     @RenderSection("Styles",false)
     @RenderSection("Scripts", required: false)
 </head>
@@ -162,14 +164,9 @@
            @Constants.PortalName
         </div>
     </footer>
-   
-    <environment include="Development">
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-
-   <environment include="Production">
-   <script src="~/js/site.min.js" asp-append-version="true"></script>
-   </environment>
+   <script type="text/javascript">
+       selectMenu();
+   </script>
 @RenderSection("BodyInvokedScripts",false)
 </body>
 

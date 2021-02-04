@@ -67,23 +67,22 @@ namespace SanitaryCartControl.Extensions
             foreach (var admin in adminUsers)
             {
 
-                if (userManager.Users.FirstOrDefault(e => e.FirstName.Equals(firstname) && e.LastName.Equals(lastname)) == null)
+                if (userManager.Users.FirstOrDefault(e => e.FirstName.Equals(admin.FirstName) && e.LastName.Equals(admin.LastName)) == null)
                 {
                     ApplicationUser user = new ApplicationUser()
                     {
                         LastName = admin.LastName,
-                        FirstName = firstname,
-                        UserName = userName,
+                        FirstName = admin.FirstName,
+                        UserName = admin.UserName,
                         ImagePath = Path.Combine(@"/images/site", "administration.svg")
                     };
-                    var createResult = await userManager.CreateAsync(user, "NL@1crt8");
-                    if (createResult.Succeeded)
+                    var createdAdmin = await userManager.CreateAsync(user, admin.Password);
+                    if (createdAdmin.Succeeded)
                     {
                         var roleUser = await userManager.AddToRoleAsync(user, ApplicationRoles.Administration);
                         if (roleUser.Succeeded)
                             System.Console.WriteLine("Admin Created and Assigned");
                     }
-
                 }   
             }
         }
