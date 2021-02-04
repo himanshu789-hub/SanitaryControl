@@ -10,7 +10,7 @@
   foreach (var item in Model.CategoryInfos)
   {
       <div class="itemHolder">
-              <a class="imageHolder" href='@Utilities.GetActionLinkForCategoryOrProduct(item.Id,item.HoldChildren,false)'>
+              <a class="imageHolder" href='@Utilities.GetActionLinkForCategoryOrProduct(item.Id,!item.HoldChildren,false)'>
                 <img src="@item?.ImagePath"/>
               </a>
               <text class="title">@item.Title</text>
@@ -44,8 +44,11 @@ else
   }
   <script type="text/javascript"> 
     window.categoryId = @Model.ParentId;
-    window.productRequestUrl =@Json.Serialize(@Url.Action("Get","Item",new {Id=""}));       
+    window.productRequestUrl =@Json.Serialize(@Url.Action("Get","Item",new {Id=""}));      
+    if(activateBuildItems) 
     activateBuildItems();
+    else
+    console.error('Item Loader Not Added')
   </script>
 }
 </div>

@@ -18617,8 +18617,8 @@ function activateBuildItems() {
 			itemHolder.append([imageHolder, text]);
 			jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper).append(itemHolder);
 		});
-
-		jquery__WEBPACK_IMPORTED_MODULE_0__(body).scroll(function () {
+         
+		jquery__WEBPACK_IMPORTED_MODULE_0__(window).scroll(function () {
 			debugger;
 			
 				if (jquery__WEBPACK_IMPORTED_MODULE_0__(window).scrollTop() == jquery__WEBPACK_IMPORTED_MODULE_0__(document).height() - jquery__WEBPACK_IMPORTED_MODULE_0__(window).height()) {

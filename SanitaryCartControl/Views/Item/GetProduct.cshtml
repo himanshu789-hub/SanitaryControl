@@ -14,7 +14,7 @@
                 productBreadcrumb[index] = new BreadcrumbInfo(Model.Name,Utilities.GetActionLinkForCategoryOrProduct(Model.Id,false,true));
 
 }
-@Html.Partial("_Breadcrumb",productBreadcrumb)
+<partial name="_Breadcrumb" model="productBreadcrumb"></partial>
     <div class="row no-gutters">
         <div class="col-sm-12 col-md-5 d-flex flex-column p-1 pt-sm-2 pl-sm-2" id="lightbox-wrapper">
             <div class="d-flex justify-content-center align-items-center" id="first-image-holder" onclick="show();">
@@ -24,9 +24,9 @@
                 <span class="text">Click To Expand</span>
             </div>
             <div class="d-flex justify-content-start align-items-center" id="lightbox-gallery">
-               @if(Model.Images!=null && Model.Images.Count()>2)
+               @if(Model.Images!=null && Model.Images.Count()>0)
                {
-@foreach (var item in Model.Images.Where(e=>e!=Model.Images.First()))
+                foreach (string item in Model.Images)
                 {
                 <a class="m-1" href="@item" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>       
                 }
@@ -96,7 +96,7 @@
     </div>
     @section HeadInvokeScripts
     {
-       <script src="/lib/lightbox/dist/js/lightbox-plus-jquery.min.js"></script>
+       <script src="/lib/lightbox/dist/js/lightbox-plus-jquery.min.js" type="text/javascript"></script>
     }
     @section Styles
     {
@@ -116,9 +116,18 @@
             }, 100)
 
         }
-       $(lightbox.option({
+        if(lightbox)
+        {
+            console.log('lightbox present')
+         $(window).on('load',function(){
+         lightbox.option({
             'resizeDuration': 200,
             'wrapAround': false
-        }));
+           });
+         });   
+        }
+        else
+        console.error('lightbox not exists');
+        
         }
     </script>

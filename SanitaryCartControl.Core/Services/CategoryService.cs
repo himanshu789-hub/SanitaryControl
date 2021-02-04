@@ -153,10 +153,6 @@ namespace SanitaryCartControl.Core.Services
                 return GetTree(CategoryBLLs, null);
             }
         }
-        bool IsEndPoint(IEnumerable<Category> categories, int[] SeriesHolderIds, int ItemId)
-        {
-            return categories.Where(e => e.ParentId == ItemId).Count() > 0 ? false : (!SeriesHolderIds.Contains(ItemId));
-        }
         IEnumerable<CategoryBLL> GetTree(IEnumerable<CategoryBLL> categories, int? parentId = null)
         {
             return categories.Where(e => e.ParentId == parentId).Select(e => new CategoryBLL()

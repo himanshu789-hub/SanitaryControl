@@ -31,8 +31,8 @@ export function activateBuildItems() {
 			itemHolder.append([imageHolder, text]);
 			$(elements.ItemWrapper).append(itemHolder);
 		});
-
-		$(body).scroll(function () {
+         
+		$(window).scroll(function () {
 			debugger;
 			
 				if ($(window).scrollTop() == $(document).height() - $(window).height()) {
