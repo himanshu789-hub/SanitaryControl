@@ -81,7 +81,7 @@ namespace SanitaryCartControl.Areas.Controllers
             }
             return View(Result);
         }
-        [HttpPost]
+        [HttpGet]
         public JsonResult CheckName(string name)
         {
             var result = _brandService.IsNameExists(name);

@@ -1,4 +1,4 @@
-export  function selectMenu() {
+export const selectMenu =  function () {
 	const pathName = location.pathname;
 	const controller = pathName.split('/')[1];
 	const selector = '#' + controller;

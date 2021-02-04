@@ -68,7 +68,8 @@ namespace SanitaryCartControl
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-           app.UseStaticFiles();
+            app.UseStaticFiles();
+            
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();

@@ -3,35 +3,36 @@
 @inject UserManager<ApplicationUser> _userManager;
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@Constants.PortalName</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,300" rel="stylesheet">
-    
+
     <environment exclude="Development">
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
-        integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
-       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">        
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+        <script></script>    
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script type="text/javascript" src="~/dist/cms.min.entry.js"></script>
     </environment>
- 
+    
     <environment include="Development">
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <link rel="stylesheet" href="~/css/site.css"  asp-append-version="true"/>
+        <script type="text/javascript" src="~/dist/cms.entry.js"></script>
     </environment>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
     @RenderSection("Styles",false)
-    @RenderSection("Scripts", required: false)
+    
+    @RenderSection("HeadInvokeScripts", required: false)
+   
 </head>
+
 <body id="page">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
@@ -55,18 +56,19 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-2 collapse show d-md-flex bg-light p-0 min-vh-100" id="sidebar">
-                <ul class="nav flex-column flex-nowrap overflow-hidden  main-ul">
+                <ul class="nav flex-column flex-nowrap overflow-hidden  main-ul bg-display">
                     <li class="nav-item  ">
                         <a class="nav-link text-truncate" asp-area="Cms" asp-controller="Home" asp-action="Index">
                             <i class="fa fa-home"></i>
                             <span class="d-inline">Home</span></a>
                     </li>
-                      <li class="nav-item  ">
-                        <a class="nav-link text-truncate" asp-area="Cms" asp-controller="Category" asp-action="GetNonSeriesHolder">
+                    <li class="nav-item  ">
+                        <a class="nav-link text-truncate" asp-area="Cms" asp-controller="Category"
+                            asp-action="GetNonSeriesHolder">
                             <i class="fa fa-sitemap"></i>
                             <span class="d-inline">View Category</span></a>
                     </li>
-                    <hr style=" width: 94%;z-index: 1;border: 1px solid white;"/>
+                    <hr style=" width: 94%;z-index: 1;border: 1px solid white;" />
                     <li class="nav-item ">
                         <a class="nav-link collapsed text-truncate" data-target="#Brand" data-toggle="collapse">
                             <i class="fa fa-building"></i>
@@ -74,13 +76,15 @@
                         <div class="collapse" id="Brand" aria-expanded="false">
                             <ul class="flex-column pl-4 nav sub-ul">
                                 <li class="nav-item">
-                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Add" asp-controller="Brand">
+                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Add"
+                                        asp-controller="Brand">
                                         <i class="fa fa-plus-square" aria-hidden="true"></i><span>Add</span>
                                     </a>
 
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="GetAll" asp-controller="Brand">
+                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="GetAll"
+                                        asp-controller="Brand">
                                         <i class="fa fa-list-ol" aria-hidden="true"></i> <span>View All</span>
                                     </a>
                                 </li>
@@ -94,12 +98,14 @@
                         <div class="collapse" id="Product" aria-expanded="false">
                             <ul class="flex-column pl-4 nav sub-ul">
                                 <li class="nav-item">
-                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Add" asp-controller="Product">
+                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Add"
+                                        asp-controller="Product">
                                         <i class="fa fa-plus-square" aria-hidden="true"></i> <span>Add</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Search" asp-controller="Product">
+                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Search"
+                                        asp-controller="Product">
                                         <i class="fa fa-search-plus" aria-hidden="true"></i> <span>Search</span>
                                     </a>
                                 </li>
@@ -113,12 +119,14 @@
                         <div class="collapse" id="Series" aria-expanded="false">
                             <ul class="flex-column pl-4 nav sub-ul">
                                 <li class="nav-item">
-                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Add" asp-controller="Series">
+                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Add"
+                                        asp-controller="Series">
                                         <i class="fa fa-plus-square" aria-hidden="true"></i> <span>Add</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="ViewAll" asp-controller="Series">
+                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="ViewAll"
+                                        asp-controller="Series">
                                         <i class="fa fa-search-plus" aria-hidden="true"></i> <span>Find</span>
                                     </a>
                                 </li>
@@ -132,12 +140,13 @@
                         <div class="collapse" id="Account" aria-expanded="false">
                             <ul class="flex-column pl-4 nav sub-ul">
                                 <li class="nav-item">
-                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Register" asp-controller="Account">
+                                    <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="Register"
+                                        asp-controller="Account">
                                         <i class="fa fa-user-plus" aria-hidden="true"></i><span>Add</span>
                                     </a>
                                 </li>
-                                <li class="nav-item"> <a class="nav-link collapsed py-1" asp-area="Cms" asp-action="ViewAll"
-                                        asp-controller="Account">
+                                <li class="nav-item"> <a class="nav-link collapsed py-1" asp-area="Cms"
+                                        asp-action="ViewAll" asp-controller="Account">
                                         <i class="fa fa-users" aria-hidden="true"></i> <span>View All</span>
                                     </a>
                                 </li>
@@ -146,7 +155,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div class="col pt-2">
                 <label class="body-header">
                     <img src="/images/site/icon.png" width="50px" height="50px" class="pr-1" /> <span
@@ -161,13 +170,13 @@
     </div>
     <footer class="border-top footer text-muted">
         <div class="container">
-           @Constants.PortalName
+            @Constants.PortalName
         </div>
     </footer>
-   <script type="text/javascript">
-       selectMenu();
-   </script>
-@RenderSection("BodyInvokedScripts",false)
+    <script type="text/javascript">
+        selectMenu();
+    </script>
+    @RenderSection("BodyInvokeScripts",false)
 </body>
 
 </html>

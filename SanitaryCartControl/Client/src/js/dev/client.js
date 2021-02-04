@@ -9,5 +9,7 @@ window.activateBuildItems = activateBuildItems;
 window.removeControls = removeControls;
 window.buildNavigation = BuildNavigation;
 window.$ = $;
+import { LightBox } from './../lightbox';
+window.lightbox = LightBox();
 import './../../css/clientsite.css';
 console.log('Client Development Bundle Loaded')

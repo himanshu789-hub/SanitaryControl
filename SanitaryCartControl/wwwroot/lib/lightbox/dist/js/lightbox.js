@@ -1,5 +1,6 @@
 import * as $ from 'jquery';
-export const LightBox = function () {
+
+export const Lightbox = function () {
 	function Lightbox(options) {
 		this.album = [];
 		this.currentImageIndex = void 0;
@@ -550,4 +551,4 @@ export const LightBox = function () {
 		}
 	};
 	return new Lightbox();
-};
+}
