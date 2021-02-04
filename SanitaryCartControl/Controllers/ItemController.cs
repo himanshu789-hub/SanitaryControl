@@ -4,7 +4,7 @@ using SanitaryCartControl.DTOModels;
 using SanitaryCartControl.Core.Contracts.Services;
 using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.BLLModels;
-using SanitaryCartControl.Miscellaneous.Struct;
+using SanitaryCartControl.Miscellaneous.Models;
 using SanitaryCartControl.Miscellaneous.Converters;
 using SanitaryCartControl.Miscellaneous.Utilities;
 namespace SanitaryCartControl.Controllers

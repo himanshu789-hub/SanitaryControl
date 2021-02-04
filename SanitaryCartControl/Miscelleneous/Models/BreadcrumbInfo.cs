@@ -1,6 +1,6 @@
-namespace SanitaryCartControl.Miscellaneous.Struct
+namespace SanitaryCartControl.Miscellaneous.Models
 {
-  public struct BreadcrumbInfo
+  public class BreadcrumbInfo
    {
        public  string Name{get;set;}
         public string Link{get;set;}

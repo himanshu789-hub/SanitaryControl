@@ -1,20 +1,21 @@
 @model SanitaryCartControl.Core.Entities.BLLModels.ProductBLL
 @using SanitaryCartControl.Core.Entities.Enums;
 @using SanitaryCartControl.Miscellaneous.Converters;
-@using SanitaryCartControl.Miscellaneous.Struct;
+@using SanitaryCartControl.Miscellaneous.Models;
 @{
      BreadcrumbInfo[] categoryBreadcrumbInfo = Converters.GetBreadcrumbsFromAncestorsBLL(Model.RootPath);
-               BreadcrumbInfo[] productBreadcrumb = new BreadcrumbInfo[categoryBreadcrumbInfo.Length+1];
+     IList<BreadcrumbInfo> breadcrumbs = new List<BreadcrumbInfo>(categoryBreadcrumbInfo);
+     breadcrumbs.Add(new BreadcrumbInfo(Model.Name,Utilities.GetActionLinkForCategoryOrProduct(Model.Id,false,true)));  
+     @* BreadcrumbInfo[] productBreadcrumb = new BreadcrumbInfo[categoryBreadcrumbInfo.Length+1];
                int index = 0;
                foreach(BreadcrumbInfo breadcrumb in categoryBreadcrumbInfo)
                 {
                   productBreadcrumb[index] = categoryBreadcrumbInfo[index];
                   index++;
                 }
-                productBreadcrumb[index] = new BreadcrumbInfo(Model.Name,Utilities.GetActionLinkForCategoryOrProduct(Model.Id,false,true));
-
+                productBreadcrumb[index] = new BreadcrumbInfo(Model.Name,Utilities.GetActionLinkForCategoryOrProduct(Model.Id,false,true)); *@
 }
-<partial name="_Breadcrumb" model="productBreadcrumb"></partial>
+<partial name="_Breadcrumb" model="breadcrumbs"></partial>
     <div class="row no-gutters">
         <div class="col-sm-12 col-md-5 d-flex flex-column p-1 pt-sm-2 pl-sm-2" id="lightbox-wrapper">
             <div class="d-flex justify-content-center align-items-center" id="first-image-holder" onclick="show();">
@@ -24,11 +25,20 @@
                 <span class="text">Click To Expand</span>
             </div>
             <div class="d-flex justify-content-start align-items-center" id="lightbox-gallery">
+               
                @if(Model.Images!=null && Model.Images.Count()>0)
                {
-                foreach (string item in Model.Images)
+                for(byte i=0;i<Model.Images.Count();i++)
                 {
-                <a class="m-1" href="@item" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>       
+                  string item = Model.Images[i];  
+                  if(i==0)
+                  {
+                     <a class="m-1" href="@item" id="first" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>       
+                  } else
+                  {
+                      <a class="m-1" href="@item" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>       
+                  }
+
                 }
                }
                 

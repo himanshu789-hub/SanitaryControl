@@ -76,12 +76,12 @@ namespace SanitaryCartControl.Core.Services
                     cmd.Parameters.Add(paremeter);
                     con.Open();
                     SqlDataReader sqlDataReader = cmd.ExecuteReader();
-                    int count = 0;
+                    int index = 0;
                     if (sqlDataReader.HasRows)
                     {
                         while (sqlDataReader.Read())
                         {
-                            if (count == 0)
+                            if (index == 0)
                             {
                                 ancestorCategoryBLL.IsEndCategory = !sqlDataReader.GetBoolean(1);//true if element has no children
                                 ancestorCategoryBLL.Title = sqlDataReader["Title"] as string;
@@ -95,10 +95,10 @@ namespace SanitaryCartControl.Core.Services
                                     Ancestors = null,
                                     Id = sqlDataReader.GetInt32(0),
                                     Title = sqlDataReader["Title"] as string,
-                                    IsEndCategory = sqlDataReader.GetBoolean(1)
+                                    IsEndCategory = !sqlDataReader.GetBoolean(1)
                                 });
                             }
-                            count++;
+                            index++;
                         }
 
                     }

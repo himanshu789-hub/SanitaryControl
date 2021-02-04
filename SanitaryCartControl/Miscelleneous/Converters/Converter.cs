@@ -3,7 +3,7 @@ using SanitaryCartControl.DTOModels;
 using SanitaryCartControl.Core.Entities.BLLModels;
 using System.Linq;
 using SanitaryCartControl.Miscellaneous.Utilities;
-using SanitaryCartControl.Miscellaneous.Struct;
+using SanitaryCartControl.Miscellaneous.Models;
 namespace SanitaryCartControl.Miscellaneous.Converters
 {
     public sealed class Converters

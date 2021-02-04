@@ -3,7 +3,7 @@ using SanitaryCartControl.DTOModels;
 using SanitaryCartControl.Core.Entities.BLLModels;
 using System.Linq;
 using SanitaryCartControl.Miscellaneous.Utilities;
-using SanitaryCartControl.Miscellaneous.Struct;
+using SanitaryCartControl.Miscellaneous.Models;
 using System.Text;
 
 namespace SanitaryCartControl.Areas.Miscellaneous

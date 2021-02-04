@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using SanitaryCartControl.Core.Entities.BLLModels;
-using SanitaryCartControl.Miscellaneous.Struct;
+using SanitaryCartControl.Miscellaneous.Models;
 namespace SanitaryCartControl.ViewModels
 {
     public class ItemViewModel
