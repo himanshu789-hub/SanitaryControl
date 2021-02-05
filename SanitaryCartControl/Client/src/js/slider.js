@@ -46,9 +46,7 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 			const firstChild = $(sliderIdentifier).children().first();
 			const lastChild = $(sliderIdentifier).children().last().clone();
 			lastChild.insertBefore(`${sliderIdentifier}>*:first-child`);
-
 			firstChild.clone().insertAfter(`${sliderIdentifier}>*:last-child`);
-
 			const lengthAfterClone = slider.length + 2;
 			slider.slideWidth = $(sliderWrapper).width();
 			$(sliderIdentifier).css({
@@ -57,6 +55,24 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 			});
 			applyAnimaton();
 			provideWidthToSlide();
+
+			setTimeout(() => {
+				this.setSourceToDataset();
+			}, 2000);
+		},
+		setSourceToDataset: function () {
+			const images = $(sliderIdentifier).find('>img.lazy');
+			$(sliderIdentifier).on('transitionend', function () {
+				console.log('siding triggers');
+				Array.from(images).forEach(element => {
+					if ($(element).offset().left == $(sliderIdentifier).scrollLeft()) {
+						const dataSrc = $(element).attr('data-src');
+						$(element).attr('src', dataSrc);
+					}
+				});
+				const anyImageWithLazyClass = images.filter(element => $(element).hasClass('lazy')).length > 0;
+				if (!anyImageWithLazyClass) $(sliderIdentifier).off('scroll');
+			});
 		},
 		dragStart: function (e) {
 			if (e.type == 'touchstart') {
@@ -120,8 +136,12 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 
 					$(sliderIdentifier).css('transform', `translateX(0px)`);
 					slider.index = slider.length - 1;
+
 					setTimeout(() => {
-						$(sliderIdentifier).css({ transition: 'unset', transform: `translateX(-${slider.length * slider.slideWidth}px)` });
+						$(sliderIdentifier).css({
+							transition: 'transform .001s ease-in',
+							transform: `translateX(-${slider.length * slider.slideWidth}px)`,
+						});
 					}, slider.intervalInMs / 4);
 				}
 			}
@@ -131,19 +151,23 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 	var resizeIntervalId;
 	$(window).on('resize', function () {
 		clearInterval(resizeIntervalId);
-
+		console.log('resize event fires');
 		window.resizeIntervalId = setTimeout(function () {
 			clearInterval(slider.intervalId);
-			slider.slideWidth - $(window).width();
+			slider.slideWidth = $(sliderWrapper).width();
 			provideWidthToSlide();
+			adjustSlider();
 			applyAutomaticSliderIfRequire();
 		}, 500);
 	});
+	function adjustSlider() {
+		$(sliderIdentifier).css('transform', `translateX(-${(slider.index+1) * slider.slideWidth}px)`);
+	}
 	function provideWidthToSlide() {
 		$(sliderIdentifier)
 			.children()
 			.each(function (index, element) {
-				$(element).css({ width: slider.slideWidth });
+				$(element).css({ 'min-width': slider.slideWidth + 'px' });
 			});
 	}
 	$('#prev').click(function () {

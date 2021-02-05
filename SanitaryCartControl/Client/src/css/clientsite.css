@@ -550,7 +550,7 @@ nav li.parent > ul#child.showList {
 .control {
 	position: absolute;
 	top: 50%;
-	height: 10%;
+	height: 40px;
 	max-height: 45px;
 	cursor: pointer;
 	transform: translateY(-50%);
@@ -974,8 +974,8 @@ h6,
 	position: absolute;
 }
 #slider > img {
-	width: 25%;
 	float: left;
+	display:block;
 	height: 100%;
 }
 #slider:hover {
