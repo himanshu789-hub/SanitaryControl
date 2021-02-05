@@ -33,8 +33,7 @@ export function activateBuildItems() {
 		});
          
 		$(window).scroll(function () {
-			debugger;
-			
+			console.log('scroll Event Fires')
 				if ($(window).scrollTop() == $(document).height() - $(window).height()) {
 			const url = window.itemRequestUrl + `?page=${++page}&IsSubcategory=${window.isSubcategory}&Id=${window.id}`;
 			$.ajax({

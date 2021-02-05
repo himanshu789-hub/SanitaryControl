@@ -476,7 +476,7 @@ $(elements.breadcrumpLabel).text(withoutRado).removeClass("disabled");
         const quantityName = getNameByProperty(index, itemNameandProperties.QunatityProperty);
         const quantityValidator = $('<span data-valmsg-replace="true">')
             .attr("data-valmsg-for", quantityName).addClass("small text-danger");
-        let quantity = $('<input type="text" class="form-control" data-val="true"/>')
+        let quantity = $('<input type="text" class="form-control" data-val="true" disabled/>')
             .val(data[index][itemNameandProperties.QunatityProperty])
             .attr("name", quantityName)
             .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.QunatityProperty}`)

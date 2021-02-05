@@ -359,7 +359,7 @@ namespace SanitaryCartControl.Core.Context
                 entity.Property(e => e.Value)
                     .HasMaxLength(20)
                     .IsUnicode(true);
-
+                
                 entity.HasOne(d => d.AtributeTypeNavigation)
                     .WithMany(p => p.TypeProductQuantities)
                     .HasForeignKey(d => d.AtributeType)

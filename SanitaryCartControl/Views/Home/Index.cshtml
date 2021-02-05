@@ -33,7 +33,7 @@
                 @foreach (var item in Model.BaseCategories)
                 {
                 <div class="category">
-                    <a href="@Utilities.GetActionLinkForCategoryOrProduct(item.Id,item.HoldChildren,false)" class="category-content" style="--background-image:url('./image/faucetjpg.jpg')">
+                    <a href="@Utilities.GetActionLinkForCategoryOrProduct(item.Id,!item.HoldChildren,false)" class="category-content" style="--background-image:url('./image/faucetjpg.jpg')">
                         <span class="text">
                             <p class="name">@item.Title</p>
                             <p class="link">View Products &#187;</p>

@@ -9,10 +9,4 @@ module.exports = merge(common, {
 	},
 	mode: 'development',
 	devtool: 'source-map',
-    plugins:[
-	new webpack.ProvidePlugin({
-		'$':'jquery',
-		'jQuery':'jquery'
-	})
-]
 });

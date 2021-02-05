@@ -60,15 +60,18 @@ namespace SanitaryCartControl
             if (env.IsDevelopment())
             {
                 //ApplicationExtensionsMethods.SeedRolesAndAdmin(serviceProvider,Configuration);
-                app.UseDeveloperExceptionPage();
+                //   app.UseDeveloperExceptionPage();
+                app.UseCustomExceptionHandler();
+
             }
             else
             {
                 app.UseCustomExceptionHandler();
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
+           
+            app.UseHttpsRedirection();
             
             app.UseAuthentication();
             app.UseRouting();

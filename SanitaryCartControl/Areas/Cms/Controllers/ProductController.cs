@@ -40,10 +40,10 @@ namespace SanitaryCartControl.Areas.Controllers
             _productService = productService;
         }
         [HttpGet]
-         public IActionResult Error()
-         {
-             throw new System.Exception();
-         }
+        public IActionResult Error()
+        {
+            throw new System.Exception();
+        }
         [HttpGet]
         public IActionResult GetCategory([FromQuery][BindRequired] int brandId)
         {
@@ -63,11 +63,11 @@ namespace SanitaryCartControl.Areas.Controllers
                 ModelState.RemoveIfPresent($"Attributes[{i}].Id");
                 ModelState.RemoveIfPresent($"Attributes[{i}].IsActive");
             }
-            if(ModelState.GetValidationState("Product.Type")==ModelValidationState.Valid)
+            if (ModelState.GetValidationState("Product.Type") == ModelValidationState.Valid)
             {
-                if(productEditDTO.Product.Type==(byte)ProductType.NoneVariable)
+                if (productEditDTO.Product.Type == (byte)ProductType.NoneVariable)
                 {
-                     ModelState.RemoveIfPresent($"Attributes[0].Value");
+                    ModelState.RemoveIfPresent($"Attributes[0].Value");
                 }
             }
             if (ModelState.IsValid)
@@ -75,22 +75,28 @@ namespace SanitaryCartControl.Areas.Controllers
                 string[] images = null;
                 string[] oldImages = _productService.GetById(productEditDTO.Product.Id).Images;
                 if (productEditDTO.Images != null)
-                    {
-                        this.DeleteImages(oldImages);
-                        images = this.AddImages(productEditDTO.Images, imagesPath);
-                    }
+                {
+                    this.DeleteImages(oldImages);
+                    images = this.AddImages(productEditDTO.Images, imagesPath);
+                }
                 bool IsUpdated = _productService.Update(Converters.ToProductBLL(productEditDTO.Product, productEditDTO.Attributes, images));
                 if (IsUpdated)
+                {
+                    IDictionary<string, object> parameters = new Dictionary<string, object>();
+                    parameters.Add("search",productEditDTO.Product.Name);
                     return View("Success", new MessageViewModel()
                     {
                         IsSuccess = true,
-                        Link = Url.Action("Search", productEditDTO.Product.Id)
+                        Link = Url.Action("Search"),
+                        Params = parameters
                     });
+
+                }
             }
             return View("Success", new MessageViewModel()
             {
                 IsSuccess = false,
-                Link = Url.Action("/Cms/Edit", productEditDTO.Product.Id)
+                Link = Url.Action("Edit", productEditDTO.Product.Id)
             });
 
         }
@@ -116,19 +122,20 @@ namespace SanitaryCartControl.Areas.Controllers
         }
 
         [HttpGet]
-        public IActionResult DeleteSucced(string search,int page)
+        public IActionResult DeleteSucced(string search, int page)
         {
-            IDictionary<string,object> dict =  new Dictionary<string, object>();
-            dict.Add("search",search);
-            dict.Add("page",page);
-            return View("Success",new MessageViewModel(){
-                IsSuccess=true,
-                Link="Search",
-                Params=dict
+            IDictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("search", search);
+            dict.Add("page", page);
+            return View("Success", new MessageViewModel()
+            {
+                IsSuccess = true,
+                Link = "Search",
+                Params = dict
             });
         }
         [HttpGet]
-        public IActionResult DeleteFailed(string search,int page)
+        public IActionResult DeleteFailed(string search, int page)
         {
             IDictionary<string, object> dict = new Dictionary<string, object>();
             dict.Add("search", search);
@@ -141,15 +148,15 @@ namespace SanitaryCartControl.Areas.Controllers
             });
         }
         [HttpPost]
-        public IActionResult Delete([BindRequired]int Id)
+        public IActionResult Delete([BindRequired] int Id)
         {
-            if(ModelState.IsValid)
-            { 
-             bool IsDeleted =  _productService.Delete(Id);
-              if(IsDeleted)
-              return Ok();
+            if (ModelState.IsValid)
+            {
+                bool IsDeleted = _productService.Delete(Id);
+                if (IsDeleted)
+                    return Ok();
             }
-              return BadRequest();
+            return BadRequest();
         }
         [HttpPost]
         public IActionResult Add(ProductViewModel productViewModel)
@@ -164,8 +171,8 @@ namespace SanitaryCartControl.Areas.Controllers
             }
             if (ModelState.IsValid)
             {
-                string Description = productViewModel.Product.Description ;
-                productViewModel.Product.Description = Description.Replace("\'","\"");
+                string Description = productViewModel.Product.Description;
+                productViewModel.Product.Description = Description.Replace("\'", "\"");
                 int productId = _productService
                 .Add(Converters.ToProductBLL(productViewModel.Product,
                 productViewModel.Attributes,
@@ -195,8 +202,8 @@ namespace SanitaryCartControl.Areas.Controllers
             }
             int pageSize = 40;
             var products = _productService.Search(search);
-            
-            return View(products.ToPagedList(page??1,pageSize));
+
+            return View(products.ToPagedList(page ?? 1, pageSize));
         }
 
     }

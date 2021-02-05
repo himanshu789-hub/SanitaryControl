@@ -97,7 +97,7 @@
                 <span class="fa fa-minus"></span>
                 </button>
                 </span>
-                @Html.TextBoxFor(e=>e.Attributes[i].Quantity,"",new {@class="form-control input-number",@min="1",@max="255"})
+                @Html.TextBoxFor(e=>e.Attributes[i].Quantity,"",new {@class="form-control input-number",@min="1",@max="255",@disabled="true"})
                 <span class="input-group-append">
                 <button type="button" class="btn btn-default btn-number bg-success text-white" data-type="plus" data-field="@name">
                 <span class="fa fa-plus"></span>
@@ -223,7 +223,7 @@
         },
         theme: 'snow'
     });
-    quill.root.innerHTML = '@Html.Raw(Model.Product.Description)'
+    quill.root.innerHTML =@Json.Serialize(@Html.Raw(Model.Product.Description).ToString())
     quill.root.setAttribute('spellcheck', false)
     quill.on('text-change', function (delta, oldDelta, source) {
         $(elements.textAreaId).val(quill.container.firstChild.innerHTML);
@@ -531,7 +531,7 @@ $(".input-number").keydown(function (e) {
         const quantityName = getNameByProperty(index, itemNameandProperties.QunatityProperty);
         const quantityValidator = $('<span data-valmsg-replace="true">')
             .attr("data-valmsg-for", quantityName).addClass("small text-danger");
-        let quantity = $('<input type="text" class="form-control" data-val="true"/>')
+        let quantity = $('<input type="text" class="form-control" data-val="true" disabled/>')
             .val(data[index][itemNameandProperties.QunatityProperty])
             .attr("name", quantityName)
             .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.QunatityProperty}`)
