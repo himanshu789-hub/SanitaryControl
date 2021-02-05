@@ -35,6 +35,11 @@ namespace SanitaryCartControl.Controllers
                     {
                         const int NUMBER_OF_PRODUCT_AT_A_TIME = 10;
                         ItemViewModel.ParentId = Item.CategoryId.Value;
+                        // ICollection<ProductInfoBLL> productInfos = new List<ProductInfoBLL>();
+                        // for (int i = 0; i <= 22; i++)
+                        // {
+                        //     productInfos.Add(new ProductInfoBLL() { Id = 1, ImagePath = "/images/brand/3d8454b7-1435-48f6-b33f-815e1952b198.png", Name = "Demo" });
+                        // }
                         IEnumerable<ProductInfoBLL> productInfos = _productService.GetProductsByCategoryId(Item.CategoryId.Value, Item.Page.Value, NUMBER_OF_PRODUCT_AT_A_TIME);
                         ItemViewModel.ProductInfos = productInfos;
                         if (Item.Page == 0)
@@ -55,8 +60,8 @@ namespace SanitaryCartControl.Controllers
         {
             if (ModelState.IsValid)
             {
-               ProductBLL product =  _productService.GetById(Id);
-              
+                ProductBLL product = _productService.GetById(Id);
+
                 return View(product);
             }
             return BadRequest();

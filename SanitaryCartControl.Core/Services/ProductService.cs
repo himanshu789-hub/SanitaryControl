@@ -86,9 +86,9 @@ namespace SanitaryCartControl.Core.Services
                 .FirstOrDefault(e => e.Id == product.Id);
                 OldProduct.Name = product.Name;
                 OldProduct.DateUpdated = product.DateUpdated;
-                
+
                 OldProduct.Description = product.Description;
-                
+
                 if (OldProduct == null)
                     return false;
                 if (product.Images != null)
@@ -187,16 +187,18 @@ namespace SanitaryCartControl.Core.Services
             }
         }
 
-        public IEnumerable<ProductInfoBLL> GetProductsByCategoryId(int CategoryId,int Page,int Count)
+        public IEnumerable<ProductInfoBLL> GetProductsByCategoryId(int CategoryId, int Page, int Count)
         {
             using (var context = new SanitaryCartContext(_con))
             {
-               IEnumerable<ProductInfoBLL> products = context.Products.AsNoTracking().Where(e => e.CategoryId == CategoryId).Include(e=>e.Images).Take(10).Skip(Page * 10).Select(e=>new ProductInfoBLL{
-                   Id=e.Id,
-                   Name=e.Name,
-                   ImagePath=e.Images.Count>0?e.Images.First().Path:null
-               }).ToList();
-               return products;
+                IEnumerable<ProductInfoBLL> products = context.Products.AsNoTracking().Where(e => e.CategoryId == CategoryId)
+                .Include(e => e.Images).Take(Count).Skip(Page * Count).Select(e => new ProductInfoBLL
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    ImagePath = e.Images.Count > 0 ? e.Images.First().Path : null
+                }).ToList();
+                return products;
             }
         }
     }

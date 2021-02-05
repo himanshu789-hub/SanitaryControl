@@ -1,7 +1,7 @@
 @model ItemViewModel
 
 <partial name="_Breadcrumb" for="Breadcrumps"></partial>
-<div id="Item-Wrapper" class="m-1 m-lg-5"> 
+<div id="Item-Wrapper" class="m-1 p-lg-5 pb-lg-0"> 
 @if(!Model.IsEndCategory)
 {
    if(Model.CategoryInfos.Count()>0)
@@ -44,6 +44,7 @@ else
   }
   <script type="text/javascript"> 
     window.categoryId = @Model.ParentId;
+    window.isSubCategory = true;
     window.productRequestUrl =@Json.Serialize(@Url.Action("Get","Item",new {Id=""}));      
     if(activateBuildItems) 
     activateBuildItems();

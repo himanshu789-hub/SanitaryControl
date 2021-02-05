@@ -1,58 +1,53 @@
 import * as $ from 'jquery';
 export function activateBuildItems() {
+	var elements = {
+		ItemWrapper: '#Item-Wrapper',
+		loading: '#loading',
+	};
+	if (!(window.categoryId && window.productRequestUrl && window.isSubCategory != undefined)) {
+		console.error('variable not found');
+		return;
+	}
+
+	if (!$(elements.ItemWrapper)) {
+		console.error('Item Wrapper Element Not Found');
+		return;
+	}
+	window.page = 0;
 	function buildItems(data) {
-		if (!(window.categoryId && window.productRequestUrl)) {
-			console.error('variable not found');
-			return;
-		}
-
-		var elements = {
-			ItemWrapper: '#Item-Wrapper',
-			loading: '#loading',
-		};
-
-		if (!$(elements.ItemWrapper)) {
-			console.error('Item Wrapper Element Not Found');
-			return;
-		}
-		window.page = 0;
-
-		data.forEach(function (item) {
+		Array.from(data).forEach(function (item) {
 			const itemHolder = $('<div>').addClass('itemHolder');
-			let imageHolder;
-			if (!isSubCategory) imageHolder = $('<a>').addClass('imageHolder');
-			else imageHolder = $('<div>').addClass('imageHolder');
-
-			const img = $('<img>').attr('src', item.Image);
-			const link = $('<a>').text('View Details').addClass('link').attr('href', '#');
-			imageHolder.append(img);
-			if (!isSubcategory) imageHolder.append(link);
-			const text = $('<text>').text(item.Name).addClass('title');
+			let imageHolder = $('<div>').addClass('imageHolder');
+			const img = $('<img>').attr('src', item.imagePath);
+			const link = $('<a>').text('View Details').addClass('link').attr('href', `/Item/GetProduct/${item.id}`);
+			imageHolder.append([img, link]);
+			const text = $('<text>').text(item.name).addClass('title');
 			itemHolder.append([imageHolder, text]);
 			$(elements.ItemWrapper).append(itemHolder);
 		});
-         
-		$(window).scroll(function () {
-			console.log('scroll Event Fires')
-				if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-			const url = window.itemRequestUrl + `?page=${++page}&IsSubcategory=${window.isSubcategory}&Id=${window.id}`;
+	}
+	$(elements.ItemWrapper).scroll(function () {
+		if ($(elements.ItemWrapper).scrollTop() == $(elements.ItemWrapper)[0].scrollHeight - $(elements.ItemWrapper)[0].clientHeight) {
+			const url =
+				window.productRequestUrl + `?page=${++window.page}&IsEndCategory=${window.isSubCategory}&CategoryId=${window.categoryId}`;
 			$.ajax({
 				url,
 				method: 'GET',
 				success: function (res) {
-					$(elements.loading).remove();
 					if (res.length == 0) {
-						window.removeEventListener('scroll');
+						$(elements.ItemWrapper)[0].removeEventListener('scroll');
 					} else {
 						buildItems(res);
 					}
+					$(elements.loading).remove();
 				},
 				beforeSend: function () {
-					const loadingSpan = $('<span>').attr('id', 'loading');
-					$(elements.ItemWrapper).append(loadingSpan);
+					const loadingSpan = $(
+						'<span style="display:block" class="text-center"><i class="fa fa-spinner fa-spin fa-3x"></span>',
+					).attr('id', 'loading');
+					$(loadingSpan).insertAfter($(elements.ItemWrapper));
 				},
 			});
-			}
-		});
-	}
+		}
+	});
 }

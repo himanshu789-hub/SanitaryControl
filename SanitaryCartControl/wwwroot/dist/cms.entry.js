@@ -20688,7 +20688,7 @@ window.selectMenu = _homepage__WEBPACK_IMPORTED_MODULE_6__["selectMenu"];
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectMenu", function() { return selectMenu; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectMenu", function() { return selectMenu; });
 const selectMenu =  function () {
 	const pathName = location.pathname;
 	const controller = pathName.split('/')[1];
@@ -20703,7 +20703,6 @@ const selectMenu =  function () {
 	});
 };
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
