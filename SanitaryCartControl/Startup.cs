@@ -43,7 +43,6 @@ namespace SanitaryCartControl
                   options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
                   options.SuppressXFrameOptionsHeader =true;
                   options.Cookie.HttpOnly=true;
-                  options.Cookie.Expiration=new TimeSpan(0,30,0);
                   options.Cookie.Name="_AntiForgeryVerification";
                   options.Cookie.SameSite=Microsoft.AspNetCore.Http.SameSiteMode.Strict;
                   options.Cookie.SecurePolicy=Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;

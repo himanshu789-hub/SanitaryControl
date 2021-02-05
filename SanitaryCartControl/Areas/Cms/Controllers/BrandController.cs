@@ -81,6 +81,12 @@ namespace SanitaryCartControl.Areas.Controllers
             }
             return View(Result);
         }
+
+        public JsonResult ThrowError()
+        {
+            throw new System.Exception();
+        }
+        
         [HttpGet]
         public JsonResult CheckName(string name)
         {

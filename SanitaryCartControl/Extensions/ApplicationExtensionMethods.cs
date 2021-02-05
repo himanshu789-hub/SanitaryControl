@@ -17,7 +17,7 @@ namespace SanitaryCartControl.Extensions
             {
                 ExceptionHandler = (context) =>
                 {
-                    bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith("/Cms");
+                    bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith("/Cms",System.StringComparison.OrdinalIgnoreCase);
 
                     if (IsRequestFormCms)
                     {

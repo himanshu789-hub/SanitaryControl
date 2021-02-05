@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using SanitaryCartControl.ViewModels;
 using System.Linq;
 using System.Collections.Generic;
+
+using Microsoft.AspNetCore.Diagnostics;
 using SanitaryCartControl.Miscellaneous.Constnants;
 using SanitaryCartControl.Core.Contracts.Services;
 using Microsoft.Extensions.Configuration;
@@ -23,10 +25,10 @@ namespace SanitaryCartControl.Controllers
         {
             return View();
         }
-        public IActionResult ThrowError()
-        {
-            throw new System.Exception();
-        }
+        // public IActionResult ThrowError()
+        // {
+        //     throw new System.Exception();
+        // }
         public IActionResult Index()
         {
             HomeViewModel homeViewModel = new HomeViewModel();

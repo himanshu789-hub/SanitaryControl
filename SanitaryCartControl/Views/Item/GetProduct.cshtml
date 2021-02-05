@@ -63,12 +63,16 @@
                     @Model.Brand.Name
                 </div>
             </div>
-            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
               @{
                 bool  IsProductOfNoneType  = Model.Type==(byte)ProductType.NoneVariable;
+                bool IsAnyActive = Model.AttributeBLLs.Any(e=>e.IsActive); 
               }
-                <label style="width: 100px;display: table;" class="align-middle font-weight-bold">
-                <u>
+   <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+               
+              @if(IsAnyActive)
+              {
+                  <label style="width: 100px;display: table;" class="align-middle font-weight-bold">
+                  <u>
                     @if(IsProductOfNoneType)  
                     {
                         <span>Price</span>
@@ -77,12 +81,13 @@
                     {
                       <span> @Utilities.GetAttributeNameByType(Model.Type)</span>
                     }
-                </u></label>
+                </u>
+                </label>
                 <div class="pl-3 pr-1 text-justify">
             @if(Model.Type!=(byte)ProductType.NoneVariable)
             {
-                 <span class="d-inline-flex justify-content-start">
-        <select onchange="price(this)" class="form-control">   
+                <span class="d-inline-flex justify-content-start">
+                <select onchange="price(this)" class="form-control">   
                        <option value="" disabled selected>-- Select Your Option --</option>
                         @foreach (var item in Model.AttributeBLLs)
                         {
@@ -92,14 +97,20 @@
                         }
                         </select>
                 </span>
-                    <label class="price"><span class="price-text"></span></label>
-                
+                <label class="price"><span class="price-text"></span></label>
             }
             else 
             {
               <label class="price show"><span class="price-text">@Model.AttributeBLLs.First().Price</span></label> 
             }
-                </div>
+     </div>
+           
+            }
+            else
+            {
+                <h6 class="text-danger">* Currently Suspended </h6>
+            }
+                
             </div>
            
         </div>
