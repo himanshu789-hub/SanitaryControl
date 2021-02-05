@@ -30,15 +30,15 @@ namespace SanitaryCartControl.Core.Extensions
                    options.LogoutPath = "/Cms/Account/Logut";
                    options.AccessDeniedPath = "/Cms/Account/AccessDenied";
                    options.ReturnUrlParameter="returnUrl";
-                   
-                  
+                   options.SlidingExpiration = true;
+                   options.ExpireTimeSpan = new System.TimeSpan(0,30,0);
                    options.Cookie = new Microsoft.AspNetCore.Http.CookieBuilder
                    {
-                       MaxAge=new System.TimeSpan(8,0,0),
                        Path= "/",
                        SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
                        SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest,
                        HttpOnly=true,                       
+                    
                    };
                });
 

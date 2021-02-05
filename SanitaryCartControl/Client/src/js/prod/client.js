@@ -1,8 +1,8 @@
 import { BuildNavigation } from './../nav';
 import { activateBuildItems } from './../item';
 import { buildSlider, removeControls } from './../slider';
-import lightbox from './../lightbox';
-window.lightbox  = lightbox;
+import {LightBox} from './../lightbox';
+window.lightbox  = LightBox();
 window.buildSlider = buildSlider;
 window.activateBuildItems = activateBuildItems;
 window.removeControls = removeControls;

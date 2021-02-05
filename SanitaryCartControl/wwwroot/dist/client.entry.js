@@ -18616,10 +18616,7 @@ function activateBuildItems() {
 		});
 	}
 	jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper).scroll(function () {
-		if (
-			jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper).scrollTop() ==
-			jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper)[0].scrollHeight - jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper)[0].clientHeight
-		) {
+		if (jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper).scrollTop() == jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper)[0].scrollHeight - jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper)[0].clientHeight) {
 			const url =
 				window.productRequestUrl + `?page=${++window.page}&IsEndCategory=${window.isSubCategory}&CategoryId=${window.categoryId}`;
 			jquery__WEBPACK_IMPORTED_MODULE_0__["ajax"]({
@@ -18627,7 +18624,7 @@ function activateBuildItems() {
 				method: 'GET',
 				success: function (res) {
 					if (res.length == 0) {
-						window.removeEventListener('scroll');
+						jquery__WEBPACK_IMPORTED_MODULE_0__(elements.ItemWrapper)[0].removeEventListener('scroll');
 					} else {
 						buildItems(res);
 					}

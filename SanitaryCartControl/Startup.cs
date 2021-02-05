@@ -46,7 +46,7 @@ namespace SanitaryCartControl
                   options.Cookie.Name="_AntiForgeryVerification";
                   options.Cookie.SameSite=Microsoft.AspNetCore.Http.SameSiteMode.Strict;
                   options.Cookie.SecurePolicy=Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
-                  
+                
             });
             services.AddControllersWithViews(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
         }
