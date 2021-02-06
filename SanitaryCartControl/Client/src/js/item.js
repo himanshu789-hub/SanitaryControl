@@ -1,4 +1,5 @@
 import * as $ from 'jquery';
+
 export function activateBuildItems() {
 	var elements = {
 		ItemWrapper: '#Item-Wrapper',
@@ -26,8 +27,12 @@ export function activateBuildItems() {
 			$(elements.ItemWrapper).append(itemHolder);
 		});
 	}
-	$(elements.ItemWrapper).scroll(function () {
-		if ($(elements.ItemWrapper).scrollTop() == $(elements.ItemWrapper)[0].scrollHeight - $(elements.ItemWrapper)[0].clientHeight) {
+	$(elements.ItemWrapper).scroll(ajaxItemLoading);
+	const ajaxItemLoading = function () {
+		if (
+			$(elements.ItemWrapper).scrollTop() ==
+			$(elements.ItemWrapper)[0].scrollHeight - $(elements.ItemWrapper)[0].clientHeight
+		) {
 			const url =
 				window.productRequestUrl + `?page=${++window.page}&IsEndCategory=${window.isSubCategory}&CategoryId=${window.categoryId}`;
 			$.ajax({
@@ -35,7 +40,7 @@ export function activateBuildItems() {
 				method: 'GET',
 				success: function (res) {
 					if (res.length == 0) {
-						$(elements.ItemWrapper)[0].removeEventListener('scroll');
+						$(elements.ItemWrapper)[0].removeEventListener('scroll',ajaxItemLoading);
 					} else {
 						buildItems(res);
 					}
@@ -49,5 +54,5 @@ export function activateBuildItems() {
 				},
 			});
 		}
-	});
+	};
 }

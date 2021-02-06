@@ -993,6 +993,20 @@ h6,
 {
 	min-height:calc(100vh - 100px);
 }
+
+.lazy-wrapper .lazy
+{
+	background-color: white;
+	opacity:1;
+	animation: flicker 0.5s ease-in-out infinite alternate;
+}
+@keyframes flicker
+{
+	100%{
+		opacity:0.5;
+		background-color: var(--color1);
+	}
+}
 @media screen and (max-width: 200px) {
 }
 #infographics p {
@@ -1269,6 +1283,7 @@ h6,
 	height: 100%;
 	transition: all 1s ease-in-out;
 	display: block;
+	width:100%;
 }
 .itemHolder > .imageHolder > .link {
 	opacity: 0;

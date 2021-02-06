@@ -55,12 +55,14 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 			});
 			applyAnimaton();
 			provideWidthToSlide();
-
+				applyAutomaticSliderIfRequire();
+		
 			setTimeout(() => {
-				this.setSourceToDataset();
+				this.lazyLoadSliderImage();
 			}, 2000);
+			
 		},
-		setSourceToDataset: function () {
+		lazyLoadSliderImage: function () {
 			const images = $(sliderIdentifier).find('>img.lazy');
 			$(sliderIdentifier).on('transitionend', function () {
 				console.log('siding triggers');
@@ -190,6 +192,6 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 	function activateAutomateSlider() {
 		return setInterval(() => {
 			slider.moveSlider(1);
-		}, slider.intervalInMs);
+		}, Math.abs(slider.intervalInMs));
 	}
 }

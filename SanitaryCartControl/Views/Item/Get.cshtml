@@ -1,7 +1,7 @@
 @model ItemViewModel
 
 <partial name="_Breadcrumb" for="Breadcrumps"></partial>
-<div id="Item-Wrapper" class="m-1 p-lg-5 pb-lg-0"> 
+<div id="Item-Wrapper" class="m-1 p-lg-5 pb-lg-0 lazy-wrapper"> 
 @if(!Model.IsEndCategory)
 {
    if(Model.CategoryInfos.Count()>0)
@@ -11,7 +11,7 @@
   {
       <div class="itemHolder">
               <a class="imageHolder" href='@Utilities.GetActionLinkForCategoryOrProduct(item.Id,!item.HoldChildren,false)'>
-                <img src="@item?.ImagePath"/>
+                <img data-src="@item?.ImagePath" class="lazy"/>
               </a>
               <text class="title">@item.Title</text>
       </div>
@@ -31,7 +31,7 @@ else
       {
       <div class="itemHolder">
         <div class="imageHolder">
-          <img src="@item?.ImagePath" />
+          <img data-src="@item?.ImagePath" class="lazy"/>
           <a class="link" href='@Utilities.GetActionLinkForCategoryOrProduct(item.Id,false,true)'>View Details</a>
         </div>
         <text class="title">@item.Name<text>
@@ -53,3 +53,5 @@ else
   </script>
 }
 </div>
+
+<script> window.lazyLoadActivation();</script>
