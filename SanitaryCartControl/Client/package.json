@@ -13,6 +13,10 @@
         "quill": "^1.3.7"
     },
     "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-core": "^6.26.3",
+        "babel-loader": "^8.2.2",
+        "babel-preset-env": "^1.7.0",
         "compression-webpack-plugin": "^7.1.2",
         "css-loader": "^3.6.0",
         "file-loader": "^6.0.0",
@@ -30,6 +34,7 @@
     "scripts": {
         "build:prod": "webpack --config webpack.prod.js",
         "build": "webpack --config webpack.dev.js",
-        "watch": "webpack --watch --config webpack.dev.js && gulp watch"
+        "watch": "webpack --watch --config webpack.dev.js && gulp watch",
+        "babel": "babel src -d build"
     }
 }

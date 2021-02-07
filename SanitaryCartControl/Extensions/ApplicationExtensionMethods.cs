@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Diagnostics;
 namespace SanitaryCartControl.Extensions
 {
     class UserInfo
@@ -18,7 +20,10 @@ namespace SanitaryCartControl.Extensions
                 ExceptionHandler = (context) =>
                 {
                     bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith("/Cms",System.StringComparison.OrdinalIgnoreCase);
-
+                    context.Response.StatusCode =Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError;
+                    var logger = context.Features.Get<ILogger>();
+                    var exception = context.Features.Get<IExceptionHandlerFeature>();
+                    logger.LogError(exception.Error,"Exception Handled By Golbal Handler");
                     if (IsRequestFormCms)
                     {
                         context.Response.Redirect("/Cms/Home/Error");

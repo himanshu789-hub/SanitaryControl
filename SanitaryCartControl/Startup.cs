@@ -46,7 +46,6 @@ namespace SanitaryCartControl
                   options.Cookie.Name="_AntiForgeryVerification";
                   options.Cookie.SameSite=Microsoft.AspNetCore.Http.SameSiteMode.Strict;
                   options.Cookie.SecurePolicy=Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
-                
             });
             services.AddControllersWithViews(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
         }
@@ -59,8 +58,8 @@ namespace SanitaryCartControl
             if (env.IsDevelopment())
             {
                 //ApplicationExtensionsMethods.SeedRolesAndAdmin(serviceProvider,Configuration);
-                //   app.UseDeveloperExceptionPage();
-                app.UseCustomExceptionHandler();
+                  app.UseDeveloperExceptionPage();
+//                app.UseCustomExceptionHandler();
 
             }
             else
@@ -80,13 +79,13 @@ namespace SanitaryCartControl
             {
                 endpoints.MapControllerRoute(
                     name: "WithAreas",
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id:int?}");
+                    pattern: "{area:exists}/{controller=Account}/{action=LogIn}/{id:int:min(1)?}");
             });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "WithAreas",
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id:guid?}");
+                    pattern: "{area:exists}/{controller}/{action}/{id:guid?}");
             });
             app.UseEndpoints(endpoints =>
             {

@@ -24,9 +24,11 @@ namespace SanitaryCartControl.Controllers
         {
             if (context.Exception != null)
             {
+                context.Exception = null;
                 context.Result = new StatusCodeResult(Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError);
             }
         }
+        
 
     }
 }

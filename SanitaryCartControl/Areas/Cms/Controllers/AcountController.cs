@@ -29,6 +29,10 @@ namespace SanitaryCartControl.Areas.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
+            foreach (var cookie in HttpContext.Request.Cookies)
+            {
+                  HttpContext.Response.Cookies.Delete(cookie.Key);
+            }
             return View();       
         }
 
@@ -43,7 +47,7 @@ namespace SanitaryCartControl.Areas.Controllers
                 var result = _signInManager.PasswordSignInAsync(logIn.UserName, logIn.Password, false, false).Result;
                 if (result.Succeeded)
                 {
-                    if (returnUrl != null && !returnUrl.Contains(@"/Account/LogOut")&&Url.IsLocalUrl(returnUrl))
+                    if (returnUrl != null && !returnUrl.Contains(@"/Account/LogOut") && Url.IsLocalUrl(returnUrl))
                         return LocalRedirect(returnUrl);
                     return LocalRedirect(@"/Cms/Home/Index");
                 }
@@ -56,6 +60,7 @@ namespace SanitaryCartControl.Areas.Controllers
         [AllowAnonymous]
         public IActionResult LogIn()
         {
+            
             return View();
         }
         

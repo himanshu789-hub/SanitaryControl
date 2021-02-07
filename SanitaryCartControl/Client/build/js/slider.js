@@ -1,9 +1,15 @@
+'use strict';
 
-export function removeControls() {
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.removeControls = removeControls;
+exports.buildSlider = buildSlider;
+function removeControls() {
 	$('.control').remove();
 }
 
-export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
+function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 	if (!$) {
 		console.error('jQuery not found');
 		return;
@@ -17,16 +23,16 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 
 	function checkIdentifierValidity(name) {
 		if ($(name).length == 0) {
-			console.error(`No '${sliderIdentifier}' exists`);
+			console.error('No \'' + sliderIdentifier + '\' exists');
 			return;
 		}
 		if ($(name).length > 1) {
-			console.error(`Multiple Identifier With Name ${sliderWrapper} exists`);
+			console.error('Multiple Identifier With Name ' + sliderWrapper + ' exists');
 			return;
 		}
 	}
 
-	const slider = {
+	var slider = {
 		index: -1,
 		length: -1,
 		touchmoveX: 0,
@@ -36,7 +42,9 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 		intervalId: -1,
 		intervalInMs: 4000,
 
-		init: function () {
+		init: function init() {
+			var _this = this;
+
 			var posX1, posX2;
 			$(sliderIdentifier).mousedown(slider.dragStart);
 			$(sliderIdentifier).on('touchstart', slider.dragStart);
@@ -44,40 +52,41 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 			$(sliderIdentifier).on('touchmove', slider.dragMove);
 			$(sliderIdentifier).on('touchend', slider.dragEnd);
 			slider.length = $(sliderIdentifier).children().length;
-			const firstChild = $(sliderIdentifier).children().first();
-			const lastChild = $(sliderIdentifier).children().last().clone();
-			lastChild.insertBefore(`${sliderIdentifier}>*:first-child`);
-			firstChild.clone().insertAfter(`${sliderIdentifier}>*:last-child`);
-			const lengthAfterClone = slider.length + 2;
+			var firstChild = $(sliderIdentifier).children().first();
+			var lastChild = $(sliderIdentifier).children().last().clone();
+			lastChild.insertBefore(sliderIdentifier + '>*:first-child');
+			firstChild.clone().insertAfter(sliderIdentifier + '>*:last-child');
+			var lengthAfterClone = slider.length + 2;
 			slider.slideWidth = $(sliderWrapper).width();
 			$(sliderIdentifier).css({
 				width: $(sliderWrapper).width() * lengthAfterClone + 'px',
-				transform: `translateX(-${slider.slideWidth}px)`,
+				transform: 'translateX(-' + slider.slideWidth + 'px)'
 			});
 			applyAnimaton();
 			provideWidthToSlide();
-				applyAutomaticSliderIfRequire();
-		
-			setTimeout(() => {
-				this.lazyLoadSliderImage();
+			applyAutomaticSliderIfRequire();
+
+			setTimeout(function () {
+				_this.lazyLoadSliderImage();
 			}, 2000);
-			
 		},
-		lazyLoadSliderImage: function () {
-			const images = $(sliderIdentifier).find('>img.lazy');
+		lazyLoadSliderImage: function lazyLoadSliderImage() {
+			var images = $(sliderIdentifier).find('>img.lazy');
 			$(sliderIdentifier).on('transitionend', function () {
 				console.log('siding triggers');
-				Array.from(images).forEach(element => {
+				Array.from(images).forEach(function (element) {
 					if ($(element).offset().left == $(sliderWrapper).offset().left) {
-						const dataSrc = $(element).attr('data-src');
+						var dataSrc = $(element).attr('data-src');
 						$(element).attr('src', dataSrc);
 					}
 				});
-				const anyImageWithLazyClass = images.filter(element => $(element).hasClass('lazy')).length > 0;
+				var anyImageWithLazyClass = images.filter(function (element) {
+					return $(element).hasClass('lazy');
+				}).length > 0;
 				if (!anyImageWithLazyClass) $(sliderIdentifier).off('scroll');
 			});
 		},
-		dragStart: function (e) {
+		dragStart: function dragStart(e) {
 			if (e.type == 'touchstart') {
 				slider.touchStartX = e.touches[0].clientX;
 			} else {
@@ -86,8 +95,8 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 				document.onmouseup = slider.dragEnd;
 			}
 		},
-		dragMove: function (e) {
-			let dist = 0;
+		dragMove: function dragMove(e) {
+			var dist = 0;
 			if (e.type == 'touchmove') {
 				slider.touchmoveX = e.touches[0].clientX;
 				dist = slider.touchStartX - slider.touchmoveX;
@@ -98,8 +107,8 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 				slider.moveX = slider.index * slider.slideWidth + dist;
 			}
 		},
-		dragEnd: function (e) {
-			const absMove = Math.abs(slider.index * slider.slideWidth - slider.moveX);
+		dragEnd: function dragEnd(e) {
+			var absMove = Math.abs(slider.index * slider.slideWidth - slider.moveX);
 			if (absMove > slider.slideWidth / 2) {
 				if (slider.moveX > slider.index * slider.slideWidth) {
 					slider.moveSlider(1);
@@ -110,7 +119,7 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 			document.onmouseup = null;
 			document.onmousemove = null;
 		},
-		moveSlider: function (position) {
+		moveSlider: function moveSlider(position) {
 			if (slider.index == -1 || slider.index == slider.length - 1) applyAnimaton();
 
 			if (position == 1) {
@@ -118,12 +127,12 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 					console.log('Before Index : ', slider.index);
 
 					slider.index++;
-					$(sliderIdentifier).css('transform', `translateX(${-(slider.index + 1) * slider.slideWidth}px)`);
+					$(sliderIdentifier).css('transform', 'translateX(' + -(slider.index + 1) * slider.slideWidth + 'px)');
 					console.log('After Index : ', slider.index);
 				} else {
-					$(sliderIdentifier).css('transform', `translateX(${-(slider.length + 1) * slider.slideWidth}px)`);
-					setTimeout(() => {
-						$(sliderIdentifier).css({ transition: 'unset', transform: `translateX(-${slider.slideWidth}px)` });
+					$(sliderIdentifier).css('transform', 'translateX(' + -(slider.length + 1) * slider.slideWidth + 'px)');
+					setTimeout(function () {
+						$(sliderIdentifier).css({ transition: 'unset', transform: 'translateX(-' + slider.slideWidth + 'px)' });
 					}, slider.intervalInMs / 4);
 					slider.index = -1;
 				}
@@ -131,24 +140,24 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 				if (slider.index > 0) {
 					console.log('Back Before Index : ', slider.index);
 
-					$(sliderIdentifier).css('transform', `translateX(${-slider.index * slider.slideWidth}px)`);
+					$(sliderIdentifier).css('transform', 'translateX(' + -slider.index * slider.slideWidth + 'px)');
 
 					slider.index--;
 				} else {
 					console.log('Back Before Index : ', slider.index);
 
-					$(sliderIdentifier).css('transform', `translateX(0px)`);
+					$(sliderIdentifier).css('transform', 'translateX(0px)');
 					slider.index = slider.length - 1;
 
-					setTimeout(() => {
+					setTimeout(function () {
 						$(sliderIdentifier).css({
 							transition: 'transform .001s ease-in',
-							transform: `translateX(-${slider.length * slider.slideWidth}px)`,
+							transform: 'translateX(-' + slider.length * slider.slideWidth + 'px)'
 						});
 					}, slider.intervalInMs / 4);
 				}
 			}
-		},
+		}
 	};
 	slider.init();
 	var resizeIntervalId;
@@ -164,14 +173,12 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 		}, 500);
 	});
 	function adjustSlider() {
-		$(sliderIdentifier).css('transform', `translateX(-${(slider.index+1) * slider.slideWidth}px)`);
+		$(sliderIdentifier).css('transform', 'translateX(-' + (slider.index + 1) * slider.slideWidth + 'px)');
 	}
 	function provideWidthToSlide() {
-		$(sliderIdentifier)
-			.children()
-			.each(function (index, element) {
-				$(element).css({ 'min-width': slider.slideWidth + 'px' });
-			});
+		$(sliderIdentifier).children().each(function (index, element) {
+			$(element).css({ 'min-width': slider.slideWidth + 'px' });
+		});
 	}
 	$('#prev').click(function () {
 		clearInterval(slider.intervalId);
@@ -191,7 +198,7 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 		$(sliderIdentifier).css('transition', 'all 0.8s ease-in-out');
 	}
 	function activateAutomateSlider() {
-		return setInterval(() => {
+		return setInterval(function () {
 			slider.moveSlider(1);
 		}, Math.abs(slider.intervalInMs));
 	}

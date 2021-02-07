@@ -1,12 +1,24 @@
 const path = require('path');
 const webpack = require('webpack');
+
 module.exports = {
 	output: {
 		filename: '[name].entry.js',
-		path: path.resolve(__dirname, '..', 'wwwroot', 'dist'),
+		path:  path.resolve(__dirname, '..', 'wwwroot', 'dist'),
 	},
 	module: {
 		rules: [
+			// {
+			// 	test: /\.js$/,
+			// 	include: path.resolve(__dirname, 'src'),
+			// 	exclude: '/node_modules',
+			// 	use: {
+			// 		loader: 'babel-loader',
+			// 		query: {
+			// 			presets: ['@babel/preset-env'],
+			// 		},
+			// 	},
+			// },
 			{ test: /\.css$/, use: ['style-loader', 'css-loader'] },
 			{ test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader' },
 			{ test: /\.(woff|woff2)$/, loader: 'url-loader?prefix=font/&limit=5000' },

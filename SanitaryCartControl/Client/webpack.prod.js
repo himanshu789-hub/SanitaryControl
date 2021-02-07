@@ -8,6 +8,6 @@ module.exports = merge(common, {
 	},
 	mode: 'production',
 	output: {
-		filename: '[name].min.entry.js'
-	}
+		filename: '[name].min.entry.js',
+	},
 });

@@ -30,9 +30,17 @@
             <div id="slider">
               @if(IsImagesPresent)
               {
-                foreach (var item in Model)
+                for (byte i = 0;i<Model.Length;i++)
                 {
-                    <img src="@item"/>
+                    string item = Model[i];
+                    if(i==0)
+                    {
+                     <img src="@item"/>
+                    }
+                    else
+                    {
+                        <img data-src="@item" class="lazy"/>
+                    }
                 }
               }
               else

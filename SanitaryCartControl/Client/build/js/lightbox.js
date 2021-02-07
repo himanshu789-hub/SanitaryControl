@@ -1,5 +1,9 @@
+'use strict';
 
-export const LightBox = function () {
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var LightBox = exports.LightBox = function LightBox() {
 	function Lightbox(options) {
 		this.album = [];
 		this.currentImageIndex = void 0;
@@ -29,11 +33,10 @@ export const LightBox = function () {
     Sanitize Title
     If the caption data is trusted, for example you are hardcoding it in, then leave this to false.
     This will free you to add html tags, such as links, in the caption.
-
-    If the caption data is user submitted or from some other untrusted source, then set this to true
+      If the caption data is user submitted or from some other untrusted source, then set this to true
     to prevent xss and other injection attacks.
      */
-		sanitizeTitle: false,
+		sanitizeTitle: false
 	};
 
 	Lightbox.prototype.option = function (options) {
@@ -83,9 +86,7 @@ export const LightBox = function () {
 		// on the page below.
 		//
 		// Github issue: https://github.com/lokesh/lightbox2/issues/663
-		$(
-			'<div id="lightboxOverlay" tabindex="-1" class="lightboxOverlay"></div><div id="lightbox" tabindex="-1" class="lightbox"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""/><div class="lb-nav"><a class="lb-prev" aria-label="Previous image" href="" ></a><a class="lb-next" aria-label="Next image" href="" ></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>',
-		).appendTo($('body'));
+		$('<div id="lightboxOverlay" tabindex="-1" class="lightboxOverlay"></div><div id="lightbox" tabindex="-1" class="lightbox"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""/><div class="lb-nav"><a class="lb-prev" aria-label="Previous image" href="" ></a><a class="lb-next" aria-label="Next image" href="" ></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
 
 		// Cache jQuery objects
 		this.$lightbox = $('#lightbox');
@@ -100,14 +101,14 @@ export const LightBox = function () {
 			top: parseInt(this.$container.css('padding-top'), 10),
 			right: parseInt(this.$container.css('padding-right'), 10),
 			bottom: parseInt(this.$container.css('padding-bottom'), 10),
-			left: parseInt(this.$container.css('padding-left'), 10),
+			left: parseInt(this.$container.css('padding-left'), 10)
 		};
 
 		this.imageBorderWidth = {
 			top: parseInt(this.$image.css('border-top-width'), 10),
 			right: parseInt(this.$image.css('border-right-width'), 10),
 			bottom: parseInt(this.$image.css('border-bottom-width'), 10),
-			left: parseInt(this.$image.css('border-left-width'), 10),
+			left: parseInt(this.$image.css('border-left-width'), 10)
 		};
 
 		// Attach event handlers to the newly minted DOM elements
@@ -149,12 +150,10 @@ export const LightBox = function () {
 
 		/*
       Show context menu for image on right-click
-
-      There is a div containing the navigation that spans the entire image and lives above of it. If
+        There is a div containing the navigation that spans the entire image and lives above of it. If
       you right-click, you are right clicking this div and not the image. This prevents users from
       saving the image or using other context menu actions with the image.
-
-      To fix this, when we detect the right mouse button is pressed down, but not yet clicked, we
+        To fix this, when we detect the right mouse button is pressed down, but not yet clicked, we
       set pointer-events to none on the nav div. This is so that the upcoming right-click event on
       the next mouseup will bubble down to the image. Once the right-click/contextmenu event occurs
       we set the pointer events back to auto for the nav div so it can capture hover and left-click
@@ -165,12 +164,9 @@ export const LightBox = function () {
 				self.$nav.css('pointer-events', 'none');
 
 				self.$lightbox.one('contextmenu', function () {
-					setTimeout(
-						function () {
-							this.$nav.css('pointer-events', 'auto');
-						}.bind(self),
-						0,
-					);
+					setTimeout(function () {
+						this.$nav.css('pointer-events', 'auto');
+					}.bind(self), 0);
 				});
 			}
 		});
@@ -197,7 +193,7 @@ export const LightBox = function () {
 			self.album.push({
 				alt: $link.attr('data-alt'),
 				link: $link.attr('href'),
-				title: $link.attr('data-title') || $link.attr('title'),
+				title: $link.attr('data-title') || $link.attr('title')
 			});
 		}
 
@@ -232,12 +228,10 @@ export const LightBox = function () {
 		// Position Lightbox
 		var top = $window.scrollTop() + this.options.positionFromTop;
 		var left = $window.scrollLeft();
-		this.$lightbox
-			.css({
-				top: top + 'px',
-				left: left + 'px',
-			})
-			.fadeIn(this.options.fadeDuration);
+		this.$lightbox.css({
+			top: top + 'px',
+			left: left + 'px'
+		}).fadeIn(this.options.fadeDuration);
 
 		// Disable scrolling of the page while open
 		if (this.options.disableScrolling) {
@@ -276,7 +270,7 @@ export const LightBox = function () {
 
 			$image.attr({
 				alt: self.album[imageNumber].alt,
-				src: filename,
+				src: filename
 			});
 
 			$preloader = $(preloader);
@@ -288,21 +282,8 @@ export const LightBox = function () {
 
 			// Calculate the max image dimensions for the current viewport.
 			// Take into account the border around the image and an additional 10px gutter on each side.
-			maxImageWidth =
-				windowWidth -
-				self.containerPadding.left -
-				self.containerPadding.right -
-				self.imageBorderWidth.left -
-				self.imageBorderWidth.right -
-				20;
-			maxImageHeight =
-				windowHeight -
-				self.containerPadding.top -
-				self.containerPadding.bottom -
-				self.imageBorderWidth.top -
-				self.imageBorderWidth.bottom -
-				self.options.positionFromTop -
-				70;
+			maxImageWidth = windowWidth - self.containerPadding.left - self.containerPadding.right - self.imageBorderWidth.left - self.imageBorderWidth.right - 20;
+			maxImageHeight = windowHeight - self.containerPadding.top - self.containerPadding.bottom - self.imageBorderWidth.top - self.imageBorderWidth.bottom - self.options.positionFromTop - 70;
 
 			/*
       Since many SVGs have small intrinsic dimensions, but they support scaling
@@ -373,18 +354,8 @@ export const LightBox = function () {
 
 		var oldWidth = this.$outerContainer.outerWidth();
 		var oldHeight = this.$outerContainer.outerHeight();
-		var newWidth =
-			imageWidth +
-			this.containerPadding.left +
-			this.containerPadding.right +
-			this.imageBorderWidth.left +
-			this.imageBorderWidth.right;
-		var newHeight =
-			imageHeight +
-			this.containerPadding.top +
-			this.containerPadding.bottom +
-			this.imageBorderWidth.top +
-			this.imageBorderWidth.bottom;
+		var newWidth = imageWidth + this.containerPadding.left + this.containerPadding.right + this.imageBorderWidth.left + this.imageBorderWidth.right;
+		var newHeight = imageHeight + this.containerPadding.top + this.containerPadding.bottom + this.imageBorderWidth.top + this.imageBorderWidth.bottom;
 
 		function postResize() {
 			self.$lightbox.find('.lb-dataContainer').width(newWidth);
@@ -398,17 +369,12 @@ export const LightBox = function () {
 		}
 
 		if (oldWidth !== newWidth || oldHeight !== newHeight) {
-			this.$outerContainer.animate(
-				{
-					width: newWidth,
-					height: newHeight,
-				},
-				this.options.resizeDuration,
-				'swing',
-				function () {
-					postResize();
-				},
-			);
+			this.$outerContainer.animate({
+				width: newWidth,
+				height: newHeight
+			}, this.options.resizeDuration, 'swing', function () {
+				postResize();
+			});
 		} else {
 			postResize();
 		}

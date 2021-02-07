@@ -1,4 +1,3 @@
-import * as $ from 'jquery';
 
 export function activateBuildItems() {
 	var elements = {

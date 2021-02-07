@@ -23,6 +23,7 @@ namespace SanitaryCartControl.Controllers
         }
         public IActionResult Error()
         {
+
             return View();
         }
         // public IActionResult ThrowError()
