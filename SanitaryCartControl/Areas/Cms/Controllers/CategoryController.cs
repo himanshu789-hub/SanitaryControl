@@ -25,7 +25,7 @@ namespace SanitaryCartControl.Areas.Controllers
             _categoryService = categoryService;
         }
         
-        public IActionResult GetNonSeriesHolder()
+        public IActionResult GetNonSeries()
         {
             return View(_categoryService.GetNonSeriesHolderBreadcrumps().ToArray());
         }
@@ -63,7 +63,7 @@ namespace SanitaryCartControl.Areas.Controllers
             {
                 IsSuccess = false,
                 Params = dict,
-                Link = Url.Action("GetNonSeriesHolder", "Category", new { Areas = "Cms" })
+                Link = Url.Action("GetNonSeries", "Category", new { Areas = "Cms" })
             });
         }
     }

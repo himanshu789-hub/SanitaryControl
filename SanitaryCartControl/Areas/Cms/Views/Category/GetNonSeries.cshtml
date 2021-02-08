@@ -4,7 +4,8 @@
     ViewData["Head"] = "View All Category";
 }
 <input type="text" class="form-control mb-1 mt-1" style="width:230px" id="search-box" placeholder="Search Box . . ."/>
-<table class="table table-striped table-hover" id="table-breadcrumb">
+<div id="categories-list">
+<table class="table table-striped table-hover lazy-wrapper" id="table-breadcrumb">
     <thead>
        <tr>
            <th>#</th>
@@ -32,9 +33,11 @@
                 <td>@item.Breadcrumps</td>
                 <td>
                     <div class="img-perfect">
-                    <a href="#@targetName"><img src='@imagePath' class="border rounded-lg img-perfect @appendedClass"/></a>
+                    <a href="#@targetName" class="overlay-image-wrapper">
+                        <img data-src='@imagePath' class="border rounded-lg img-perfect @appendedClass lazy"/>
+                    </a>
                      <div class="lb-overlay" id="@targetName">
-                      <img src="@imagePath" />
+                      <img data-src="@imagePath" />
                       <a class="text-danger lb-close" href="#page">X</a>
                       <p>@item.Breadcrumps</p>
                     </div>
@@ -45,7 +48,7 @@
         }
     </tbody>
 </table>
-
+</div>
 @section BodyInvokeScripts
     {
     <script>
@@ -58,12 +61,30 @@
             $(setTimeout(function(){
                    $('.append-class').addClass('fade-in')
             },1000));
+            let scrollIntervalId ;
             $(elements.searchBox).keyup(function(e){
+                const shouldScroll = false;
                 const value = $(elements.searchBox).val().toLowerCase();
-                $(`${elements.table}>tbody>tr`).map(function(index,row){
+                $(`${elements.table}>tbody>tr`).each(function(index,row){
                  $(row).toggle($(row).text().toLowerCase().indexOf(value)>-1);
                 });
+                
+                clearInterval(scrollIntervalId)
+              scrollIntervalId = setTimeout(function(){
+                $('.lazy-wrapper').scrollTop(1);
+              },3000)
             });
+            
+            $('a.overlay-image-wrapper').click(function(e){
+               const imageSrc = $(this).find('>img').attr('data-src')
+               $(this).next().find('>img').attr('src',imageSrc);  
+            })
+        }
+        if(window.lazyLoadActivation)
+        {
+            $(function(){
+                window.lazyLoadActivation();
+            })
         }
     </script>
     }

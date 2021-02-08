@@ -19,17 +19,26 @@ namespace SanitaryCartControl.Extensions
             {
                 ExceptionHandler = (context) =>
                 {
-                    bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith("/Cms",System.StringComparison.OrdinalIgnoreCase);
+                    bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith(@"/Cms",System.StringComparison.OrdinalIgnoreCase);
                     context.Response.StatusCode =Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError;
+                   
                     var logger = context.Features.Get<ILogger>();
-                    var exception = context.Features.Get<IExceptionHandlerFeature>();
-                    logger.LogError(exception.Error,"Exception Handled By Golbal Handler");
-                    if (IsRequestFormCms)
+                    var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    bool IsExceptionFromApiControllers = context.Request.Path.ToUriComponent().Contains(@"/api/");
+                    
+                    logger.LogError(exceptionHandlerFeature.Error,"Exception Handled By Golbal Handler");
+                    
+                    if(IsExceptionFromApiControllers)
+                    {
+                        
+                    }
+                    else if (IsRequestFormCms)
                     {
                         context.Response.Redirect("/Cms/Home/Error");
                     }
                     else
                         context.Response.Redirect("/Home/Error");
+                    
                     return System.Threading.Tasks.Task.CompletedTask;
                 }
             });

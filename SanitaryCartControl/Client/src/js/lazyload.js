@@ -26,7 +26,7 @@ export function LazyLoadingActivation() {
 			const images = $(lazyElements.lazyWrapper).find(' .lazy');
 			images.each(function (index, element) {
 				if (
-					$(element).offset().top <=
+					$(element).offset().top - $(lazyElements.lazyWrapper).offset().top <=
 					$(lazyElements.lazyWrapper)[0].clientHeight
 				) {
 					const dataSrc = $(element).attr('data-src');

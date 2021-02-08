@@ -539,3 +539,27 @@ img[src=''].brand {
 .lb-overlay p {
 	opacity: 1;
 }
+
+
+#categories-list>table
+{
+	height:70vh;
+	overflow-y: scroll;
+	display:block;
+}
+
+
+.lazy-wrapper .lazy
+{
+	background-color: white;
+	opacity:1;
+	animation: flicker 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes flicker
+{
+	100%{
+		opacity:0.5;
+		background-color: #7f53ac;
+	}
+}

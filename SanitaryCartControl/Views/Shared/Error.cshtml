@@ -1,6 +1,10 @@
-
-<div class="error text-center">
-    <h1 class="text-danger">A Unexpected Server Error Occurred</h1>
-    <h5 style="color:var(--head-color)">Please Try After Some Time</h5>
-    <i class="fa fa-frown-o fa-4x" style="color:var(--color2)" aria-hidden="true"></i>
+<div class="d-flex justify-content-center">
+    <div class="error">
+        <h1 class="text-color4">SORRY!</h1>
+        <h2 class="text-danger">An Unexpected Error Occurred</h2>
+        <h5 class="text-dark text-center">Please Try After Some Time</h5>
+        <p class="m-2 text-center">
+            @Html.ActionLink("Redirect","Index",new{},new{@class="btn redirect"})
+        </p>
+    </div>
 </div>

@@ -9,4 +9,6 @@ import  'jquery-validation';
 import 'jquery-validation-unobtrusive';
 import './../../css/cmssite.css';
 import {selectMenu} from './../homepage';
+import {LazyLoadingActivation} from './../lazyload';
+window.lazyLoadActivation = LazyLoadingActivation;
 window.selectMenu = selectMenu;
