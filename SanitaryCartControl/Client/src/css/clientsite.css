@@ -3,18 +3,10 @@
 	padding: 0;
 	font-family: 'Roboto', sans-serif;
 }
-
-:root {
-	--color1: #70bcbc;
-	--color2: #67aa8d;
-	--color3: #0a0a0a;
-	--color4: gray;
-	--menu-bgcolor: rgb(65, 126, 119);
-	--menu-color: rgb(193, 203, 202);
-	--mobile-menu-height: 50px;
-	--nav-icon-open-Y-amount: 14px;
-	--nav-icon-open-bgcolor: #f58634;
+a:focus {
+	color: black;
 }
+
 h1,
 h2,
 h3,
@@ -27,16 +19,19 @@ h6,
 :root {
 	--color1: #70bcbc;
 	--color2: #67aa8d;
+	--sub-head: rgba(103, 170, 141, 0.85);
 	--color3: #0a0a0a;
-	--foteer-bg-color: #d4d3da;
-	--footer-text-color: #4a5150;
+	--foteer-bg-color: var(--menu-bgcolor);
+	--footer-text-color: black;
 	--facebook-color: #4267b2;
+	--facebook-bg-color: white;
 	--insta-color: #f56040;
 	--menu-bgcolor: #888c8f;
 	--menu-color: #f3f7f9;
 	--submenu-bg-color: #4a5150;
 	--submenu-text-color: var(--color2);
 	--mobile-menu-height: 70px;
+	--footer-heading-color: white;
 	--head-color: #6c7173;
 	--text-color: #b4adae;
 	--nav-icon-open-Y-amount: 14px;
@@ -249,7 +244,7 @@ nav li.parent > ul#child.showList {
 		top: 20px;
 	}
 	#slider-wrapper {
-		height: 56.25vw;
+		height: 40.01vw;
 	}
 }
 #header {
@@ -615,11 +610,11 @@ h2 {
 #footer {
 	background-color: var(--foteer-bg-color);
 	color: var(--footer-text-color);
+	padding: 15px;
 }
 #footer-content img {
-	width: 67px;
-	height: auto;
-	margin: auto;
+	width: 88px;
+	height: 100%;
 }
 .image-logo {
 	box-shadow: 0px 0px 3px 4px rgba(0, 0, 0, 0.34);
@@ -670,7 +665,7 @@ iframe {
 }
 #footer .head {
 	font-size: 0.9rem;
-	color: var(--color2);
+	color: var(--footer-heading-color);
 }
 #copyright-bar {
 	width: 100%;
@@ -694,6 +689,10 @@ iframe {
 }
 #navigation {
 	-ms-overflow-style: none;
+}
+#home-categories,
+#home-brands > .brand-wrapper-holder {
+	padding-top: 2%;
 }
 
 #home-categories #home-product-wrapper > .category > .category-content {
@@ -968,7 +967,7 @@ h6,
 
 #slider-wrapper {
 	width: 100%;
-	height: 56.25vw;
+	height: 40.01vw;
 	position: relative;
 	overflow-x: hidden;
 }
@@ -1009,8 +1008,6 @@ h6,
 		background-color: var(--color1);
 	}
 }
-@media screen and (max-width: 200px) {
-}
 #infographics p {
 	font-size: 0.7rem;
 	margin-bottom: 0rem;
@@ -1023,11 +1020,6 @@ h6,
 }
 .graphic > .content > .head {
 	color: var(--color1);
-}
-
-@media screen and (max-width: 400px) {
-	#slider-wrapper {
-	}
 }
 
 @-webkit-keyframes pulsate-fwd {
@@ -1056,6 +1048,19 @@ h6,
 	100% {
 		-webkit-transform: scale(1);
 		transform: scale(1);
+	}
+}
+
+#maps iframe {
+	border-radius: 1% 88% 0% 81% / 0% 51% 0% 44%;
+	width: 100%;
+	max-width: 320px;
+	height: 320px;
+	box-shadow: 1px 1px 4px 3px rgb(0 0 0 / 36%);
+}
+@media screen and (max-width: 360px) {
+	#maps iframe {
+		border-radius: unset;
 	}
 }
 @media (min-width: 992px) {
@@ -1168,7 +1173,7 @@ h6,
 		align-items: flex-end !important;
 	}
 	#slider-wrapper {
-		height: 56.25vw;
+		height: 40.01vw;
 	}
 	.edge-over {
 		overflow-y: scroll !important;
@@ -1185,10 +1190,9 @@ h6,
 #contact-us .head {
 	color: var(--head-color);
 }
-#contact-us > #content {
-	justify-content: space-evenly !important;
+#contact-us > #content > .info {
+	align-items: flex-start;
 }
-
 #contact-us .info {
 	flex: 1 1 auto;
 	margin: 4px;
@@ -1201,7 +1205,7 @@ h6,
 	font-family: 'Russo One', sans-serif !important;
 }
 #contact-us .sub-head {
-	color: var(--color2) !important;
+	color: var(--sub-head) !important;
 }
 
 .bottom-line {
@@ -1216,14 +1220,6 @@ h6,
 	border: 2px solid var(--color2);
 	width: 30%;
 	animation: bottom-line 3s ease-in infinite alternate;
-}
-#maps iframe {
-	border-radius: 1% 88% 0% 81% / 0% 51% 0% 44%;
-	height: 100vw;
-	width: 100vw;
-	max-width: 400px;
-	max-height: 400px;
-	box-shadow: 1px 1px 4px 3px rgb(0 0 0 / 36%);
 }
 @keyframes bottom-line {
 	100% {
@@ -1760,7 +1756,7 @@ span.text {
 	.breadcrumb .breadcrumb-item::before,
 	.breadcrumb .breadcrumb-item::after {
 		content: '';
-		border-right: 2px solid pink;
+		border-right: 2px solid var(--color2);
 		display: block;
 		height: 50%;
 		position: absolute;
@@ -1773,7 +1769,7 @@ span.text {
 	.breadcrumb .breadcrumb-item:after {
 		bottom: 0;
 		top: auto;
-		border-right: 2px solid greenyellow;
+		border-right: 2px solid var(--color1);
 		transform: skewX(-45deg);
 	}
 

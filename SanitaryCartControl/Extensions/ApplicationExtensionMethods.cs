@@ -8,8 +8,8 @@ namespace SanitaryCartControl.Extensions
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Password { get; set; }
-        
-        public string UserName{get;set;}
+
+        public string UserName { get; set; }
     }
     public static class ApplicationExtensionsMethods
     {
@@ -19,18 +19,18 @@ namespace SanitaryCartControl.Extensions
             {
                 ExceptionHandler = (context) =>
                 {
-                    bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith(@"/Cms",System.StringComparison.OrdinalIgnoreCase);
-                    context.Response.StatusCode =Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError;
-                   
-                    var logger = context.Features.Get<ILogger>();
+                    bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith(@"/Cms", System.StringComparison.OrdinalIgnoreCase);
+                    context.Response.StatusCode = Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError;
+
+                    var logger = context.Features.Get<ILogger<IExceptionHandlerFeature>>();
                     var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
                     bool IsExceptionFromApiControllers = context.Request.Path.ToUriComponent().Contains(@"/api/");
-                    
-                    logger.LogError(exceptionHandlerFeature.Error,"Exception Handled By Golbal Handler");
-                    
-                    if(IsExceptionFromApiControllers)
+
+                    logger.LogError(exceptionHandlerFeature?.Error, "Exception Handled By Golbal Handler");
+
+                    if (IsExceptionFromApiControllers)
                     {
-                        
+                   
                     }
                     else if (IsRequestFormCms)
                     {
@@ -38,7 +38,7 @@ namespace SanitaryCartControl.Extensions
                     }
                     else
                         context.Response.Redirect("/Home/Error");
-                    
+
                     return System.Threading.Tasks.Task.CompletedTask;
                 }
             });

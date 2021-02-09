@@ -26,10 +26,10 @@ namespace SanitaryCartControl.Controllers
 
             return View();
         }
-        // public IActionResult ThrowError()
-        // {
-        //     throw new System.Exception();
-        // }
+        public IActionResult ThrowError()
+        {
+            throw new System.Exception();
+        }
         public IActionResult Index()
         {
             HomeViewModel homeViewModel = new HomeViewModel();
