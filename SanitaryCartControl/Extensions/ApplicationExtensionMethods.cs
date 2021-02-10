@@ -13,7 +13,7 @@ namespace SanitaryCartControl.Extensions
     }
     public static class ApplicationExtensionsMethods
     {
-        public static void UseCustomExceptionHandler(this IApplicationBuilder app)
+        public static void UseCustomExceptionHandler(this IApplicationBuilder app,ILogger logger)
         {
             app.UseExceptionHandler(new ExceptionHandlerOptions
             {
@@ -22,11 +22,10 @@ namespace SanitaryCartControl.Extensions
                     bool IsRequestFormCms = context.Request.Path.ToUriComponent().StartsWith(@"/Cms", System.StringComparison.OrdinalIgnoreCase);
                     context.Response.StatusCode = Microsoft.AspNetCore.Http.StatusCodes.Status500InternalServerError;
 
-                    var logger = context.Features.Get<ILogger<IExceptionHandlerFeature>>();
                     var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
                     bool IsExceptionFromApiControllers = context.Request.Path.ToUriComponent().Contains(@"/api/");
 
-                    logger.LogError(exceptionHandlerFeature?.Error, "Exception Handled By Golbal Handler");
+                    logger.LogError(exceptionHandlerFeature.Error, "Exception Handled By Golbal Handler");
 
                     if (IsExceptionFromApiControllers)
                     {

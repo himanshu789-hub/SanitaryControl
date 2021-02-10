@@ -64,7 +64,7 @@ namespace SanitaryCartControl
             }
             else
             {
-                app.UseCustomExceptionHandler();
+                app.UseCustomExceptionHandler(logger);
                 app.UseHsts();
             }
             app.UseStaticFiles();
