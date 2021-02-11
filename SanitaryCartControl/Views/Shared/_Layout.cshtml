@@ -70,23 +70,26 @@
                             class="image-logo" /></a>
                 </div>
                 <div class=" d-flex flex-column justify-content-between pl-2">
-                    <label class="head text-uppercase">@Constants.PortalHead</label>
+                    <label class="head text-uppercase m-0 firm-name">@Constants.PortalHead</label>
                     <table id="info-table">
                         <tr>
                             <td><u>Address</u></td>
                         </tr>
                         <tr>
-                            <td>
-                                @Constants.Address
+                            <td class="address-cell-content">
+                                @foreach(string addressPart in Constants.Address.Split(":"))
+                                {
+                                         <span>@addressPart</span>
+                                }
                             </td>
                         </tr>
                     </table>
                 </div>
             </div>
             <div class="col-12 col-md-4 pt-2 pt-md-0">
-                <div id="social-icons" class="">
-                    <label class="head text-uppercase">Follow Us On</label>
-                    <div class="d-flex flex-column flex-sm-row">
+                <div id="social-icons">
+                    <label class="head text-uppercase text-md-right d-block">Follow Us On</label>
+                    <div class="d-flex flex-column flex-sm-row justify-content-start justify-content-md-end">
                         <a href="https://www.facebook.com/GokulEnt/?ti=as" class="facebook ml-2"><i
                                 class="fa fa-facebook-official" aria-hidden="true"></i></a>
                     </div>

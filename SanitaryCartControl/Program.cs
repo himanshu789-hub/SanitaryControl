@@ -40,6 +40,7 @@ namespace SanitaryCartControl
                     
                     if(httpHosting.HostingEnvironment.EnvironmentName==Microsoft.Extensions.Hosting.Environments.Production)
                     {
+                             
                     }
                     else
                     {
