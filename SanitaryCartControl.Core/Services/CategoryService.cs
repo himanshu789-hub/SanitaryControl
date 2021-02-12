@@ -244,7 +244,8 @@ namespace SanitaryCartControl.Core.Services
                     Id = category.Id,
                     ParentId = category.ParentId,
                     Title = category.Titlle,
-                    Categories = null
+                    Categories = null,
+                    ImagePath=category.ImagePath
                 };
             }
         }
@@ -269,11 +270,32 @@ namespace SanitaryCartControl.Core.Services
 
         public IEnumerable<CategoryBLL> GetCategoryListUptoFirstLevel()
         {
-            using (var context = new SanitaryCartContext(_con))
+            ICollection<CategoryBLL> categoryBLLs = new List<CategoryBLL>();
+            using (var con = new SqlConnection(_con))
             {
-                IEnumerable<Category> categories = context.Categories.FromSqlRaw<Category>("EXEC GetNodeTillFirstLevel").ToList();
-                IEnumerable<int> SeriesHolderIds = GetSeriesHoldersIdsFromContext(context);
-                return GetTree(HelpherMethods.ToCatgeoryBLL(categories, SeriesHolderIds.ToArray()), null);
+                string sql = "EXEC GetNodeTillFirstLevel";
+                using (var command = new SqlCommand(sql, con))
+                {
+                    con.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int? ParentId = null;
+                        if (!reader.IsDBNull(2))
+                        {
+                            ParentId = reader.GetInt32(2);
+                        }
+                        categoryBLLs.Add(new CategoryBLL()
+                        {
+                            Id = reader.GetInt32(0),
+                            Categories = null,
+                            IsEndPoint = !reader.GetBoolean(3),
+                            ParentId = ParentId,
+                            Title = reader["Title"] as string
+                        });
+                    }
+                }
+                return GetTree(categoryBLLs, null);
             }
         }
 
@@ -282,7 +304,7 @@ namespace SanitaryCartControl.Core.Services
             using (var context = new SanitaryCartContext(_con))
             {
                 IEnumerable<Category> categories = context.Categories.Where(e => e.ParentId == null).AsNoTracking().ToList();
-                
+
                 ICollection<CategoryInfo> categoryInfos = new List<CategoryInfo>();
                 //assuming all category having parentId NULL.Thus Automatically SeriesHolder For Now Case As I Known All Root Have Children
                 foreach (var item in categories)

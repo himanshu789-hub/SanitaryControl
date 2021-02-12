@@ -49,7 +49,7 @@ namespace SanitaryCartControl.Areas.Controllers
                     return View("Success", new MessageViewModel()
                     {
                         IsSuccess = true,
-                        Link = Url.Action("GetNonSeriesHolder", "Category", new { Areas = "Cms" })
+                        Link = Url.Action("GetNonSeries", "Category", new { Areas = "Cms" })
                     });
             }
             IDictionary<string, object> dict = null;

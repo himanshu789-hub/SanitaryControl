@@ -13,6 +13,7 @@ namespace SanitaryCartControl.Areas.Controllers
 
         public BaseController(IHostEnvironment env) => _env = env;
 
+
         [NonAction]
         public void DeleteImage(string path)
         {
@@ -47,7 +48,7 @@ namespace SanitaryCartControl.Areas.Controllers
             {
                 file.CopyTo(stream);
             }
-            return getRelativePath;
+            return getRelativePath.Replace(@"\","/");
         }
         [NonAction]
         protected string[] AddImages(IFormFileCollection files, string path)
