@@ -83,7 +83,7 @@ namespace SanitaryCartControl.Areas.Controllers
                 if (IsUpdated)
                 {
                     IDictionary<string, object> parameters = new Dictionary<string, object>();
-                    parameters.Add("search",productEditDTO.Product.Name);
+                    parameters.Add("search", productEditDTO.Product.Name);
                     return View("Success", new MessageViewModel()
                     {
                         IsSuccess = true,
@@ -118,7 +118,14 @@ namespace SanitaryCartControl.Areas.Controllers
         }
         public IActionResult GetValues([BindRequired] ProductType type, [BindRequired] int categoryId)
         {
-            return Json(_productService.GetAttrinuteValues(type, categoryId));
+            try
+            {
+                return Json(_productService.GetAttrinuteValues(type, categoryId));
+            }
+            catch (System.Data.SqlClient.SqlException)
+            {
+                return Problem();
+            }
         }
 
         [HttpGet]

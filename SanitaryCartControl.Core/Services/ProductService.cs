@@ -59,7 +59,6 @@ namespace SanitaryCartControl.Core.Services
                             var result = context.Materials.Where(e => e.CategoryIdFk == rootId).AsNoTracking().ToList();
                             result.ForEach(e => Values.Add(new KeyValuePair<int, string>(e.Id, e.Title)));
                         }
-
                         break;
                     default:
                         throw new System.Exception("A Non Recognised Product Type Encountered");
