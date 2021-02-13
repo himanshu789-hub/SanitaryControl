@@ -33,7 +33,7 @@ namespace SanitaryCartControl.Controllers
                 {
                     if (Item.Page.HasValue)
                     {
-                        const int NUMBER_OF_PRODUCT_AT_A_TIME = 10;
+                        const int NUMBER_OF_PRODUCT_AT_A_TIME = 22;
                         ItemViewModel.ParentId = Item.CategoryId.Value;
                         // ICollection<ProductInfoBLL> productInfos = new List<ProductInfoBLL>();
                         // for (int i = 0; i <= 22; i++)
