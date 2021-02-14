@@ -30,6 +30,7 @@ namespace SanitaryCartControl.Core.Helpher
             ProductBLL productBLL = new ProductBLL();
             productBLL.Id = product.Id;
             productBLL.Type = product.Type;
+            productBLL.IsActive = product.IsActive;
             productBLL.Name = product.Name;
             productBLL.Brand = HelpherMethods.ToBrandBLL(product.BrandIdFkNavigation);
             productBLL.Description = product.Description;

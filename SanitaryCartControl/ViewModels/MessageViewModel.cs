@@ -5,6 +5,7 @@ namespace SanitaryCartControl.ViewModels
     {
         public string Link{get;set;}
         public bool IsSuccess{get;set;}
+        public string Message{get;set;}
         public IDictionary<string,object> Params{get;set;}
     }
 }

@@ -16,7 +16,16 @@ else
     <div class="text-center text-danger">
         <i class="fa fa-times-circle-o fa-4x scale-up-center" style="font-size: 120px;" aria-hidden="true"></i>
     <p class="font-weight-bold">Operation Failed</p>
-    <p>Somethig Went Wrong</p>
+    <p>
+        @if(Model.Message!=null)
+        {
+<span>@Model.Message</span>
+        }
+        else
+        {
+     <span>Somethig Went Wrong</span>
+        }
+   </p>
     </div>
 }
 

@@ -57,6 +57,7 @@ namespace SanitaryCartControl.Areas.Controllers
         [HttpPost]
         public IActionResult Edit(ProductEditDTO productEditDTO)
         {
+
             ModelState.Remove<ProductEditDTO>(e => e.Images);
             for (int i = 0; i < productEditDTO.Attributes.Count(); i++)
             {
@@ -72,8 +73,20 @@ namespace SanitaryCartControl.Areas.Controllers
             }
             if (ModelState.IsValid)
             {
+                ProductBLL oldProductBLL = _productService.GetById(productEditDTO.Product.Id);
+                if (!oldProductBLL.IsActive)
+                {
+                    return View("Success", new MessageViewModel()
+                    {
+                        Message = $"Product with code {oldProductBLL.Code} is deleted by another user before you post the value",
+                        Link = Url.Action("Search"),
+                        IsSuccess = false
+                    });
+
+                }
                 string[] images = null;
                 string[] oldImages = _productService.GetById(productEditDTO.Product.Id).Images;
+
                 if (productEditDTO.Images != null)
                 {
                     this.DeleteImages(oldImages);
@@ -105,6 +118,15 @@ namespace SanitaryCartControl.Areas.Controllers
         {
             ProductEditViewModel productViewModel = new ProductEditViewModel();
             ProductBLL productBLL = _productService.GetById(Id);
+            if (!productBLL.IsActive)
+            {
+                return View("Success", new MessageViewModel()
+                {
+                    Message = $"Product with code {productBLL.Code} delete by another user after you got original value",
+                    Link = Url.Action("Search"),
+                    IsSuccess = false
+                });
+            }
             productViewModel.Product = Converters.ToProductDTO(productBLL);
             productViewModel.Brand = productBLL.Brand;
             productViewModel.Attributes = Converters.ToAttributeDTOList(productBLL.AttributeBLLs).ToArray();

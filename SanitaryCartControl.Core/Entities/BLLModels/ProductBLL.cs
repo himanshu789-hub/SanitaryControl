@@ -15,5 +15,6 @@ namespace SanitaryCartControl.Core.Entities.BLLModels
         public string[] Images{get;set;}
         public IEnumerable<AttributeBLL> AttributeBLLs{get;set;} 
         public AncestorCategoryBLL RootPath{get;set;}
+        public bool IsActive{get;set;}
     }
 }
