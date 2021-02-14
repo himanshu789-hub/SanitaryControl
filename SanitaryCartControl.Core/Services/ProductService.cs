@@ -163,8 +163,11 @@ namespace SanitaryCartControl.Core.Services
         }
         public IEnumerable<ProductBLL> Search(string value)
         {
+            PagedProduct pagedProducts =  new PagedProduct();
+            
             using (var context = new SanitaryCartContext(_con))
             {
+
                 var products = context.Products.AsNoTracking().Where(e => (e.Code == value || e.Name.Contains(value)) && e.IsActive)
                   .Include(e => e.TypeProductQuantities)
                   .Include(e => e.BrandIdFkNavigation).Include(e => e.Category).ThenInclude(e => e.Parent).ToList();
