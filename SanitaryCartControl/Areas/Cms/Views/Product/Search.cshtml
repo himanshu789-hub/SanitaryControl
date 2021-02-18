@@ -1,7 +1,7 @@
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
 @using X.PagedList.Mvc.Bootstrap4.Core;
-@model IPagedList<ProductBLL>;
+@model SanitaryCartControl.Core.Entities.BLLModels.PagedProduct;
 @using Microsoft.AspNetCore.Antiforgery;
 @inject IAntiforgery antiForgery;
 
@@ -21,10 +21,16 @@
 }
 @if(Model!=null)
 {
-  @if(Model.Count>0)
+    <div class="text-right">
+    Total Count : @Model.TotalCount
+    </div>
+  @if(Model.CurrentTotal>0)
   {      
+
     <table class="table table-hover">
         <thead>
+            
+            <td>S.No.</td>
             <th>Code</th>
             <th>Name</th>
             <th>Brand</th>
@@ -34,10 +40,12 @@
             
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @for (var i = 0 ;i< Model.Products.Count();i++)
             {
+                var item = Model.Products.ElementAt(i);
                 <tr>
-                    <td>@item.Code</td>
+                    <td>@(i+1+(Model.PageSize*(Model.PageIndex-1)))</td>
+                    <td>@item.Code (@item.Id)</td>
                     <td>@item.Name</td>
                     <td>@item.Brand.Name</td>
                     <td class="text-center">
@@ -110,7 +118,19 @@ table table>thead>tr>th{
 }
     </style>
     <div class="d-flex justify-content-center">
-@Html.PagedListPager( Model ,page => Url.Action("Search", new { page,search=Context.Request.Query["search"] }),Bootstrap4PagedListRenderOptions.Classic)
+      @{
+          int totalPage =(int) Math.Ceiling((decimal)Model.TotalCount/Model.CurrentTotal);
+      }
+      @for(int i=0;i<totalPage;i++)
+      {
+          string appendClass=(i+1)==Context.Request.Query["page"]?"active":"";
+          string link = Url.Action("Search",new {search=Context.Request.Query["search"],page=(i+1)});
+          <nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item @appendClass"><a class="page-link" href="@Json.Serialize(link))">@(i+1)</a></li>
+  </ul>
+</nav>
+      }
     </div>
 }
 else{

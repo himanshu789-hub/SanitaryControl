@@ -120,13 +120,13 @@ namespace SanitaryCartControl.Areas.Controllers
         [HttpGet]
         public IActionResult DeleteSucced()
         {
-          return  this.Success(@"/Account/ViewAll");
+          return  this.Success(Url.Action("ViewAll"));
         }
         
         [HttpGet]
         public IActionResult DeleteFailed()
         {
-           return this.Failed(@"/Account/ViewAll");
+           return this.Failed(Url.Action("ViewAll"));
         }
 
         [HttpPost]

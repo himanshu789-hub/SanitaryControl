@@ -9,7 +9,7 @@ namespace SanitaryCartControl.Core.Contracts.Services
     ProductBLL GetById(int Id);
     bool Update(ProductBLL product);
     int Add(ProductBLL product);
-    IEnumerable<ProductBLL> Search(string value);
+    PagedProduct Search(string value,int page,int count);
     bool Delete(int Id);
     IEnumerable<ProductInfoBLL> GetProductsByCategoryId(int CategoryId,int Page,int Count);
     }

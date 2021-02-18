@@ -229,10 +229,12 @@ namespace SanitaryCartControl.Areas.Controllers
             {
                 return View(null);
             }
+            if (!page.HasValue)
+                page = 1;
             int pageSize = 40;
-            var products = _productService.Search(search);
-
-            return View(products.ToPagedList(page ?? 1, pageSize));
+            var products = _productService.Search(search, page.Value,pageSize);
+        
+            return View(products);
         }
 
     }

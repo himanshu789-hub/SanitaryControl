@@ -7,6 +7,7 @@ using System.Linq;
 using Enums = SanitaryCartControl.Core.Entities.Enums;
 using Microsoft.Extensions.Options;
 using SanitaryCartControl.Core.Helpher;
+using System.Data.SqlClient;
 namespace SanitaryCartControl.Core.Services
 {
     public class ProductService : IProductService
@@ -161,18 +162,64 @@ namespace SanitaryCartControl.Core.Services
                 return NewProduct.Id;
             }
         }
-        public IEnumerable<ProductBLL> Search(string value)
+        public PagedProduct Search(string value, int page, int count)
         {
-            PagedProduct pagedProducts =  new PagedProduct();
-            
-            using (var context = new SanitaryCartContext(_con))
+            PagedProduct pagedProducts = new PagedProduct();
+            using (var connection = new SqlConnection(_con))
             {
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText = "EXEC SearchProductWithPartition @PageCount=@PageCount,@Search=@Search,@Page=@Page";
+                    SqlParameter pageCount = new SqlParameter()
+                    {
+                        Value = count,
+                        ParameterName = "@PageCount",
+                        SqlDbType = System.Data.SqlDbType.Int
+                    };
+                    SqlParameter search = new SqlParameter()
+                    {
+                        Value = value,
+                        ParameterName = "@Search",
+                        SqlDbType = System.Data.SqlDbType.NVarChar,
+                        Size = 50
+                    };
+                    SqlParameter pageNumber = new SqlParameter()
+                    {
+                        Value = page,
+                        ParameterName = "@Page",
+                        SqlDbType = System.Data.SqlDbType.Int
+                    };
+                    command.Parameters.AddRange(new[] { pageCount, search, pageNumber });
+                    command.Connection = connection;
 
-                var products = context.Products.AsNoTracking().Where(e => (e.Code == value || e.Name.Contains(value)) && e.IsActive)
-                  .Include(e => e.TypeProductQuantities)
-                  .Include(e => e.BrandIdFkNavigation).Include(e => e.Category).ThenInclude(e => e.Parent).ToList();
-                return HelpherMethods.ToProductBLLs(products.AsQueryable());
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    var mappedProducts = new Mapper(reader).CreateList<ProductBLL>();
+                    var uniqueIds = mappedProducts.Select(e=>e.Id).Distinct();
+                    
+                    pagedProducts.PageIndex = page;
+                    pagedProducts.PageSize = count;
+
+                    if (reader.NextResult())
+                    {
+                        while (reader.Read())
+                        {
+                            pagedProducts.TotalCount = reader.GetInt32(0);
+                        }
+                    }
+                return pagedProducts;
             }
+            // using (var context = new SanitaryCartContext(_con))
+            // {
+
+            //     var query = context.Products.AsNoTracking().Where(e => (e.Code == value || e.Name.Contains(value)) && e.IsActive)
+            //       .Include(e => e.TypeProductQuantities)
+            //       .Include(e => e.BrandIdFkNavigation).Include(e => e.Category).ThenInclude(e => e.Parent);
+            //     var products = query.ToList();
+            //     return HelpherMethods.ToProductBLLs(products.AsQueryable());
+            // }
+        }
         }
         public bool Delete(int Id)
         {

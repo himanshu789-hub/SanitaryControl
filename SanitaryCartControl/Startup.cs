@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,9 +8,10 @@ using Microsoft.Extensions.Logging;
 using SanitaryCartControl.Extensions;
 using SanitaryCartControl.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Internal;
 using Microsoft.AspNetCore.Mvc;
 using SanitaryCartControl.Core.Context;
+using Microsoft.AspNetCore.DataProtection;
+using System.IO;
 
 namespace SanitaryCartControl
 {
@@ -30,6 +27,7 @@ namespace SanitaryCartControl
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(@"./Keys/"));
             services.AddDbContext<SanitaryCartContext>(options =>
              options.UseSqlServer(Configuration.GetConnectionString("SQLConnection")));
 
@@ -39,13 +37,13 @@ namespace SanitaryCartControl
             services.AddServicesExtensionsWithIConfiguration(Configuration);
             services.AddAntiforgery(options =>
             {
-                  options.FormFieldName = "_AntiForgeryVerification";
-                  options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
-                  options.SuppressXFrameOptionsHeader =true;
-                  options.Cookie.HttpOnly=true;
-                  options.Cookie.Name="_AntiForgeryVerification";
-                  options.Cookie.SameSite=Microsoft.AspNetCore.Http.SameSiteMode.Strict;
-                  options.Cookie.SecurePolicy=Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
+                options.FormFieldName = "_AntiForgeryVerification";
+                options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
+                options.SuppressXFrameOptionsHeader = true;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Name = "_AntiForgeryVerification";
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
+                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
             });
             services.AddControllersWithViews(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
         }
@@ -58,8 +56,8 @@ namespace SanitaryCartControl
             if (env.IsDevelopment())
             {
                 //ApplicationExtensionsMethods.SeedRolesAndAdmin(serviceProvider,Configuration);
-                  app.UseDeveloperExceptionPage();
-//                app.UseCustomExceptionHandler();
+                app.UseDeveloperExceptionPage();
+                //                app.UseCustomExceptionHandler();
 
             }
             else
@@ -68,13 +66,13 @@ namespace SanitaryCartControl
                 app.UseHsts();
             }
             app.UseStaticFiles();
-           
-          //  app.UseHttpsRedirection();
-            
+
+            //  app.UseHttpsRedirection();
+
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
-         
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
