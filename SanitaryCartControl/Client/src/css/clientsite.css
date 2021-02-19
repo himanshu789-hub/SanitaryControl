@@ -1053,8 +1053,8 @@ h6,
 #maps iframe {
 	border-radius: 1% 88% 0% 81% / 0% 51% 0% 44%;
 	width: 100%;
-	max-width: 320px;
-	height: 320px;
+	max-width: 360px;
+	height: 360px;
 	box-shadow: 1px 1px 4px 3px rgb(0 0 0 / 36%);
 }
 @media screen and (max-width: 360px) {
@@ -1204,7 +1204,8 @@ h6,
 	font-family: 'Russo One', sans-serif !important;
 }
 #contact-us .sub-head {
-	color: var(--sub-head) !important;
+	color: var(--head-color) !important;
+	font-weight: bold;
 }
 
 .bottom-line {
