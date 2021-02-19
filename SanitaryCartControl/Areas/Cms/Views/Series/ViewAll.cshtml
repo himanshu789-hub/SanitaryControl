@@ -8,6 +8,7 @@
     ICollection<SelectListItem> categories = new List<SelectListItem>();
     foreach (var item in Model.Category)
         categories.Add(new SelectListItem() { Value = item.Key.ToString(), Text = item.Value });
+        ViewData["Head"] = "View All Series";
 }
 
 @using(Html.BeginForm("ViewAll","Series",FormMethod.Get,new {@class=""})){

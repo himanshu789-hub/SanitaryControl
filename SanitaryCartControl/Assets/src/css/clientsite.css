@@ -1186,6 +1186,10 @@ h6,
 	font-size: 0.7rem;
 }
 
+#contact-us a{
+	color:black;
+}
+
 #contact-us .head {
 	color: var(--head-color);
 }

@@ -1,7 +1,7 @@
 
 import 'bootstrap/dist/css/bootstrap.css'
 import  'jquery/dist/jquery';
-import 'bootstrap';
+import 'bootstrap/dist/js/bootstrap.bundle';
 import * as $ from 'jquery'
 window.$ = $;
 window.jQuery = $;

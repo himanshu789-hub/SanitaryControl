@@ -2,13 +2,19 @@
 @model CategoryBLL
 @{
    string breadcrumbs = Converters.ToBreadcrumbByCategoryBLL(Model, '>');
+   ViewData["Head"] = "Edit A Category";
 }
 
 <span class="alert alert-danger d-none" id="show-category-form-error">&#9632; Please Upload A Image <i
       class="fa fa-close" onclick="removeError()"></i></span>
 <label role="textbox" class="border rounded p-3" style="min-width: 50%;">@breadcrumbs</label>
 
-@using (Html.BeginForm("Edit", "Category", FormMethod.Post, new { @enctype = "multipart/form-data", @id = "category-update-form" }))
+@using (Html.BeginForm("Edit", "Category", FormMethod.Post, new
+{
+   @enctype = "multipart/form-data",
+   @id =
+"category-update-form"
+}))
 {
    @Html.HiddenFor(e=>e.Id)
    <div class="form-inline">
@@ -32,12 +38,12 @@
       image: '#category-image-tag',
       updateButton: '#update-button',
       imageSelector: '#image-selector',
-      changeButton:"#changeButton",
+      changeButton: "#changeButton",
       form: 'form#category-update-form',
       errorViewer: '#show-category-form-error',
       lighboxImageHolder: '#image-1'
    };
-   const preivousImage = @Json.Serialize(Model.ImagePath); 
+   const preivousImage = @Json.Serialize(Model.ImagePath);
    var isImageUpdated = false;
    if ($) {
       function showUpdateButton(element) {
@@ -53,18 +59,17 @@
          this.submit();
          e.preventDefault();
       });
-      $(elements.form).on('change',elements.imageSelector,function (eventObject) {
+      $(elements.form).on('change', elements.imageSelector, function (eventObject) {
          const files = eventObject.target.files;
          if (files && files[0]) {
-            if(files[0].size/1024>100){
-                if(Number.parseInt(files[0].size/1024)>100)
-             {
-               alert('Image Fle Size Too Long.\nMust Be Atmost 100KB');
-               $(elements.imageSelector).remove();
-               const imageSelector = $('<input type="file" name="Image" class="btn btn-info" id="image-selector" placeholder="Select Image To Upload . . ." />');
-               $(imageSelector).insertBefore($(elements.updateButton))
-               return;
-             }
+            if (files[0].size / 1024 > 100) {
+               if (Number.parseInt(files[0].size / 1024) > 100) {
+                  alert('Image Fle Size Too Long.\nMust Be Atmost 100KB');
+                  $(elements.imageSelector).remove();
+                  const imageSelector = $('<input type="file" name="Image" class="btn btn-info" id="image-selector" placeholder="Select Image To Upload . . ." />');
+                  $(imageSelector).insertBefore($(elements.updateButton))
+                  return;
+               }
             }
             let fileReader = new FileReader();
             fileReader.onload = function (e) {
