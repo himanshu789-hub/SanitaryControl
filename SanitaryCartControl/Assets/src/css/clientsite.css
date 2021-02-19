@@ -1571,7 +1571,7 @@ body.lb-disable-scrolling {
 	transform: rotate(-136deg);
 }
 #overlay > i:nth-child(1) {
-	color: #6d6663ba;
+	color: #e9ecef;
 }
 span.text {
 	position: absolute;
@@ -1579,6 +1579,7 @@ span.text {
 #overlay .fa-inverse {
 	font-size: 36%;
 	transform: rotate(139deg);
+	color:var(--foteer-bg-color);
 }
 #first-image-holder > img {
 	max-height: 300px;
