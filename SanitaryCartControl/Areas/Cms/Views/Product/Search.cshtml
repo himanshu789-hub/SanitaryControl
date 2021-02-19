@@ -1,17 +1,26 @@
-@using X.PagedList.Mvc.Core;
-@using X.PagedList;
-@using X.PagedList.Mvc.Bootstrap4.Core;
 @model SanitaryCartControl.Core.Entities.BLLModels.PagedProduct;
 @using Microsoft.AspNetCore.Antiforgery;
 @inject IAntiforgery antiForgery;
 
 @{
     ViewData["Head"] = "Search Product";
+        string pageValue = Context.Request.Query["page"].ToString();
+                int currentPage = 1;
+                if(pageValue!=null && Int32.TryParse(pageValue,out currentPage))
+                {
+                       
+                }
+                else 
+                currentPage = 1;
+   
 }
 @using (Html.BeginForm("Search", "Product", FormMethod.Get))
 {
     <div class="row">
         <div class="col-3 form-group">
+           
+            @Html.Hidden("page",currentPage)
+            
             @Html.TextBox("search","",new {@class="form-control",@placeholder="Enter Name or Code"})
         </div>
         <div class="col-2">
@@ -21,6 +30,13 @@
 }
 @if(Model!=null)
 {
+
+                int previousPage = currentPage<=1 ? 1 : currentPage-1;
+                int totalPage =(int) Math.Ceiling((decimal)Model.TotalCount/Model.CurrentTotal);
+                int nextPage = currentPage>=totalPage?totalPage:currentPage+1;
+                string nextPageLink =  Url.Action("Search",new {search=Context.Request.Query["search"],page=nextPage});
+                string previousPageLink =  Url.Action("Search",new {search=Context.Request.Query["search"],page=previousPage});
+
     <div class="text-right">
     Total Count : @Model.TotalCount
     </div>
@@ -45,7 +61,7 @@
                 var item = Model.Products.ElementAt(i);
                 <tr>
                     <td>@(i+1+(Model.PageSize*(Model.PageIndex-1)))</td>
-                    <td>@item.Code (@item.Id)</td>
+                    <td>@item.Code</td>
                     <td>@item.Name</td>
                     <td>@item.Brand.Name</td>
                     <td class="text-center">
@@ -118,19 +134,20 @@ table table>thead>tr>th{
 }
     </style>
     <div class="d-flex justify-content-center">
-      @{
-          int totalPage =(int) Math.Ceiling((decimal)Model.TotalCount/Model.CurrentTotal);
-      }
-      @for(int i=0;i<totalPage;i++)
-      {
-          string appendClass=(i+1)==Context.Request.Query["page"]?"active":"";
-          string link = Url.Action("Search",new {search=Context.Request.Query["search"],page=(i+1)});
           <nav aria-label="Page navigation example">
   <ul class="pagination">
-    <li class="page-item @appendClass"><a class="page-link" href="@Json.Serialize(link))">@(i+1)</a></li>
+       <li class="page-item"><a class="page-link" href="@previousPageLink">Previous</a></li>
+      @for(int i=0;i<totalPage;i++)
+      {
+          string appendClass=(i+1)==currentPage?"active":"";
+          
+          string link = Url.Action("Search",new {search=Context.Request.Query["search"],page=(i+1)});
+          <li class="page-item @appendClass"><a class="page-link" href="@Json.Serialize(link))">@(i+1)</a></li>
+      }
+ <li class="page-item"><a class="page-link" href="@nextPageLink">Next</a></li>
   </ul>
 </nav>
-      }
+
     </div>
 }
 else{

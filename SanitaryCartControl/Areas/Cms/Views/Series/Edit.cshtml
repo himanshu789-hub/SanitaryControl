@@ -92,9 +92,9 @@ ViewData["Head"]="Edit A Series";
            debugger;
            if(files && files[0])
            {
-             if(Number.parseInt(files[0].size/1024)>28)
+             if(Number.parseInt(files[0].size/1024)>100)
              {
-               alert('Image Fle Size Too Long.\nMust Be Atmost 28KB');
+               alert('Image Fle Size Too Long.\nMust Be Atmost 100KB');
                form.remove();
                return;
              }

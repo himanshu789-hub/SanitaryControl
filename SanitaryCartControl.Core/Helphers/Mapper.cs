@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Data.SqlClient;
 using System.Collections.Generic;
@@ -9,57 +10,50 @@ namespace SanitaryCartControl.Core.Helpher
 {
     public class Mapper
     {
-        SqlDataReader _reader;
+        //  IEnumerable<T> CreateList<T>()
+        // {
+        //     ICollection<T> lists = new List<T>();
+        //     if (_reader.HasRows)
+        //     {
+        //         while (_reader.Read())
+        //         {
+        //             this.MapType<T>(lists);
+        //         }
+        //     }
+        //     return lists;
+        // }
+        // ICollection<T> GetEmptyCollection<T>()
+        // {
+        //     return new List<T>();
+        // }
+        // void GetMapCollection<ParentType>(ParentType parent, PropertyInfo propertyInfo)
+        // {
+        //     if (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.Namespace == "System.Collections.Generic")
+        //     {
+        //         object collectionElement = this.GetType().GetMethod("MapType", BindingFlags.Instance | BindingFlags.NonPublic)
+        //         .MakeGenericMethod(propertyInfo.PropertyType.GenericTypeArguments.First()).Invoke(this, null);
 
-        public Mapper(SqlDataReader reader)
-        {
-            _reader = reader;
-        }
-        public IEnumerable<T> CreateList<T>()
-        {
-            ICollection<T> lists = new List<T>();
-            if (_reader.HasRows)
-            {
-                while (_reader.Read())
-                {
-                    lists.Add(this.MapType<T>());
-                }
-            }
-            var uniqueItem = lists;
-            return lists;
-        }
-        ICollection<T> GetEmptyCollection<T>()
-        {
-            return new List<T>();
-        }
-        void GetMapCollection<ParentType>(ParentType parent, PropertyInfo propertyInfo)
-        {
-            if (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.Namespace == "System.Collections.Generic")
-            {
-                object collectionElement = this.GetType().GetMethod("MapType", BindingFlags.Instance | BindingFlags.NonPublic)
-                .MakeGenericMethod(propertyInfo.PropertyType.GenericTypeArguments.First()).Invoke(this, null);
+        //         var constructorType = typeof(List<>).GetGenericTypeDefinition().MakeGenericType(new Type[] { propertyInfo.PropertyType.GetGenericArguments().First() });
+        //         var previousValue = propertyInfo.GetValue(parent);
 
-                var constructorType = typeof(List<>).GetGenericTypeDefinition().MakeGenericType(new Type[] { propertyInfo.PropertyType.GetGenericArguments().First() });
-                var previousValue = propertyInfo.GetValue(parent);
+        //         if (previousValue == null)
+        //         {
+        //             var newInstance = Activator.CreateInstance(constructorType);
+        //             propertyInfo.SetValue(parent, newInstance);
 
-                if (previousValue == null)
-                {
-                    var newInstance = Activator.CreateInstance(constructorType);
-                    propertyInfo.SetValue(parent, newInstance);
+        //         }
+        //         var instance = Activator.CreateInstance(constructorType);
 
-                }
-                var instance = Activator.CreateInstance(constructorType);
-            
-                instance.GetType().GetMethod("AddRange").Invoke(instance, new object[] { propertyInfo.GetValue(parent) });
-                instance.GetType().GetMethod("Add").Invoke(instance, new object[] { collectionElement });
-                propertyInfo.SetValue(parent, instance);
-            }
-            else
-                throw new System.ArgumentException("Non Enumerable PropertyInfo Argument");
-        }
-        T MapType<T>()
+        //         instance.GetType().GetMethod("AddRange").Invoke(instance, new object[] { propertyInfo.GetValue(parent) });
+        //         instance.GetType().GetMethod("Add").Invoke(instance, new object[] { collectionElement });
+        //         propertyInfo.SetValue(parent, instance);
+        //     }
+        //     else
+        //         throw new System.ArgumentException("Non Enumerable PropertyInfo Argument");
+        // }
+        public T MapType<T>(SqlDataReader reader)
         {
-            if (_reader != null)
+            if (reader != null)
             {
                 T item = Activator.CreateInstance<T>();
                 PropertyInfo[] fields = typeof(T).GetProperties();
@@ -73,13 +67,12 @@ namespace SanitaryCartControl.Core.Helpher
                     }
                     if (propertyInfo.PropertyType.IsClass && propertyInfo.PropertyType.Namespace.StartsWith("SanitaryCartControl.Core.Entities.BLLModels"))
                     {
-                        Object nestedInstance = this.GetType().GetMethod("MapType", BindingFlags.NonPublic | BindingFlags.Instance).MakeGenericMethod(type).Invoke(this, null);
+                        Object nestedInstance = this.GetType().GetMethod("MapType",BindingFlags.Public | BindingFlags.Instance).MakeGenericMethod(type).Invoke(this, new object[]{reader});
                         propertyInfo.SetValue(item, nestedInstance);
                     }
                     else if (propertyInfo.PropertyType.Namespace == "System.Collections.Generic")
                     {
-                        this.GetMapCollection<T>(item, propertyInfo);
-                        
+                        continue;
                     }
                     else
                     {
@@ -92,7 +85,7 @@ namespace SanitaryCartControl.Core.Helpher
                         }
                         try
                         {
-                            object value = _reader[mappedProperty];
+                            object value = reader[mappedProperty];
                             value = Convert.ChangeType(value, propertyInfo.PropertyType);
                             propertyInfo.SetValue(item, value);
 
@@ -101,10 +94,7 @@ namespace SanitaryCartControl.Core.Helpher
                         {
 
                         }
-                        catch (System.Exception)
-                        {
-
-                        }
+                        
                     }
 
                 }

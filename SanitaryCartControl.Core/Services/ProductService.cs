@@ -2,9 +2,13 @@ using System.Collections.Generic;
 using SanitaryCartControl.Core.Contracts.Services;
 using SanitaryCartControl.Core.Entities.BLLModels;
 using SanitaryCartControl.Core.Context;
+using System;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Reflection;
 using Enums = SanitaryCartControl.Core.Entities.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Options;
 using SanitaryCartControl.Core.Helpher;
 using System.Data.SqlClient;
@@ -162,7 +166,7 @@ namespace SanitaryCartControl.Core.Services
                 return NewProduct.Id;
             }
         }
-        public PagedProduct Search(string value, int page, int count)
+        public PagedProduct Search(string searchValue, int page, int count)
         {
             PagedProduct pagedProducts = new PagedProduct();
             using (var connection = new SqlConnection(_con))
@@ -178,7 +182,7 @@ namespace SanitaryCartControl.Core.Services
                     };
                     SqlParameter search = new SqlParameter()
                     {
-                        Value = value,
+                        Value = searchValue,
                         ParameterName = "@Search",
                         SqlDbType = System.Data.SqlDbType.NVarChar,
                         Size = 50
@@ -194,13 +198,35 @@ namespace SanitaryCartControl.Core.Services
 
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        ICollection<ProductBLL> products = new List<ProductBLL>();
+                        while (reader.Read())
+                        {
+                            int Id = (int)reader["Id"];
+                            bool ExistsAlready = products.FirstOrDefault(e => e.Id == Id) != null;
+                            if (ExistsAlready)
+                            {
+                                ProductBLL existsProduct = products.First(e => e.Id == Id);
+                                List<AttributeBLL> attributeBLLs = new List<AttributeBLL>();
+                                attributeBLLs.AddRange(existsProduct.AttributeBLLs);
+                                attributeBLLs.Add(new Mapper().MapType<AttributeBLL>(reader));
+                                existsProduct.AttributeBLLs = attributeBLLs;
+                            }
+                            else
+                            {
+                                ProductBLL newProduct = new Mapper().MapType<ProductBLL>(reader);
+                                ICollection<AttributeBLL> attributeBLLs = new List<AttributeBLL>();
+                                attributeBLLs.Add(new Mapper().MapType<AttributeBLL>(reader));
+                                newProduct.AttributeBLLs = attributeBLLs;
+                                products.Add(newProduct);
+                            }
+                        }
 
-                    var mappedProducts = new Mapper(reader).CreateList<ProductBLL>();
-                    var uniqueIds = mappedProducts.Select(e=>e.Id).Distinct();
-                    
+                        pagedProducts.Products = products;
+                    }
                     pagedProducts.PageIndex = page;
                     pagedProducts.PageSize = count;
-
                     if (reader.NextResult())
                     {
                         while (reader.Read())
@@ -208,18 +234,18 @@ namespace SanitaryCartControl.Core.Services
                             pagedProducts.TotalCount = reader.GetInt32(0);
                         }
                     }
-                return pagedProducts;
-            }
-            // using (var context = new SanitaryCartContext(_con))
-            // {
+                    return pagedProducts;
+                }
+                // using (var context = new SanitaryCartContext(_con))
+                // {
 
-            //     var query = context.Products.AsNoTracking().Where(e => (e.Code == value || e.Name.Contains(value)) && e.IsActive)
-            //       .Include(e => e.TypeProductQuantities)
-            //       .Include(e => e.BrandIdFkNavigation).Include(e => e.Category).ThenInclude(e => e.Parent);
-            //     var products = query.ToList();
-            //     return HelpherMethods.ToProductBLLs(products.AsQueryable());
-            // }
-        }
+                //     var query = context.Products.AsNoTracking().Where(e => (e.Code == value || e.Name.Contains(value)) && e.IsActive)
+                //       .Include(e => e.TypeProductQuantities)
+                //       .Include(e => e.BrandIdFkNavigation).Include(e => e.Category).ThenInclude(e => e.Parent);
+                //     var products = query.ToList();
+                //     return HelpherMethods.ToProductBLLs(products.AsQueryable());
+                // }
+            }
         }
         public bool Delete(int Id)
         {

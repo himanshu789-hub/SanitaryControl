@@ -341,12 +341,12 @@ $(".input-number").keydown(function (e) {
                 return false;
             }
              const IsAllFileNotAppropriate=  $(files).filter((index,file)=>{    
-                if(Math.ceil(file.size/1024)>64)
+                if(Math.ceil(file.size/1024)>300)
                    return true;
             }).length>0;
             if(IsAllFileNotAppropriate)
             {
-                alert('Image File Size Too Long.\nEach Must Be Less Than 64KB');
+                alert('Image File Size Too Long.\nEach Must Be Less Than 300KB');
                 reInitializeFileInput();
                 return false;
             }
