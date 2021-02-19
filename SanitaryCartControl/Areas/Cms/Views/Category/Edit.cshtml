@@ -21,7 +21,7 @@
          </div>
       </div>
       <button type="button" class="btn btn-danger" onclick="showUpdateButton(this)" id="changeButton">Change</button>
-      <input type="file" name="Image" class="btn btn-info invisible" id="upload-button"
+      <input type="file" name="Image" class="btn btn-info invisible" id="image-selector"
          placeholder="Select Image To Upload . . ." />
       <button type="submit" class="btn btn-success invisible" id="update-button">Update</button>
    </div>
@@ -30,8 +30,8 @@
 
    const elements = {
       image: '#category-image-tag',
-      imageSelector: '#update-button',
-      uploadButton: '#upload-button',
+      updateButton: '#update-button',
+      imageSelector: '#image-selector',
       changeButton:"#changeButton",
       form: 'form#category-update-form',
       errorViewer: '#show-category-form-error',
@@ -41,8 +41,8 @@
    var isImageUpdated = false;
    if ($) {
       function showUpdateButton(element) {
-         $(elements.uploadButton).removeClass('invisible');
-         $(element).addClass('invisible');
+         $(elements.imageSelector).removeClass('invisible');
+         $(elements.changeButton).remove();
       };
 
       $(document).on("submit", elements.form, function (e) {
@@ -53,7 +53,7 @@
          this.submit();
          e.preventDefault();
       });
-      $(elements.uploadButton).change(function (eventObject) {
+      $(elements.form).on('change',elements.imageSelector,function (eventObject) {
          const files = eventObject.target.files;
          if (files && files[0]) {
             if(files[0].size/1024>100){
@@ -61,8 +61,8 @@
              {
                alert('Image Fle Size Too Long.\nMust Be Atmost 100KB');
                $(elements.imageSelector).remove();
-               const imageSelector = $('<input type="file" name="Image" class="btn btn-info invisible" id="upload-button" placeholder="Select Image To Upload . . ." />');
-               $(imageSelector).insertAfter($(elements.changeButton))
+               const imageSelector = $('<input type="file" name="Image" class="btn btn-info" id="image-selector" placeholder="Select Image To Upload . . ." />');
+               $(imageSelector).insertBefore($(elements.updateButton))
                return;
              }
             }
@@ -72,8 +72,8 @@
                $(elements.image).attr('src', src)
                $(elements.lighboxImageHolder + '>img').attr('src', src);
                isImageUpdated = true;
-               $(elements.uploadButton).addClass('invisible');
-               $(elements.imageSelector).removeClass('invisible');
+               $(elements.imageSelector).addClass('invisible');
+               $(elements.updateButton).removeClass('invisible');
             };
             fileReader.readAsDataURL(files[0]);
          }
