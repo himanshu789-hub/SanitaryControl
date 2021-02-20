@@ -203,6 +203,7 @@ namespace SanitaryCartControl.Core.Services
                         ICollection<ProductBLL> products = new List<ProductBLL>();
                         while (reader.Read())
                         {
+
                             int Id = (int)reader["Id"];
                             bool ExistsAlready = products.FirstOrDefault(e => e.Id == Id) != null;
                             if (ExistsAlready)
@@ -225,8 +226,8 @@ namespace SanitaryCartControl.Core.Services
 
                         pagedProducts.Products = products;
                     }
-                    pagedProducts.PageIndex = page;
-                    pagedProducts.PageSize = count;
+                    pagedProducts.GeneralPageSize = count;
+                    pagedProducts.PageNumber = page;
                     if (reader.NextResult())
                     {
                         while (reader.Read())

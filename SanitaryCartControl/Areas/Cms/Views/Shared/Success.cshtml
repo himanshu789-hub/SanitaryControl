@@ -31,7 +31,7 @@ else
 
 
 <center>
-    <form action="@Model.Link" method="GET">
+    <form action="@Model.Link" method="GET" id="message-form">
 @if(Model.Params!=null && Model.Params.Count()>0)
     {
           @foreach (var item in Model.Params)
@@ -42,12 +42,5 @@ else
           }
     }
        <button class="btn" type="submit">Redirect</button>
-       <style>
-           button{
-               background: rgb(42,32,212);
-background: linear-gradient(90deg, rgba(42,32,212,1) 0%, rgba(59,59,138,1) 82%);
-color: white !important;
-           }
-       </style>
-    </form>
+           </form>
 </center>

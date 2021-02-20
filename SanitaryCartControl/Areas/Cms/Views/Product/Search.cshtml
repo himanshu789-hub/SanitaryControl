@@ -14,7 +14,7 @@
                 currentPage = 1;
    
 }
-@using (Html.BeginForm("Search", "Product", FormMethod.Get))
+@using (Html.BeginForm("Search", "Product", FormMethod.Get,new {@id="search-form"}))
 {
     <div class="row">
         <div class="col-3 form-group">
@@ -31,17 +31,17 @@
 @if(Model!=null)
 {
 
-                int previousPage = currentPage<=1 ? 1 : currentPage-1;
-                int totalPage =(int) Math.Ceiling((decimal)Model.TotalCount/Model.CurrentTotal);
-                int nextPage = currentPage>=totalPage?totalPage:currentPage+1;
-                string nextPageLink =  Url.Action("Search",new {search=Context.Request.Query["search"],page=nextPage});
-                string previousPageLink =  Url.Action("Search",new {search=Context.Request.Query["search"],page=previousPage});
-
     <div class="text-right">
     Total Count : @Model.TotalCount
     </div>
-  @if(Model.CurrentTotal>0)
+  @if(Model.CurrentPageSize>0)
   {      
+
+                int previousPage = currentPage<=1 ? 1 : currentPage-1;
+                int totalPage =(int) Math.Ceiling((decimal)Model.TotalCount/Model.CurrentPageSize);
+                int nextPage = currentPage>=totalPage?totalPage:currentPage+1;
+                string nextPageLink =  Url.Action("Search",new {search=Context.Request.Query["search"],page=nextPage});
+                string previousPageLink =  Url.Action("Search",new {search=Context.Request.Query["search"],page=previousPage});
 
     <table class="table table-hover">
         <thead>
@@ -60,7 +60,7 @@
             {
                 var item = Model.Products.ElementAt(i);
                 <tr>
-                    <td>@(i+1+(Model.PageSize*(Model.PageIndex-1)))</td>
+                    <td>@(i+1+(Model.GeneralPageSize*(Model.PageNumber-1)))</td>
                     <td>@item.Code</td>
                     <td>@item.Name</td>
                     <td>@item.Brand.Name</td>
@@ -115,28 +115,10 @@
             }
         </tbody>
     </table>
-    <style>
-        
-table table>tbody>tr:hover {
-background-color:#31528e !important;
-color:white !important;
-font-weight:bold;
-}
-table table>tbody>tr:hover td{
-	border:none;
-}
-table table>thead>tr{
-    background-color: rgb(47 196 203);
-}
-table table>thead>tr>th{
-    border:none !important;
-    color:white !important;
-}
-    </style>
     <div class="d-flex justify-content-center">
           <nav aria-label="Page navigation example">
   <ul class="pagination">
-       <li class="page-item"><a class="page-link" href="@previousPageLink">Previous</a></li>
+       <li class="page-item"><a class="page-link" href="@previousPageLink">&laquo; Previous</a></li>
       @for(int i=0;i<totalPage;i++)
       {
           string appendClass=(i+1)==currentPage?"active":"";
@@ -144,7 +126,7 @@ table table>thead>tr>th{
           string link = Url.Action("Search",new {search=Context.Request.Query["search"],page=(i+1)});
           <li class="page-item @appendClass"><a class="page-link" href="@Json.Serialize(link))">@(i+1)</a></li>
       }
- <li class="page-item"><a class="page-link" href="@nextPageLink">Next</a></li>
+ <li class="page-item"><a class="page-link" href="@nextPageLink">Next &raquo;</a></li>
   </ul>
 </nav>
 

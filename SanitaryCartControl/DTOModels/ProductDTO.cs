@@ -12,7 +12,7 @@ namespace SanitaryCartControl.DTOModels
         [MaxLength(80, ErrorMessage = "Must Be Atmost 80 Character")]
         public string Name { get; set; }
         [Required]
-        [RegularExpression("^[A-Z][-A-Z0-9]+[A-Z0-9]$",ErrorMessage="Please Enter Valid Code")]
+        [RegularExpression("^[A-Z][- A-Z0-9]+[A-Z0-9]$",ErrorMessage="Please Enter Valid Code")]
         [MaxLength(20,ErrorMessage="Must Be Atmost 20 Character")]
         public string Code { get; set; }
         [Required]
