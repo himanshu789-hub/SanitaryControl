@@ -351,6 +351,10 @@ namespace SanitaryCartControl.Core.Context
                 entity.Property(e => e.IsActive)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
+                
+                entity.Property(e=>e.IsPriceVisible)
+                    .IsRequired()
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Price).HasColumnType("decimal(7, 2)");
 

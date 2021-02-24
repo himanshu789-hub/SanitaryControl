@@ -10,11 +10,16 @@ namespace SanitaryCartControl.DTOModels
         public byte AttributeId{get;set;}
         [Required]
         public string Value{get;set;}
-        public byte Quantity{get;set;}
+        
+        [Required]
+        public byte PiecesPerSet{get;set;}
+        
         [BindRequired]   
         [Range(type:typeof(decimal),"0","99999.99999", ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public decimal Price{get;set;}
         [Required]
         public bool IsActive{get;set;}
+        [Required]
+        public bool IsPriceVisible{get;set;}
     }
 }

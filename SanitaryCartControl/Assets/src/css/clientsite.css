@@ -1647,7 +1647,7 @@ span.text {
 
 	transition: all 1s ease-in-out;
 }
-.price.show .price-text::before {
+.price.show .price-text.show-currency::before {
 	content: '\f156';
 	font-family: 'FontAwesome';
 }
@@ -1718,19 +1718,6 @@ span.text {
 	vertical-align: middle;
 	margin-left: 110px;
 	font-size: 1.3rem;
-}
-.price-text {
-	position: relative;
-	top: 80px;
-	transition: all 0s ease-in-out;
-}
-.price.show .price-text {
-	top: 0px;
-	transition: all 1s ease-in-out;
-}
-.price.show .price-text::before {
-	content: '\f156';
-	font-family: 'FontAwesome';
 }
 
 .breadcrumb-item {

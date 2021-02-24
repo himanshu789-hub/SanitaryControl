@@ -109,8 +109,9 @@ namespace SanitaryCartControl.Core.Helpher
                     Id = item.Id,
                     AttributeId = item.AtributeType,
                     Price = item.Price,
-                    Quantity = item.Quantity,
+                    PeicesPerSet = item.PiecesPerSet,
                     Value = item.Value,
+                     IsPriceVisible = item.IsPriceVisible,
                     IsActive = (bool)item.IsActive
                 });
             }

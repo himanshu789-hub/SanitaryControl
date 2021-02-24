@@ -92,16 +92,26 @@
                         @foreach (var item in Model.AttributeBLLs)
                         {
                           if(item.IsActive){
-                          <option value="@item.Price">@item.Value</option>
+                          <option value="@item.Price" data-shouldvisible="@item.IsPriceVisible">@item.Value</option>
                           }
                         }
-                        </select>
+                </select>
                 </span>
                 <label class="price"><span class="price-text"></span></label>
             }
             else 
             {
-              <label class="price show"><span class="price-text">@Model.AttributeBLLs.First().Price</span></label> 
+                var attribute = Model.AttributeBLLs.FirstOrDefault();
+                
+                if(attribute.IsPriceVisible)
+                {
+                 <label class="price show"><span class="price-text">@Model.AttributeBLLs.First().Price</span></label> 
+                }
+                else
+                {
+                    <label><span class="text-danger"><i class="fa fa-ban"></i> N/A</span></label>   
+                }
+
             }
      </div>
            
@@ -126,9 +136,20 @@
         }
         function price(e) {
             $('.price').removeClass('show')
+            $('.price-text').removeClass('show-currency')
+            var options  = e.options[e.selectedIndex];
+            var shouldVisible = options.dataset.shouldvisible;
             setTimeout(function () {
-                $('.price-text').html(e.value)
+                if(shouldVisible=="True") 
+                {
+                $('.price-text').addClass('show-currency').html(e.value)
+                }
+                else
+                {
+                    $('.price-text').removeClass('show-currency').html('<span class="text-danger"><i class="fa fa-ban"></i> Price N/A</span>')
+                }
                 $('.price').addClass('show')
+                
             }, 100)
 
         }

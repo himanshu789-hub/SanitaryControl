@@ -114,7 +114,8 @@ namespace SanitaryCartControl.Core.Services
                     AttributeBLL attributeBLL = product.AttributeBLLs.FirstOrDefault(e => e.Id == item);
                     typeProductQuantity.IsActive = attributeBLL.IsActive;
                     typeProductQuantity.Price = attributeBLL.Price;
-                    typeProductQuantity.Quantity = attributeBLL.Quantity;
+                    typeProductQuantity.PiecesPerSet = attributeBLL.PeicesPerSet;
+                    typeProductQuantity.IsPriceVisible = attributeBLL.IsPriceVisible;
                 }
                 IEnumerable<AttributeBLL> attributeBLLs = product.AttributeBLLs.Where(e => e.Id == 0);
                 foreach (var item in attributeBLLs)
@@ -122,8 +123,9 @@ namespace SanitaryCartControl.Core.Services
                     OldProduct.TypeProductQuantities.Add(new TypeProductQuantity()
                     {
                         Value = item.Value,
-                        Quantity = item.Quantity,
+                        PiecesPerSet = item.PeicesPerSet,
                         IsActive = true,
+                        IsPriceVisible=true,
                         Price = item.Price,
                         AtributeType = item.AttributeId
                     });
@@ -153,7 +155,7 @@ namespace SanitaryCartControl.Core.Services
                     {
                         AtributeType = item.AttributeId,
                         Price = item.Price,
-                        Quantity = item.Quantity,
+                        PiecesPerSet = item.PeicesPerSet,
                         Value = item.AttributeId == ((byte)Enums.ProductType.NoneVariable) ? null : item.Value,
                         IsActive = true
                     });

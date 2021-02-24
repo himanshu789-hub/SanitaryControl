@@ -47,11 +47,14 @@ namespace SanitaryCartControl.Areas.Miscellaneous
                 Attributes.Add(new AttributeDTO()
                 {
                     Id = item.Id,
+                    IsPriceVisible=item.IsPriceVisible,
                     AttributeId = item.AttributeId,
                     Price = item.Price,
-                    Quantity = item.Quantity,
+                    
+                    PiecesPerSet = item.PeicesPerSet,
                     Value = item.Value,
                     IsActive = item.IsActive
+                    
                 });
             }
             return Attributes;
@@ -69,8 +72,9 @@ namespace SanitaryCartControl.Areas.Miscellaneous
                     Id = item.Id,
                     AttributeId = item.AttributeId,
                     Price = item.Price,
-                    Quantity = item.Quantity,
+                    PeicesPerSet = item.PiecesPerSet,
                     Value = item.Value,
+                    IsPriceVisible = item.IsPriceVisible,
                     IsActive = item.IsActive
                 });
             }

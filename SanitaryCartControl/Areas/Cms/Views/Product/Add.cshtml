@@ -58,7 +58,6 @@
         <div class="card-header font-weight-bold">Specific Information : </div>
         <div class="card-body">
             <div id="attributes-wrapper">
-                @Html.ValidationMessageFor(e=>e.Attributes,null,new {@class="text-danger small"},"span")
                 <div id="attributes" name="Attributes" id="Attributes" data-val-required="Please, First Select A Category">
 
                 </div>
@@ -302,7 +301,7 @@ state.count=0;
     var item = {
         'AttributeId': null,
         'Value': null,
-        'Quantity': null,
+        'PiecesPerSet': null,
         'Price': null
     };
 
@@ -310,7 +309,7 @@ state.count=0;
         'ModelName': "Attributes",
         'AttributeIdProperty': "AttributeId",
         'ValueProperty': "Value",
-        'QunatityProperty': "Quantity",
+        'PeicesPerSetProperty': "PiecesPerSet",
         'PriceProperty': "Price"
     };
 
@@ -387,11 +386,11 @@ $(elements.breadcrumpLabel).text(withoutRado).removeClass("disabled");
             Min: "Must be atleast 1",
             Max: "Must be smaller than 1,00,000"
         },
-        Quantity: {
-            Required: "Please Enter Quantity",
+        PeicesPerSet: {
+            Required: "Please Enter Peices/Set",
             Max: "Must be atmost 255",
             Min: "Must be atleast 1",
-            Digits: "Please Enter Valid Quantity"
+            Digits: "Please Enter Only Numeric Value"
         },
         'Dropdown': 'Please Select a ',
         getDropdownMessage: function (name) {
@@ -472,25 +471,25 @@ $(elements.breadcrumpLabel).text(withoutRado).removeClass("disabled");
 
         dropdownWrapper.append([label, dropdown, dropdownErrorMsg]);
 
-        let quantityWrapper = $('<div class="col-2 form-group"><label>Quantity : </label></div>');
-        const quantityName = getNameByProperty(index, itemNameandProperties.QunatityProperty);
+        let quantityWrapper = $('<div class="col-2 form-group"><label>Pieces Per Set : </label></div>');
+        const quantityName = getNameByProperty(index, itemNameandProperties.PeicesPerSetProperty);
         const quantityValidator = $('<span data-valmsg-replace="true">')
             .attr("data-valmsg-for", quantityName).addClass("small text-danger");
-        let quantity = $('<input type="text" class="form-control" data-val="true" disabled/>')
-            .val(data[index][itemNameandProperties.QunatityProperty])
+        let quantity = $('<input type="text" class="form-control" data-val="true"/>')
+            .val(data[index][itemNameandProperties.PeicesPerSetProperty])
             .attr("name", quantityName)
-            .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.QunatityProperty}`)
-            .attr("data-val-required", validationMesage.Quantity.Required)
-            .attr("data-rule-digits", validationMesage.Quantity.Digits)
-            .attr("data-msg-digits", validationMesage.Quantity.Digits)
-            .attr("data-msg-min", validationMesage.Quantity.Min)
-            .attr("data-msg-max", validationMesage.Quantity.Max)
+            .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.PeicesPerSetProperty}`)
+            .attr("data-val-required", validationMesage.PeicesPerSet.Required)
+            .attr("data-rule-digits",true)
+            .attr("data-msg-digits", validationMesage.PeicesPerSet.Digits)
+            .attr("data-msg-min", validationMesage.PeicesPerSet.Min)
+            .attr("data-msg-max", validationMesage.PeicesPerSet.Max)
             .attr("data-rule-min", 1)
             .attr("data-rule-max", 255)
-
             .focusout(function () {
-                data[index][itemNameandProperties.QunatityProperty] = $(quantity).val();
+                data[index][itemNameandProperties.PeicesPerSetProperty] = $(quantity).val();
             }.bind(index));
+
         quantityWrapper.append([quantity, quantityValidator]);
 
         let priceWrapper = $('<div class="col-2 form-group"><label>Price : </label></div>');
@@ -568,6 +567,8 @@ $(elements.breadcrumpLabel).text(withoutRado).removeClass("disabled");
                      <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">     
                      <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
                  </environment>
+
+
 }
 @section HeadInvokeScripts
 {

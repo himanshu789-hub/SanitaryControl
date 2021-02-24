@@ -2,6 +2,12 @@
 @model ProductEditViewModel
 @{
     ViewData["Head"] = "Edit Product : " + Model.Product.Code;
+    string visisbility = "";
+                if(Model.Product.DateUpdated.Equals(Model.Product.DateAdded))
+                {
+                      visisbility="invisible";
+            
+                }
 }
 
 @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { @enctype = "multipart/form-data" }))
@@ -35,18 +41,12 @@
                 <label>Date Created : </label>
                 @Html.TextBoxFor(e=>e.Product.DateAdded,"",new {@class="form-control pointer-none",@readonly="readonly"})
             </div>
-            @{
-                string visisbility = "";
-                if(Model.Product.DateUpdated.Equals(Model.Product.DateAdded))
-                visisbility="invisible";
-            }
+            
+            
             <div class="col-3 form-group @visisbility">
                 <label>Date Modified : </label>
-                        @Html.TextBoxFor(e=>e.Product.DateUpdated,"",new {@class="form-control pointer-none",@readonly="readonly"})
+                @Html.TextBoxFor(e=>e.Product.DateUpdated,"",new {@class="form-control pointer-none",@readonly="readonly"})
             </div>
-            <style>
-
-            </style>
             
         </div>
     </div>
@@ -79,51 +79,55 @@
                      </div>
                     @if(Model.Product.Type!=(byte)ProductType.NoneVariable)
                     {
-                     <div class="col-3 form-group">
+                     <div class="col-2 form-group">
                         <label>@Utilities.GetAttributeNameByType(Model.Product.Type) </label>
                     @Html.TextBoxFor(e=>e.Attributes[i].Value,"",new {@class="form-control pointer-none",@readonly="readonly"})
                      </div>
-                  
                     }
                      <div class="col-3 form-group" >
-                        <label>Quantity : </label>
+                        <label>Pieces Per Set : </label>
                     @{
-                     var name = $"Attributes[{i}].Quantity";
+                     var name = $"Attributes[{i}].PiecesPerSet";
                      }
                 <div class="input-group">
                 <span class="input-group-prepend">
                 <button type="button" class="btn btn-default btn-number bg-danger text-white" 
-              data-type="minus" data-field="@name" disabled>
+              data-type="minus" data-field="@name">
                 <span class="fa fa-minus"></span>
                 </button>
                 </span>
-                @Html.TextBoxFor(e=>e.Attributes[i].Quantity,"",new {@class="form-control input-number",@min="1",@max="255",@disabled="true"})
+                @Html.TextBoxFor(e=>e.Attributes[i].PiecesPerSet,"",new {@class="form-control input-number",@min="1",@max="255"})
                 <span class="input-group-append">
-                <button type="button" disabled class="btn btn-default btn-number bg-success text-white" data-type="plus" data-field="@name">
+                <button type="button" class="btn btn-default btn-number bg-success text-white" data-type="plus" data-field="@name">
                 <span class="fa fa-plus"></span>
                 </button>
                 </span>
                </div>
-                 @Html.ValidationMessageFor(e=>e.Attributes[i].Quantity,null,new {@class="text-danger small"})        
+                 @Html.ValidationMessageFor(e=>e.Attributes[i].PiecesPerSet,null,new {@class="text-danger small"})        
                 </div>
-                <div class="col-3">
+                <div class="col-2">
                  <label>Price : </label>
                  @Html.TextBoxFor(e=>e.Attributes[i].Price,"",new {@class="form-control"})
                  @Html.ValidationMessageFor(e=>e.Attributes[i].Price,null,new {@class="text-danger small"})
                 </div>
                 <div class="col-2 form-group">
-                    <label>Status : </label>
+                    <label>Product Status : </label>
                  @Html.CheckBoxFor(e=>e.Attributes[i].IsActive,
                  new {@data_on="Visible",@data_off="Hidden",@data_toggle="toggle", @data_onstyle="info" ,@data_offstyle="danger"})
-              
                 <style>
-                    .toggle-handle
-                    {
+                    .toggle-handle{
                         background-color: white;
                     }
-            .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }
+                    .toggle-group { 
+                        transition: left 0.7s; -webkit-transition: left 0.7s;
+                    }
                 </style>
                 </div>
+                <div class="col-2 form-group">
+                    <label>Price Status : </label>
+                 @Html.CheckBoxFor(e=>e.Attributes[i].IsPriceVisible,
+                 new {@data_on="Visible",@data_off="Hidden",@data_toggle="toggle", @data_onstyle="info" ,@data_offstyle="danger"})
+               </div>
                 </div>
               }
             </div>
@@ -198,10 +202,12 @@
             </div>            
     </div>
     </div>
+    
     </div>
+    
     </div>
 
-        </div>
+    </div>
     </div>
     <div class="float-right w-75 d-flex justify-content-around mt-5 mb-5">
             @Html.ActionLink("Cancel", null, null, null, new { @href = "#" ,@onclick="history.go(-1);",@class="btn btn-outline-danger p-2 w-50 mr-2" })
@@ -412,7 +418,7 @@ $(".input-number").keydown(function (e) {
     var item = {
         'AttributeId': null,
         'Value': null,
-        'Quantity': null,
+        'PiecesPerSet': null,
         'Price': null,
         'IsActive':true
     };
@@ -421,7 +427,7 @@ $(".input-number").keydown(function (e) {
         'ModelName': "Attributes",
         'AttributeIdProperty': "AttributeId",
         'ValueProperty': "Value",
-        'QunatityProperty': "Quantity",
+        'PiecesPerSetProperty': "PiecesPerSet",
         'PriceProperty': "Price",
         'IsActiveProperty':"IsActive"
     };
@@ -442,11 +448,11 @@ $(".input-number").keydown(function (e) {
             Min: "Must be atleast 1",
             Max: "Must be smaller than 1,00,000"
         },
-        Quantity: {
-            Required: "Please Enter Quantity",
+        PiecesPerSet: {
+            Required: "Please Enter Pieces Per Set",
             Max: "Must be atmost 255",
             Min: "Must be atleast 1",
-            Digits: "Please Enter Valid Quantity"
+            Digits: "Please Enter Valid Numberic Value"
         },
         'Dropdown': 'Please Select a ',
         getDropdownMessage: function (name) {
@@ -527,19 +533,19 @@ $(".input-number").keydown(function (e) {
 
         dropdownWrapper.append([label, dropdown, dropdownErrorMsg]);
 
-        let quantityWrapper = $('<div class="col-2 form-group"><label>Quantity : </label></div>');
+        let quantityWrapper = $('<div class="col-2 form-group"><label>Pieces Per Set : </label></div>');
         const quantityName = getNameByProperty(index, itemNameandProperties.QunatityProperty);
         const quantityValidator = $('<span data-valmsg-replace="true">')
             .attr("data-valmsg-for", quantityName).addClass("small text-danger");
-        let quantity = $('<input type="text" class="form-control" data-val="true" disabled/>')
+        let quantity = $('<input type="text" class="form-control" data-val="true"/>')
             .val(data[index][itemNameandProperties.QunatityProperty])
             .attr("name", quantityName)
             .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.QunatityProperty}`)
-            .attr("data-val-required", validationMesage.Quantity.Required)
-            .attr("data-rule-digits", validationMesage.Quantity.Digits)
-            .attr("data-msg-digits", validationMesage.Quantity.Digits)
-            .attr("data-msg-min", validationMesage.Quantity.Min)
-            .attr("data-msg-max", validationMesage.Quantity.Max)
+            .attr("data-val-required", validationMesage.PiecesPerSet.Required)
+            .attr("data-rule-digits", validationMesage.PiecesPerSet.Digits)
+            .attr("data-msg-digits", validationMesage.PiecesPerSet.Digits)
+            .attr("data-msg-min", validationMesage.PiecesPerSet.Min)
+            .attr("data-msg-max", validationMesage.PiecesPerSet.Max)
             .attr("data-rule-min", 1)
             .attr("data-rule-max", 255)
             .focusout(function () {

@@ -9,7 +9,8 @@ namespace SanitaryCartControl.Core.Entities.BLLModels
         public byte AttributeId { get; set; }
         public string Value { get; set; }
         [NotMapped]
-        public byte Quantity { get; set; }
+        public byte PeicesPerSet { get; set; }
+        public bool IsPriceVisible{get;set;}
         public decimal Price { get; set; }
         [Column("AttributeIsActive")]
         public bool IsActive{get;set;}

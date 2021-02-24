@@ -63,6 +63,7 @@ namespace SanitaryCartControl.Areas.Controllers
             {
                 ModelState.RemoveIfPresent($"Attributes[{i}].Id");
                 ModelState.RemoveIfPresent($"Attributes[{i}].IsActive");
+                ModelState.RemoveIfPresent($"Attributes[{i}].IsPriceVisible");
             }
             if (ModelState.GetValidationState("Product.Type") == ModelValidationState.Valid)
             {
@@ -194,7 +195,9 @@ namespace SanitaryCartControl.Areas.Controllers
             for (int i = 0; i < productViewModel.Attributes.Count(); i++)
             {
                 ModelState.RemoveIfPresent($"Attributes[{i}].Id");
+                ModelState.RemoveIfPresent($"Attributes[{i}].IsPriceVisible");
                 ModelState.RemoveIfPresent($"Attributes[{i}].IsActive");
+
                 if (((int)ProductType.NoneVariable) == productViewModel.Product.Type)
                     ModelState.RemoveIfPresent($"Attributes[{i}].Value");
             }
