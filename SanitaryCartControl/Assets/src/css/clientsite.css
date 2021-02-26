@@ -1571,7 +1571,7 @@ body.lb-disable-scrolling {
 	transform: rotate(-136deg);
 }
 #overlay > i:nth-child(1) {
-	color: #e9ecef;
+	color: #e9ecef99;
 }
 span.text {
 	position: absolute;
@@ -1635,7 +1635,6 @@ span.text {
 	overflow: hidden;
 	overflow: hidden;
 	vertical-align: middle;
-	margin-left: 110px;
 }
 .price-text {
 	position: relative;
@@ -1647,10 +1646,10 @@ span.text {
 
 	transition: all 1s ease-in-out;
 }
-.price.show .price-text.show-currency::before {
+/* .price.show .price-text.show-currency::before {
 	content: '\f156';
 	font-family: 'FontAwesome';
-}
+} */
 
 #first-image-holder {
 	height: 300px;
@@ -1712,12 +1711,11 @@ span.text {
 		opacity: 1 !important;
 	}
 }
-.price {
-	overflow: hidden;
-	overflow: hidden;
-	vertical-align: middle;
-	margin-left: 110px;
-	font-size: 1.3rem;
+
+.price table .col-head
+{
+	font-weight: bold;
+	text-decoration: underline;
 }
 
 .breadcrumb-item {
@@ -1735,6 +1733,12 @@ span.text {
 
 .text-color4 {
 	color: var(--color4);
+}
+@media screen and (max-width:976px)
+{
+  .row:before, .row:after {
+   content: none
+   }
 }
 @media screen and (min-width: 976px) {
 	.breadcrumb {
@@ -1775,7 +1779,8 @@ span.text {
 
 
 a.redirect:focus,a.redirect:hover {
-	color: black ;
+	color: white ;
+	box-shadow:0px 0px 2px 4px #67aa8d73;
 }
 .address-cell-content>span
 {
