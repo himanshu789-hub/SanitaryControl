@@ -1255,9 +1255,6 @@ h6,
 	justify-content: flex-start;
 	flex-direction: row;
 	flex-wrap: wrap;
-	overflow-x: hidden;
-	overflow-y: scroll;
-	height: 70vh;
 }
 .itemHolder {
 	width: 170px;
@@ -1272,7 +1269,7 @@ h6,
 	font-size: 0.7rem;
 }
 .itemHolder > .imageHolder {
-	min-height: 80%;
+	height: 80%;
 	width: 80%;
 	display: block;
 	position: relative;
@@ -1503,7 +1500,7 @@ body.lb-disable-scrolling {
 
 .lb-dataContainer:after {
 	content: '';
-	display: table;
+	display:  table;
 	clear: both;
 }
 
@@ -1643,20 +1640,13 @@ span.text {
 }
 .price.show .price-text {
 	top: 0px;
-
 	transition: all 1s ease-in-out;
 }
-/* .price.show .price-text.show-currency::before {
-	content: '\f156';
-	font-family: 'FontAwesome';
-} */
 
 #first-image-holder {
 	height: 300px;
 	position: relative;
 	padding: 10px;
-}
-#product-info-wrapper {
 }
 #product-info-wrapper .product-info,
 #product-info-wrapper .product-info select {
