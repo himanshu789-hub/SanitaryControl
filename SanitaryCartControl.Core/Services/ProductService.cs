@@ -269,13 +269,31 @@ namespace SanitaryCartControl.Core.Services
         {
             using (var context = new SanitaryCartContext(_con))
             {
-                IEnumerable<ProductInfoBLL> products = context.Products.AsNoTracking().Where(e => e.CategoryId == CategoryId)
-                .Include(e => e.Images).Take(Count).Skip(Page * Count).Select(e => new ProductInfoBLL
+
+                IList<ProductInfoBLL> products = new List<ProductInfoBLL>();
+
+                var query = context.Products.AsNoTracking().Where(e => e.CategoryId == CategoryId && e.IsActive)
+                .Include(e => e.Images).Skip(Page * Count).Take(Count).Select(e=>new {e.Id,e.Name,e.Images});
+                using(var connection =  new SqlConnection(_con))
                 {
-                    Id = e.Id,
-                    Name = e.Name,
-                    ImagePath = e.Images.Count > 0 ? e.Images.First().Path : null
-                }).ToList();
+                    string sql  = "SELECT p.Id,p.Name,(SELECT TOP 1 i.Path FROM Image AS i WHERE i.Product_ID_FK=p.Id AND i.Path IS NOT NULL) AS 'ImagePath'"+ 
+                    $" FROM Product AS p WHERE CategoryId={CategoryId} ORDER BY p.Id OFFSET {Page*Count} ROWS FETCH NEXT {Count} ROWS ONLY";
+                    using(var command =  new SqlCommand(sql,connection))
+                    {
+                        connection.Open();
+                        SqlDataReader dataReader = command.ExecuteReader();
+                        if(dataReader.HasRows)
+                        {
+                            while(dataReader.Read()){
+                                products.Add(new ProductInfoBLL(){
+                                    Id=dataReader.GetInt32(0),
+                                    Name=dataReader["Name"] as string,
+                                    ImagePath=dataReader["ImagePath"] as string
+                                });
+                            }
+                        }               
+                    }
+                }
                 return products;
             }
         }
