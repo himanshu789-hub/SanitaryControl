@@ -39,7 +39,7 @@ export function activateBuildItems() {
 				method: 'GET',
 				success: function (res) {
 					if (res.length == 0) {
-						$(elements.ItemWrapper).off('scroll',ajaxItemLoading);
+						$(window).off('scroll',ajaxItemLoading);
 					} else {
 						buildItems(res);
 					}
