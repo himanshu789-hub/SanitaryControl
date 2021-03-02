@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SanitaryCartControl", "Sani
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SanitaryCartControl.Core", "SanitaryCartControl.Core\SanitaryCartControl.Core.csproj", "{8CA51220-AD29-481F-A36F-1DD3A4F4262F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanitaryCartControl.Infrastructure", "SanitaryCartControl.Infrastructure\SanitaryCartControl.Infrastructure.csproj", "{3DFE81A2-BED0-465A-B554-49E476725E26}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

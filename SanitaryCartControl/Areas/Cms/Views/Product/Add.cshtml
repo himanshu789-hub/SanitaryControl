@@ -196,7 +196,7 @@ state.count=0;
             success: function (data) {
                 buildMenu($(elements.menuId), data,0)
                 $('.loading').addClass("d-none")
-             InitializeEvents();
+                InitializeEvents();
             },
             error:function(){
                 onError();
@@ -215,7 +215,6 @@ state.count=0;
     });
     quill.root.setAttribute('spellcheck', false)
     quill.on('text-change', function (delta, oldDelta, source) {
-        console.log(quill.container.firstChild.innerHTML)
         $(elements.textAreaId).val(quill.container.firstChild.innerHTML);
     });
     function buildMenu(parent, items,level) {
@@ -322,11 +321,12 @@ state.count=0;
         breadcrumps:new Array(),
         level:-1
     };
+    var localBreadcrumps = new Array();
+    
     function addToBreadcrumps(text){
         localBreadcrumps.push(text);
         state.level++;
     }
-    var localBreadcrumps = new Array();
     function appendToBreadrumps(text,index){
       localBreadcrumps  = localBreadcrumps.map(function(value,eindex){
           if(eindex==index)
@@ -337,30 +337,29 @@ state.count=0;
           return value;
       });
      localBreadcrumps = localBreadcrumps.filter((value) => value!=null || value!=undefined); 
-    state.level = index;
+     state.level = index;
     }
     function InitializeEvents(){
-
+    
     $('#menu>li.parent').mouseenter(function(e){
-         
         localBreadcrumps=new Array();
-
        addToBreadcrumps($(e.currentTarget).find('>a').text())
        state.level=0;
-   e.preventDefault();
-    })
-    $('#child>li.parent').mouseenter(function(e){
-         
+       e.preventDefault();
+    });
+
+    $('#child>li.parent').mouseenter(function(e){     
         let text = $(e.currentTarget).find('>a').text();
         let currentLevel = Number.parseInt($(e.currentTarget).attr('data-level'));
         if(currentLevel>state.level)
         addToBreadcrumps(text)
         else
         appendToBreadrumps(text,currentLevel); 
+        
         e.preventDefault();    
-    })
-    $('#menu li:not(.parent)').click(function(e){
-         
+    });
+
+    $('#menu li:not(.parent)').click(function(e){  
         const level =Number.parseInt($(e.currentTarget).attr('data-level'))
         if(level>state.level)
         addToBreadcrumps($(e.currentTarget).text())
@@ -369,16 +368,18 @@ state.count=0;
         state.breadcrumps = localBreadcrumps;  
         displayCrumps();
         e.preventDefault();
-    })
- function displayCrumps(){
-     const withoutRado = state.breadcrumps.join('→').replaceAll('»','');
+    });
     
-$(elements.breadcrumpLabel).text(withoutRado).removeClass("disabled");
- }
+    function displayCrumps(){
+     const withoutRado = state.breadcrumps.join('→').replaceAll('»','');
+     $(elements.breadcrumpLabel).text(withoutRado).removeClass("disabled");
+    }
+    
     $('#menu a').mouseenter(function(e){
         e.preventDefault();
-    })
+    });
     }
+    
     const validationMesage = {
         Price: {
             Required: "Please Enter Price",
@@ -471,7 +472,7 @@ $(elements.breadcrumpLabel).text(withoutRado).removeClass("disabled");
 
         dropdownWrapper.append([label, dropdown, dropdownErrorMsg]);
 
-        let quantityWrapper = $('<div class="col-2 form-group"><label>Pieces Per Set : </label></div>');
+        let quantityWrapper = $('<div class="col-2 form-group"><label>Quantity In Box : </label></div>');
         const quantityName = getNameByProperty(index, itemNameandProperties.PeicesPerSetProperty);
         const quantityValidator = $('<span data-valmsg-replace="true">')
             .attr("data-valmsg-for", quantityName).addClass("small text-danger");

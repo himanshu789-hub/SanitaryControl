@@ -52,6 +52,16 @@ namespace SanitaryCartControl
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ILogger<Startup> logger)
         {
             logger.LogInformation("Environment Name : " + env.EnvironmentName);
+            int workerThreads = 0;
+            int iocpThreads = 0;
+            
+            System.Threading.ThreadPool.GetMaxThreads(out workerThreads,out iocpThreads);
+            logger.LogInformation("Maximum Worker Threads Allocation in ThreadPool : " + workerThreads);
+            logger.LogInformation("Maximum IOCP Threads Allocation in ThreadPool : " + iocpThreads);
+
+            System.Threading.ThreadPool.GetMinThreads(out workerThreads, out iocpThreads);
+            logger.LogInformation("Minimum Worker Threads Allocation in ThreadPool : " + workerThreads);
+            logger.LogInformation("Minimum IOCP Threads Allocation in ThreadPool : " + iocpThreads);
 
             if (env.IsDevelopment())
             {

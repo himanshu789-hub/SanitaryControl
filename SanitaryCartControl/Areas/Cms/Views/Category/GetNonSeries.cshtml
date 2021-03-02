@@ -70,8 +70,8 @@
                 });
                 
                 clearInterval(scrollIntervalId)
-              scrollIntervalId = setTimeout(function(){
-                $('.lazy-wrapper').scrollTop(1);
+                scrollIntervalId = setTimeout(function(){
+                $(window).scrollTop(document.documentElement.scrollTop+1);
               },3000)
             });
             

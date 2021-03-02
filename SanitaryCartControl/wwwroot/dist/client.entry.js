@@ -17302,14 +17302,14 @@ function LazyLoadingActivation() {
     },
     intervalId: -1,
     init: function init() {
-      $(lazyElements.lazyWrapper)[0].addEventListener('scroll', layLoader.lazyLoadingInitiater);
+      $(window)[0].addEventListener('scroll', layLoader.lazyLoadingInitiater);
       $(window)[0].addEventListener('resize', layLoader.lazyLoadingInitiater);
       $(window)[0].addEventListener('orientationchange', layLoader.lazyLoadingInitiater);
     },
     loadImagesLazy: function loadImagesLazy() {
       var images = $(lazyElements.lazyWrapper).find(' .lazy');
       images.each(function (index, element) {
-        if ($(element).offset().top - $(lazyElements.lazyWrapper).offset().top <= $(lazyElements.lazyWrapper)[0].clientHeight) {
+        if ($(element).offset().top > 0 && Math.abs(document.documentElement.scrollTop - $(element).offset().top) <= $(window).height()) {
           var dataSrc = $(element).attr('data-src');
           $(element).attr('src', dataSrc);
           $(element).removeClass('lazy');
@@ -18045,7 +18045,10 @@ function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
         width: $(sliderWrapper).width() * lengthAfterClone + 'px',
         transform: "translateX(-".concat(slider.slideWidth, "px)")
       });
-      applyAnimaton();
+      slider.index = 1;
+      setTimeout(function () {
+        applyAnimaton();
+      }, 2000);
       provideWidthToSlide();
       applyAutomaticSliderIfRequire();
       setTimeout(function () {
@@ -18055,11 +18058,11 @@ function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
     lazyLoadSliderImage: function lazyLoadSliderImage() {
       var images = $(sliderIdentifier).find('>img.lazy');
       $(sliderIdentifier).on('transitionend', function () {
-        console.log('siding triggers');
         Array.from(images).forEach(function (element) {
           if ($(element).offset().left == $(sliderWrapper).offset().left) {
             var dataSrc = $(element).attr('data-src');
             $(element).attr('src', dataSrc);
+            $(element).removeClass('lazy');
           }
         });
         var anyImageWithLazyClass = images.filter(function (element) {
@@ -18093,7 +18096,7 @@ function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
     dragEnd: function dragEnd(e) {
       var absMove = Math.abs(slider.index * slider.slideWidth - slider.moveX);
 
-      if (absMove > slider.slideWidth / 2) {
+      if (slider.moveX != 0 && absMove > slider.slideWidth / 2) {
         if (slider.moveX > slider.index * slider.slideWidth) {
           slider.moveSlider(1);
         } else if (slider.moveX < slider.index * slider.slideWidth) {
@@ -18105,41 +18108,39 @@ function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
       document.onmousemove = null;
     },
     moveSlider: function moveSlider(position) {
-      if (slider.index == -1 || slider.index == slider.length - 1) applyAnimaton();
+      if (slider.index == 1 || slider.index == slider.length) applyAnimaton();
 
       if (position == 1) {
-        if (slider.index < slider.length - 1) {
-          console.log('Before Index : ', slider.index);
+        if (slider.index < slider.length) {
           slider.index++;
-          $(sliderIdentifier).css('transform', "translateX(".concat(-(slider.index + 1) * slider.slideWidth, "px)"));
-          console.log('After Index : ', slider.index);
+          $(sliderIdentifier).css('transform', "translateX(".concat(-slider.index * slider.slideWidth, "px)"));
         } else {
           $(sliderIdentifier).css('transform', "translateX(".concat(-(slider.length + 1) * slider.slideWidth, "px)"));
           setTimeout(function () {
             $(sliderIdentifier).css({
-              transition: 'unset',
+              transition: 'transform .001s ease-in',
               transform: "translateX(-".concat(slider.slideWidth, "px)")
             });
           }, slider.intervalInMs / 4);
-          slider.index = -1;
+          slider.index = 1;
         }
       } else if (position == -1) {
-        if (slider.index > 0) {
-          console.log('Back Before Index : ', slider.index);
-          $(sliderIdentifier).css('transform', "translateX(".concat(-slider.index * slider.slideWidth, "px)"));
+        if (slider.index > 1) {
           slider.index--;
+          $(sliderIdentifier).css('transform', "translateX(".concat(-slider.index * slider.slideWidth, "px)"));
         } else {
-          console.log('Back Before Index : ', slider.index);
           $(sliderIdentifier).css('transform', "translateX(0px)");
-          slider.index = slider.length - 1;
+          slider.index = slider.length;
           setTimeout(function () {
             $(sliderIdentifier).css({
               transition: 'transform .001s ease-in',
-              transform: "translateX(-".concat(slider.length * slider.slideWidth, "px)")
+              transform: "translateX(-".concat(slider.index * slider.slideWidth, "px)")
             });
           }, slider.intervalInMs / 4);
         }
       }
+
+      console.log(slider.index);
     }
   };
   slider.init();
@@ -18163,7 +18164,7 @@ function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
   function provideWidthToSlide() {
     $(sliderIdentifier).children().each(function (index, element) {
       $(element).css({
-        'min-width': slider.slideWidth + 'px'
+        width: slider.slideWidth + 'px'
       });
     });
   }

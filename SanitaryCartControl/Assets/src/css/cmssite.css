@@ -546,8 +546,7 @@ img[src=''].brand {
 }
 
 #categories-list > table {
-	height: 70vh;
-	overflow-y: scroll;
+
 	display: block;
 }
 

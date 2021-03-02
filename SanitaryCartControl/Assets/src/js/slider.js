@@ -1,4 +1,3 @@
-
 export function removeControls() {
 	$('.control').remove();
 }
@@ -54,23 +53,25 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 				width: $(sliderWrapper).width() * lengthAfterClone + 'px',
 				transform: `translateX(-${slider.slideWidth}px)`,
 			});
-			applyAnimaton();
+			slider.index = 1;
+			setTimeout(() => {
+				applyAnimaton();
+			}, 2000);
+
 			provideWidthToSlide();
-				applyAutomaticSliderIfRequire();
-		
+			applyAutomaticSliderIfRequire();
 			setTimeout(() => {
 				this.lazyLoadSliderImage();
 			}, 2000);
-			
 		},
 		lazyLoadSliderImage: function () {
 			const images = $(sliderIdentifier).find('>img.lazy');
 			$(sliderIdentifier).on('transitionend', function () {
-				console.log('siding triggers');
 				Array.from(images).forEach(element => {
 					if ($(element).offset().left == $(sliderWrapper).offset().left) {
 						const dataSrc = $(element).attr('data-src');
 						$(element).attr('src', dataSrc);
+						$(element).removeClass('lazy');
 					}
 				});
 				const anyImageWithLazyClass = images.filter(element => $(element).hasClass('lazy')).length > 0;
@@ -100,7 +101,7 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 		},
 		dragEnd: function (e) {
 			const absMove = Math.abs(slider.index * slider.slideWidth - slider.moveX);
-			if (absMove > slider.slideWidth / 2) {
+			if (slider.moveX!=0 && absMove > slider.slideWidth / 2) {
 				if (slider.moveX > slider.index * slider.slideWidth) {
 					slider.moveSlider(1);
 				} else if (slider.moveX < slider.index * slider.slideWidth) {
@@ -111,43 +112,36 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 			document.onmousemove = null;
 		},
 		moveSlider: function (position) {
-			if (slider.index == -1 || slider.index == slider.length - 1) applyAnimaton();
-
-			if (position == 1) {
-				if (slider.index < slider.length - 1) {
-					console.log('Before Index : ', slider.index);
-
+			if (slider.index == 1 || slider.index == slider.length ) applyAnimaton();
+            if (position == 1) {
+				if (slider.index < slider.length) {
 					slider.index++;
-					$(sliderIdentifier).css('transform', `translateX(${-(slider.index + 1) * slider.slideWidth}px)`);
-					console.log('After Index : ', slider.index);
+					$(sliderIdentifier).css('transform', `translateX(${-slider.index * slider.slideWidth}px)`);
 				} else {
 					$(sliderIdentifier).css('transform', `translateX(${-(slider.length + 1) * slider.slideWidth}px)`);
 					setTimeout(() => {
-						$(sliderIdentifier).css({ transition: 'unset', transform: `translateX(-${slider.slideWidth}px)` });
+						$(sliderIdentifier).css({ transition: 'transform .001s ease-in', transform: `translateX(-${slider.slideWidth}px)` });
 					}, slider.intervalInMs / 4);
-					slider.index = -1;
+					slider.index = 1;
 				}
 			} else if (position == -1) {
-				if (slider.index > 0) {
-					console.log('Back Before Index : ', slider.index);
-
-					$(sliderIdentifier).css('transform', `translateX(${-slider.index * slider.slideWidth}px)`);
-
+				if (slider.index > 1) {
 					slider.index--;
+					$(sliderIdentifier).css('transform', `translateX(${-slider.index * slider.slideWidth}px)`);
 				} else {
-					console.log('Back Before Index : ', slider.index);
-
 					$(sliderIdentifier).css('transform', `translateX(0px)`);
-					slider.index = slider.length - 1;
+					slider.index = slider.length;
 
 					setTimeout(() => {
 						$(sliderIdentifier).css({
 							transition: 'transform .001s ease-in',
-							transform: `translateX(-${slider.length * slider.slideWidth}px)`,
+							transform: `translateX(-${(slider.index) * slider.slideWidth}px)`,
 						});
 					}, slider.intervalInMs / 4);
 				}
 			}
+			console.log(slider.index);
+			
 		},
 	};
 	slider.init();
@@ -164,13 +158,13 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 		}, 500);
 	});
 	function adjustSlider() {
-		$(sliderIdentifier).css('transform', `translateX(-${(slider.index+1) * slider.slideWidth}px)`);
+		$(sliderIdentifier).css('transform', `translateX(-${(slider.index + 1) * slider.slideWidth}px)`);
 	}
 	function provideWidthToSlide() {
 		$(sliderIdentifier)
 			.children()
 			.each(function (index, element) {
-				$(element).css({ 'min-width': slider.slideWidth + 'px' });
+				$(element).css({ width: slider.slideWidth + 'px' });
 			});
 	}
 	$('#prev').click(function () {

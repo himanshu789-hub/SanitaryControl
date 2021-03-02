@@ -1,4 +1,3 @@
-
 export function LazyLoadingActivation() {
 	const lazyElements = {
 		lazyWrapper: '.lazy-wrapper',
@@ -18,17 +17,15 @@ export function LazyLoadingActivation() {
 		},
 		intervalId: -1,
 		init: function () {
-			$(lazyElements.lazyWrapper)[0].addEventListener('scroll', layLoader.lazyLoadingInitiater);
+			$(window)[0].addEventListener('scroll', layLoader.lazyLoadingInitiater);
 			$(window)[0].addEventListener('resize', layLoader.lazyLoadingInitiater);
 			$(window)[0].addEventListener('orientationchange', layLoader.lazyLoadingInitiater);
 		},
 		loadImagesLazy: function () {
 			const images = $(lazyElements.lazyWrapper).find(' .lazy');
 			images.each(function (index, element) {
-				if (
-					$(element).offset().top - $(lazyElements.lazyWrapper).offset().top <=
-					$(lazyElements.lazyWrapper)[0].clientHeight
-				) {
+				if ($(element).offset().top>0 && 
+				Math.abs(document.documentElement.scrollTop - $(element).offset().top)<=$(window).height()) {
 					const dataSrc = $(element).attr('data-src');
 					$(element).attr('src', dataSrc);
 					$(element).removeClass('lazy');
@@ -40,8 +37,7 @@ export function LazyLoadingActivation() {
 				$(window)[0].removeEventListener('orientationchange', layLoader.lazyLoadingInitiater);
 			}
 		},
-	};
-    
+	};    
     layLoader.loadImagesLazy();	
 	layLoader.init();
 }
