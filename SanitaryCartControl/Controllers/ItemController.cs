@@ -25,21 +25,21 @@ namespace SanitaryCartControl.Controllers
             {
                 ItemViewModel ItemViewModel = new ItemViewModel();
                 ItemViewModel.ParentId = Item.CategoryId.Value;
-                BreadcrumbInfo[] categoryBreadcrumbWithLink = Converters.GetBreadcrumbsFromAncestorsBLL(_categoryService.GetAllAncestors(Item.CategoryId.Value));
-                ItemViewModel.Breadcrumps = categoryBreadcrumbWithLink;
+           
+                if (Item.Page.HasValue && Item.Page.Value == 0)
+                {
+                    BreadcrumbInfo[] categoryBreadcrumbWithLink = Converters.GetBreadcrumbsFromAncestorsBLL(_categoryService.GetAllAncestors(Item.CategoryId.Value));
+                    ItemViewModel.Breadcrumps = categoryBreadcrumbWithLink;
+                }
                 ItemViewModel.IsEndCategory = Item.IsEndCategory.Value;
 
                 if (Item.IsEndCategory.Value)
                 {
                     if (Item.Page.HasValue)
                     {
-                        const int NUMBER_OF_PRODUCT_AT_A_TIME = 12;
+                        const int NUMBER_OF_PRODUCT_AT_A_TIME = 22;
                         ItemViewModel.ParentId = Item.CategoryId.Value;
-                        // ICollection<ProductInfoBLL> productInfos = new List<ProductInfoBLL>();
-                        // for (int i = 0; i <= 22; i++)
-                        // {
-                        //     productInfos.Add(new ProductInfoBLL() { Id = 1, ImagePath = "/images/brand/3d8454b7-1435-48f6-b33f-815e1952b198.png", Name = "Demo" });
-                        // }
+
                         IEnumerable<ProductInfoBLL> productInfos = _productService.GetProductsByCategoryId(Item.CategoryId.Value, Item.Page.Value, NUMBER_OF_PRODUCT_AT_A_TIME);
                         ItemViewModel.ProductInfos = productInfos;
                         if (Item.Page == 0)
