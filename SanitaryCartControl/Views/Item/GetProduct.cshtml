@@ -3,173 +3,183 @@
 @using SanitaryCartControl.Miscellaneous.Converters;
 @using SanitaryCartControl.Miscellaneous.Models;
 @{
-     BreadcrumbInfo[] categoryBreadcrumbInfo = Converters.GetBreadcrumbsFromAncestorsBLL(Model.RootPath);
-     IList<BreadcrumbInfo> breadcrumbs = new List<BreadcrumbInfo>(categoryBreadcrumbInfo);
-     breadcrumbs.Add(new BreadcrumbInfo(Model.Name,Utilities.GetActionLinkForCategoryOrProduct(Model.Id,false,true)));  
-     @* BreadcrumbInfo[] productBreadcrumb = new BreadcrumbInfo[categoryBreadcrumbInfo.Length+1];
-               int index = 0;
-               foreach(BreadcrumbInfo breadcrumb in categoryBreadcrumbInfo)
-                {
-                  productBreadcrumb[index] = categoryBreadcrumbInfo[index];
-                  index++;
-                }
-                productBreadcrumb[index] = new BreadcrumbInfo(Model.Name,Utilities.GetActionLinkForCategoryOrProduct(Model.Id,false,true)); *@
+    BreadcrumbInfo[] categoryBreadcrumbInfo = Converters.GetBreadcrumbsFromAncestorsBLL(Model.RootPath);
+    IList<BreadcrumbInfo> breadcrumbs = new List<BreadcrumbInfo>(categoryBreadcrumbInfo);
+    breadcrumbs.Add(new BreadcrumbInfo(Model.Name, Utilities.GetActionLinkForCategoryOrProduct(Model.Id, false, true)));
+    @* BreadcrumbInfo[] productBreadcrumb = new BreadcrumbInfo[categoryBreadcrumbInfo.Length+1];
+        int index = 0;
+        foreach(BreadcrumbInfo breadcrumb in categoryBreadcrumbInfo)
+        {
+        productBreadcrumb[index] = categoryBreadcrumbInfo[index];
+        index++;
+        }
+        productBreadcrumb[index] = new
+        BreadcrumbInfo(Model.Name,Utilities.GetActionLinkForCategoryOrProduct(Model.Id,false,true)); *@
 }
 <partial name="_Breadcrumb" model="breadcrumbs"></partial>
-    <div class="row no-gutters">
-        <div class="col-sm-12 col-md-5 d-flex flex-column p-1 pt-sm-2 pl-sm-2" id="lightbox-wrapper">
-            <div class="d-flex justify-content-center align-items-center" id="first-image-holder" onclick="show();">
-                <img class="img-fluid" src="@Model.Images?.First()" />
-                <span id="overlay" class="fa-stack fa-3x"><i class="fa fa-caret-down fa-stack-2x"></i><i
-                        class="fa fa-expand fa-inverse fa-stack-1x"></i></span>
-                <span class="text">Click To Expand</span>
-            </div>
-            <div class="d-flex justify-content-start align-items-center" id="lightbox-gallery">
-               
-               @if(Model.Images!=null && Model.Images.Count()>0)
-               {
-                for(byte i=0;i<Model.Images.Count();i++)
-                {
-                  string item = Model.Images[i];  
-                  if(i==0)
-                  {
-                     <a class="m-1" href="@item" id="first" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>       
-                  } else
-                  {
-                      <a class="m-1" href="@item" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>       
-                  }
-
-                }
-               }
-                
-             </div>
+<div class="row no-gutters justify-content-center">
+    <div class="col-sm-12 col-md-5 d-flex flex-column align-self-center p-1 pt-sm-2 pl-sm-2" id="lightbox-wrapper">
+        <div class="d-flex justify-content-center align-items-center" id="first-image-holder" onclick="show();">
+            <img class="img-fluid" src="@Model.Images?.First()" />
+            <span id="overlay" class="fa-stack fa-3x"><i class="fa fa-caret-down fa-stack-2x"></i><i
+                    class="fa fa-expand fa-inverse fa-stack-1x"></i></span>
         </div>
-        <div class="col-sm-12 col-md-7 p-2" id="product-info-wrapper">
-            
-            <h4 class="mb-md-4">@Model.Name</h4>
-            
-            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
-                 <label style="width: 100px;display: table;" class="font-weight-bold"> <u>Description</u></label>
-                <div class="pl-3 pr-1 text-up text-justify">@Html.Raw(Model.Description) </div>
-            </div>
- 
-            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
-                <label style="width: 100px;display: table;" class="align-middle font-weight-bold"><u>Code</u></label>
-                <div class="pl-3 pr-1 text-justify">
-                    @Model.Code
-                </div>
-            </div>
-            
-            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
-                <label style="width: 100px;display: table;" class="align-middle font-weight-bold"><u>Brand</u></label>
-                <div class="pl-3 pr-1 text-justify">
-                    @Model.Brand.Name
-                </div>
-            </div>
+        <div class="d-flex justify-content-center align-items-center" id="lightbox-gallery">
 
-              @{
-                bool  IsProductOfNoneType  = Model.Type==(byte)ProductType.NoneVariable;
-                bool IsAnyActive = Model.AttributeBLLs.Any(e=>e.IsActive); 
-              }
-
-            <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">   
-              @if(IsAnyActive)
-              {
-                  <label style="width: 100px;display: table;" class="align-middle font-weight-bold">
-                  <u>
-                    @if(IsProductOfNoneType)  
+            @if (Model.Images != null && Model.Images.Count() > 0)
+            {
+                for (byte i = 0; i < Model.Images.Count(); i++)
+                {
+                    string item = Model.Images[i];
+                    if (i == 0)
                     {
-                        <span>Price</span>
-                    } 
-                    else  
-                    {
-                      <span> @Utilities.GetAttributeNameByType(Model.Type)</span>
+                        <a class="m-1" href="@item" id="first" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>
                     }
-                </u>
-                </label>
-                <div class="pl-3 pr-1 text-justify">
-            @if(Model.Type!=(byte)ProductType.NoneVariable)
-            {
-                <span class="d-inline-flex justify-content-start">
-                <select onchange="price(this)" class="form-control">   
-                       <option value="" disabled selected>-- Select Your Option --</option>
-                        @foreach (var item in Model.AttributeBLLs)
-                        {
-                          if(item.IsActive){
-                          <option value="@item.Price" data-perset="@item.PeicesPerSet" data-shouldvisible="@item.IsPriceVisible">@item.Value</option>
-                          }
-                        }
-                </select>
-                </span>
-                <label class="price ml-2"><span class="price-text"></span></label>
-            }
-            else 
-            {
-                var attribute = Model.AttributeBLLs.FirstOrDefault();
-                
-                if(attribute.IsPriceVisible)
-                {
-                 <label class="price show ml-2"><span class="price-text">@Model.AttributeBLLs.First().Price</span></label> 
-                }
-                else
-                {
-                    <label><span class="text-danger"><i class="fa fa-ban"></i> N/A</span></label>   
-                }
+                    else
+                    {
+                        <a class="m-1" href="@item" data-lightbox="photos"><img src="@item" class="img-fluid" /></a>
+                    }
 
+                }
             }
-     </div>
-           
+
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-5 p-2" id="product-info-wrapper">
+        <h4 class="mb-md-4 font-weight-bold">@Model.Name</h4>
+        <div class="mt-2 mb-2 d-sm-flex flex-sm-column product-info">
+            <label style="width: 100px;display: table;" class="font-weight-bold"> Description</label>
+            <div class="pl-3 pr-1 text-up text-justify">@Html.Raw(Model.Description) </div>
+        </div>
+
+        <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+            <label style="width: 100px;display: table;" class="align-middle font-weight-bold">Code</label>
+            <div class="pl-3 pr-1 text-justify">
+                @Model.Code
+            </div>
+        </div>
+
+        <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+            <label style="width: 100px;display: table;" class="align-middle font-weight-bold">Brand</label>
+            <div class="pl-3 pr-1 text-justify">
+                @Model.Brand.Name
+            </div>
+        </div>
+
+        @{
+            bool IsProductOfNoneType = Model.Type == (byte)ProductType.NoneVariable;
+            bool IsAnyActive = Model.AttributeBLLs.Any(e => e.IsActive);
+        }
+        @if (IsAnyActive)
+        {
+            if (!IsProductOfNoneType)
+            {
+                <div class="mt-2 mb-2 d-sm-flex flex-sm-column mr-lg-2 float-lg-left product-info">
+                    <label style="width: 100px;display: table;" class="align-middle font-weight-bold">
+                            <span> @Utilities.GetAttributeNameByType(Model.Type)</span>
+                    </label>
+                    <div class="pl-3 pr-1 text-justify">
+                        <span class="d-inline-flex justify-content-start">
+                            <select onchange="price(this)" class="form-control">
+                                <option value="" disabled selected>-- Select Your Option --</option>
+                                @foreach (var item in Model.AttributeBLLs)
+                                {
+                                    if (item.IsActive)
+                                    {
+                                        <option value="@item.Price" data-perset="@item.PeicesPerSet"
+                                            data-shouldvisible="@item.IsPriceVisible">@item.Value</option>
+                                    }
+                                }
+                            </select>
+                        </span>
+                    </div>
+                </div>
+
+            <div class="price">
+                <div class="price-text"></div>
+            </div>
+            
             }
             else
             {
-                <h6 class="text-danger">* Currently Suspended </h6>
+                var attribut = Model.AttributeBLLs.FirstOrDefault();
+
+                if (attribut.IsPriceVisible)
+                {
+                    <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+                        <label style="width: 100px;display: table;" class="align-middle font-weight-bold">Price</label>
+                        <div class="pl-3 pr-1 text-justify">
+                           <span><i class="fa fa-inr"></i> @attribut.Price</span> 
+                        </div>
+                    </div>
+                                <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+                        <label style="width: 104px;display: table;" class="align-middle font-weight-bold">Quantity In Box</label>
+                        <div class="pl-3 pr-1 text-justify">
+                            @attribut.PeicesPerSet
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <label><span class="text-danger"><i class="fa fa-ban"></i>Price Info N/A</span></label>
+                }
             }
-                
-            </div>
-           
-        </div>
-    </div>
-    
-    <script>
-        if($)
+        }
+        else
         {
+            <h6 class="text-danger">* Currently Suspended</h6>
+        }
+
+    </div>
+</div>
+
+<script>
+    if ($) {
         function show() {
             $('#first')[0].click();
         }
         function price(e) {
             $('.price').removeClass('show')
             $('.price-text').removeClass('show-currency')
-            var options  = e.options[e.selectedIndex];
+            var options = e.options[e.selectedIndex];
             var shouldVisible = options.dataset.shouldvisible;
             var piecesPerSet = options.dataset.perset;
 
             setTimeout(function () {
-                if(shouldVisible=="True") 
-                {
-                var innerHTML = `<table class="table-sm"><tr><td class="col-head">Price</td><td><i class="fa fa-inr"></i>${e.value}</td></tr><tr><td class="col-head">Quantity In Box</td><td>${piecesPerSet}</td></tr></table>`;
-                $('.price-text').addClass('show-currency').html(innerHTML)
+                if (shouldVisible == "True") {
+                    var innerHTML = `<div class="mt-2 mb-2 d-sm-flex flex-sm-row product-info">
+                        <label style="width: 100px;display: table;" class="align-middle font-weight-bold">Price</label>
+                        <div class="pl-3 pr-1 text-justify">
+                            ${e.value}
+                        </div>
+                    </div>
+                    <div class="mt-2 mb-2 d-sm-flex flex-sm-row product-info">
+                        <label style="width: 104px;display: table;" class="align-middle font-weight-bold">Quantity In Box</label>
+                        <div class="pl-3 pr-1 text-justify">
+                            ${piecesPerSet}
+                        </div>
+                    </div>`;
+                    $('.price-text').html(innerHTML);
                 }
-                else
-                {
+                else {
                     $('.price-text').html('<span class="text-danger"><i class="fa fa-ban"></i> Info N/A</span>')
                 }
                 $('.price').addClass('show')
-                
+
             }, 100)
 
         }
-        if(lightbox)
-        {
+        if (lightbox) {
             console.log('lightbox present')
-         $(window).on('load',function(){
-         lightbox.option({
-            'resizeDuration': 200,
-            'wrapAround': false
-           });
-         });   
+            $(window).on('load', function () {
+                lightbox.option({
+                    'resizeDuration': 200,
+                    'wrapAround': false
+                });
+            });
         }
         else
-        console.error('lightbox not exists');
-        
-        }
-    </script>
+            console.error('lightbox not exists');
+
+    }
+</script>

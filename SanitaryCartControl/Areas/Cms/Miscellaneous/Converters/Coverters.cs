@@ -48,7 +48,7 @@ namespace SanitaryCartControl.Areas.Miscellaneous
                 {
                     Id = item.Id,
                     IsPriceVisible=item.IsPriceVisible,
-                    AttributeId = item.AttributeId,
+                    Type = item.AttributeId,
                     Price = item.Price,
                     
                     PiecesPerSet = item.PeicesPerSet,
@@ -70,7 +70,7 @@ namespace SanitaryCartControl.Areas.Miscellaneous
                 Attributes.Add(new AttributeBLL()
                 {
                     Id = item.Id,
-                    AttributeId = item.AttributeId,
+                    AttributeId = item.Type,
                     Price = item.Price,
                     PeicesPerSet = item.PiecesPerSet,
                     Value = item.Value,
@@ -91,7 +91,7 @@ namespace SanitaryCartControl.Areas.Miscellaneous
                 Images = images,
                 Description = productDTO.Description,
                 Name = productDTO.Name,
-                Type = attribute.ElementAt(0).AttributeId,
+                Type = attribute.ElementAt(0).Type,
                 RootPath = new AncestorCategoryBLL() { Id = productDTO.Category_Id_FK },
                 DateAdded = productDTO.DateAdded,
                 Id = productDTO.Id,

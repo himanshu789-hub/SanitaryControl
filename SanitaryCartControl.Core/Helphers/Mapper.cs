@@ -67,7 +67,7 @@ namespace SanitaryCartControl.Core.Helpher
                     }
                     if (propertyInfo.PropertyType.IsClass && propertyInfo.PropertyType.Namespace.StartsWith("SanitaryCartControl.Core.Entities.BLLModels"))
                     {
-                        Object nestedInstance = this.GetType().GetMethod("MapType",BindingFlags.Public | BindingFlags.Instance).MakeGenericMethod(type).Invoke(this, new object[]{reader});
+                        Object nestedInstance = this.GetType().GetMethod("MapType", BindingFlags.Public | BindingFlags.Instance).MakeGenericMethod(type).Invoke(this, new object[] { reader });
                         propertyInfo.SetValue(item, nestedInstance);
                     }
                     else if (propertyInfo.PropertyType.Namespace == "System.Collections.Generic")
@@ -85,8 +85,11 @@ namespace SanitaryCartControl.Core.Helpher
                         }
                         try
                         {
-                            object value = reader[mappedProperty];
+                            object value = reader[mappedProperty] == DBNull.Value ? 
+                            this.GetDefault(propertyInfo.PropertyType) : reader[mappedProperty];
+                            
                             value = Convert.ChangeType(value, propertyInfo.PropertyType);
+                            
                             propertyInfo.SetValue(item, value);
 
                         }
@@ -94,7 +97,7 @@ namespace SanitaryCartControl.Core.Helpher
                         {
 
                         }
-                        
+
                     }
 
                 }
@@ -103,7 +106,17 @@ namespace SanitaryCartControl.Core.Helpher
             else
                 throw new System.ArgumentNullException();
 
+
+        }
+        public  object GetDefault(Type type)
+        {
+            if (type.IsValueType)
+            {
+                return Activator.CreateInstance(type);
+            }
+            return null;
         }
     }
+
 
 }

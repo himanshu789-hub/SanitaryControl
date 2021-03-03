@@ -25,15 +25,16 @@
                 @Html.TextBoxFor(e=>e.Product.Code,"",new {@class="form-control",@readonly="readonly"})
             </div>
             <div class="col-4 form-group">
-                <label>Category : </label>
-                @Html.TextBoxFor(e=>e.BreadCrumps,"",new {@class="form-control",@disabled="true"})
-            </div>
-            <div class="col-4 form-group">
                 <label>Brand : </label>
                     <div class="d-flex justify-content-around align-items-start">
                     <span>@Html.TextBoxFor(e=>e.Brand.Name,"",new {@class="form-control",@disabled="true"})</span>
                     <span><img src="@Model.Brand.ImagePath" width="99px" height="70px" class="border rounded"/></span>
                 </div>
+            </div>
+            
+            <div class="col-12 form-group">
+                <label>Category : </label>
+                @Html.TextBoxFor(e=>e.BreadCrumps,"",new {@class="form-control",@disabled="true"})
             </div>
         </div>
         <div class="row">
@@ -75,7 +76,7 @@
                      <div class="d-none">
                          @Html.TextBoxFor(e=>e.Attributes[i].Id);
                          
-                         @Html.TextBoxFor(e=>e.Attributes[i].AttributeId);
+                         @Html.TextBoxFor(e=>e.Attributes[i].Type);
                      </div>
                     @if(Model.Product.Type!=(byte)ProductType.NoneVariable)
                     {
@@ -131,8 +132,11 @@
                 </div>
               }
             </div>
-                <label class="text-white btn btn-primary" id="plusSign"><i class="fa fa-plus"></i>Add More Item</label>
-            <div id="attributes-wrapper">
+               @if(Model.Product.Type!=(byte)ProductType.NoneVariable)
+                {
+                    <label class="text-white btn btn-primary" id="plusSign"><i class="fa fa-plus"></i>Add More Item</label>
+                }
+                <div id="attributes-wrapper">
             <div id="attributes">
 
             </div>

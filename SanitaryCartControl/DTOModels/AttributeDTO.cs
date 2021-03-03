@@ -7,10 +7,9 @@ namespace SanitaryCartControl.DTOModels
         [BindRequired]
         public int Id{get;set;}
         [BindRequired]
-        public byte AttributeId{get;set;}
+        public byte Type{get;set;}
         [Required]
         public string Value{get;set;}
-        
         [Required]
         public byte PiecesPerSet{get;set;}
         

@@ -1590,7 +1590,7 @@ span.text {
 	opacity: 0.8;
 }
 #lightbox-gallery {
-	overflow-x: scroll;
+	overflow-x: auto;
 }
 #lightbox-gallery img {
 	min-width: 100px;
@@ -1638,7 +1638,7 @@ span.text {
 	top: 80px;
 	transition: all 0s ease-in-out;
 }
-.price.show .price-text {
+.price.show>.price-text {
 	top: 0px;
 	transition: all 1s ease-in-out;
 }
@@ -1664,7 +1664,7 @@ span.text {
 	opacity: 0.8;
 }
 #lightbox-gallery {
-	overflow-x: scroll;
+	overflow-x: auto;
 }
 #lightbox-gallery img {
 	min-width: 100px;

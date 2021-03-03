@@ -16,8 +16,6 @@ using SanitaryCartControl.Core.Contracts.Services;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SanitaryCartControl.Extensions;
 using Microsoft.Extensions.Hosting;
-using X.PagedList;
-using X.PagedList.Mvc;
 using Microsoft.AspNetCore.Authorization;
 namespace SanitaryCartControl.Areas.Controllers
 {
