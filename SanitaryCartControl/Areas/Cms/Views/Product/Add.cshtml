@@ -4,7 +4,7 @@
     var brands = ViewBag.Brands as SelectList;
     ViewData["Head"] = "Add Product";
 }
-@using (Html.BeginForm("Add", "Product", FormMethod.Post, new { @class = "",@enctype="multipart/form-data" }))
+@using (Html.BeginForm("Add", "Product", FormMethod.Post, new { @class = "",@id="form-add",@enctype="multipart/form-data" }))
 {
     @Html.HiddenFor(e =>e.Product.Type)
     <div class="card m-2">
@@ -74,7 +74,6 @@
                         <span>Browse</span>
                     </label>
                     @Html.ValidationMessageFor(e=>e.Images,null,new {@class="text-danger small"},"label")
-
                 </div>
                 <div class="col-* w-75 border border-primary rounded d-flex flex-wrap justify-content-center p-4"
                     id="image-viewer">
@@ -86,11 +85,10 @@
     @Html.TextBoxFor(e=>e.Product.DateAdded,new {@class="invisible"})
     @Html.TextBoxFor(e=>e.Product.DateUpdated,new {@class="invisible"})
     
-    <button type="submit" class="btn btn-success float-right invisible m-3">Submit</button>
+    <button type="button" class="submit btn btn-success float-right invisible m-3">Submit</button>
 }
 <noscript>Please, Enable Javascript</noscript>
 <script>
-    $('[type="submit"]').removeClass("invisible");
     var elements = {
         menuId: "#menu",
         textBoxId: "#Category_Id_FK",
@@ -107,8 +105,12 @@
         dateUpdatedField:'#Product_DateUpdated',
         typeFields:'#Product_Type',
         fileHolder:'#fileHolder',
-        breadcrumpLabel:'#displayBreadCrmps'
+        breadcrumpLabel:'#displayBreadCrmps',
+        form:'#form-add',
+        submitButton:`#form-add button[type="button"].submit`,
     };
+    $(elements.submitButton).removeClass("invisible");
+   
     var inputNames = {
         fileInput:'Images'
     }
@@ -174,8 +176,8 @@
     })
        function init()
        {
-$(elements.productAttriuttesSection).children().remove();
-state.count=0;
+           $(elements.productAttriuttesSection).children().remove();
+           state.count=0;
        }
     const onError = function () {
                 alert('Error Communicating To Server\nPlease, Contact Administration');
@@ -306,7 +308,7 @@ state.count=0;
 
     const itemNameandProperties = {
         'ModelName': "Attributes",
-        'AttributeIdProperty': "AttributeId",
+        'AttributeIdProperty': "Type",
         'ValueProperty': "Value",
         'PeicesPerSetProperty': "PiecesPerSet",
         'PriceProperty': "Price"
@@ -399,12 +401,10 @@ state.count=0;
         }
     };
     const ResetFormValidation = function () {
-
-        $('form')
+        $(elements.form)
             .removeData("validator") /* added by the raw jquery.validate plugin */
             .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
-
-        $.validator.unobtrusive.parse($('form'));
+      $.validator.unobtrusive.parse($(elements.form));
     }
     var data = new Array();
     function getNameByProperty(index, propertyName) {
@@ -550,11 +550,23 @@ state.count=0;
 <script>
     $(elements.dateField).removeAttr('data-val-required')
     $(elements.dateUpdatedField).removeAttr('data-val-required')
-    $('[type="submit"]').click(function(e){
-  const date = new Date().toISOString();
+    
+    $(elements.submitButton).click(function(e){
+    const date = new Date().toISOString();
     $(elements.dateField).val(date);
     $(elements.dateUpdatedField).val(date);
-    $(this).submit();
+	if($(elements.form).valid()){
+      $(this).html(`Processing <i class="fa fa-spinner fa-spin"></i>`);
+      $(this).attr('disabled',true)
+      $(this).addClass('success')
+      $(elements.form)[0].submit();
+    }
+	});
+
+    document.addEventListener("keyup", function(event) {
+     if (event.key === 'Enter') {
+      $(elements.submitButton).click();
+    }
     });
 </script>
 

@@ -1,6 +1,7 @@
 ﻿:root {
 	--primary-color: #79bcc3;
 	--secondary-color: #63a988;
+	--in-progress:#28a745a8;
 }
 a.navbar-brand {
 	white-space: normal;
@@ -562,7 +563,16 @@ img[src=''].brand {
 		background-color: var(--primary-color);
 	}
 }
-
+.submit .cancel{
+ transition: all 0.4s ease-in;
+ cursor: pointer;
+}
+.submit.success 
+{
+	font-weight:bold;
+	cursor: progress;
+	color:white;
+}
 .slide-bottom {
 	-webkit-animation: slide-bottom 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 	animation: slide-bottom 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;

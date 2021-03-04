@@ -121,7 +121,7 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 					$(sliderIdentifier).css('transform', `translateX(${-(slider.length + 1) * slider.slideWidth}px)`);
 					setTimeout(() => {
 						$(sliderIdentifier).css({ transition: 'transform .001s ease-in', transform: `translateX(-${slider.slideWidth}px)` });
-					}, slider.intervalInMs / 4);
+					}, slider.intervalInMs / 6.6);
 					slider.index = 1;
 				}
 			} else if (position == -1) {
@@ -137,7 +137,7 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 							transition: 'transform .001s ease-in',
 							transform: `translateX(-${(slider.index) * slider.slideWidth}px)`,
 						});
-					}, slider.intervalInMs / 4);
+					}, slider.intervalInMs / 6.6);
 				}
 			}
 			console.log(slider.index);

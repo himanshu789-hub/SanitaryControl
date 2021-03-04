@@ -3,7 +3,7 @@ using SanitaryCartControl.ViewModels;
 
 namespace SanitaryCartControl
 {
-    public abstract class MessageController:Controller
+    public abstract class MessageController : Controller
     {
         [NonAction]
         protected IActionResult Success(string link)
@@ -11,7 +11,8 @@ namespace SanitaryCartControl
             return View("Success", new MessageViewModel()
             {
                 IsSuccess = true,
-                Link = link
+                Link = link,
+                Message = "User Deleted Successfully"
             });
         }
 
@@ -21,7 +22,8 @@ namespace SanitaryCartControl
             return View("Success", new MessageViewModel()
             {
                 IsSuccess = false,
-                Link = Url.Action(link)
+                Message = "User Deleted After You Recieve Posted Value or It May Not Exists",
+                Link = link
             });
         }
     }

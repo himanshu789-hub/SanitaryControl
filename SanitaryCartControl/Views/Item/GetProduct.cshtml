@@ -18,10 +18,10 @@
 }
 <partial name="_Breadcrumb" model="breadcrumbs"></partial>
 <div class="row no-gutters justify-content-center">
-    <div class="col-sm-12 col-md-5 d-flex flex-column align-self-center p-1 pt-sm-2 pl-sm-2" id="lightbox-wrapper">
+    <div class="col-12 col-md-5 d-flex flex-column align-self-center p-1 pt-sm-2 pl-sm-2" id="lightbox-wrapper">
         <div class="d-flex justify-content-center align-items-center" id="first-image-holder" onclick="show();">
             <img class="img-fluid" src="@Model.Images?.First()" />
-            <span id="overlay" class="fa-stack fa-3x"><i class="fa fa-caret-down fa-stack-2x"></i><i
+            <span id="overlay" class="fa-stack fa-3x"><i class="fa fa-circle fa-stack-1x"></i><i
                     class="fa fa-expand fa-inverse fa-stack-1x"></i></span>
         </div>
         <div class="d-flex justify-content-center align-items-center" id="lightbox-gallery">
@@ -45,23 +45,23 @@
 
         </div>
     </div>
-    <div class="col-sm-12 col-md-5 p-2" id="product-info-wrapper">
+    <div class="col-12 col-md-5 p-2" id="product-info-wrapper">
         <h4 class="mb-md-4 font-weight-bold">@Model.Name</h4>
-        <div class="mt-2 mb-2 d-sm-flex flex-sm-column product-info">
+        <div class="mt-2 mb-2 d-flex flex-column product-info">
             <label style="width: 100px;display: table;" class="font-weight-bold"> Description</label>
-            <div class="pl-3 pr-1 text-up text-justify">@Html.Raw(Model.Description) </div>
+            <div class="pl-md-3 pr-md-1 text-up text-justify">@Html.Raw(Model.Description) </div>
         </div>
 
-        <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+        <div class="mt-2 mb-2  d-inline-flex flex-column d-md-flex flex-lg-row product-info">
             <label style="width: 100px;display: table;" class="align-middle font-weight-bold">Code</label>
-            <div class="pl-3 pr-1 text-justify">
+            <div class="pl-md-3 pr-md-1 text-justify">
                 @Model.Code
             </div>
         </div>
 
-        <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+        <div class="mt-2 mb-2 d-inline-flex  flex-column d-md-flex flex-column flex-lg-row product-info">
             <label style="width: 100px;display: table;" class="align-middle font-weight-bold">Brand</label>
-            <div class="pl-3 pr-1 text-justify">
+            <div class="pl-md-3 pr-md-1 text-justify">
                 @Model.Brand.Name
             </div>
         </div>
@@ -74,11 +74,11 @@
         {
             if (!IsProductOfNoneType)
             {
-                <div class="mt-2 mb-2 d-sm-flex flex-sm-column mr-lg-2 float-lg-left product-info">
+                <div class="mt-2 mb-2 d-inline-flex flex-column d-md-flex flex-column mr-lg-2 float-lg-left product-info">
                     <label style="width: 100px;display: table;" class="align-middle font-weight-bold">
                             <span> @Utilities.GetAttributeNameByType(Model.Type)</span>
                     </label>
-                    <div class="pl-3 pr-1 text-justify">
+                    <div class="pl-md-3 pr-md-1 text-justify">
                         <span class="d-inline-flex justify-content-start">
                             <select onchange="price(this)" class="form-control">
                                 <option value="" disabled selected>-- Select Your Option --</option>
@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-            <div class="price">
+            <div class="mt-2 mb-2 d-inline-flex flex-column d-md-flex flex-column mr-lg-2 float-lg-left product-info price">
                 <div class="price-text"></div>
             </div>
             
@@ -106,15 +106,15 @@
 
                 if (attribut.IsPriceVisible)
                 {
-                    <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+                    <div class="mt-2 mb-2 d-inline-flex d-md-flex flex-column flex-column flex-lg-row product-info">
                         <label style="width: 100px;display: table;" class="align-middle font-weight-bold">Price</label>
-                        <div class="pl-3 pr-1 text-justify">
+                        <div class="pl-md-3 pr-md-1 text-justify">
                            <span><i class="fa fa-inr"></i> @attribut.Price</span> 
                         </div>
                     </div>
-                                <div class="mt-2 mb-2 d-sm-flex flex-sm-column flex-lg-row product-info">
+                                <div class="mt-2 mb-2 d-inline-flex flex-column d-md-flex flex-column flex-lg-row product-info">
                         <label style="width: 104px;display: table;" class="align-middle font-weight-bold">Quantity In Box</label>
-                        <div class="pl-3 pr-1 text-justify">
+                        <div class="pl-md-3 pr-md-1 text-justify">
                             @attribut.PeicesPerSet
                         </div>
                     </div>
@@ -147,15 +147,15 @@
 
             setTimeout(function () {
                 if (shouldVisible == "True") {
-                    var innerHTML = `<div class="mt-2 mb-2 d-sm-flex flex-sm-row product-info">
+                    var innerHTML = `<div class="d-inline-flex flex-column d-md-flex flex-md-row product-info">
                         <label style="width: 100px;display: table;" class="align-middle font-weight-bold">Price</label>
-                        <div class="pl-3 pr-1 text-justify">
-                            ${e.value}
+                        <div class="pl-md-3 pr-md-1 text-justify">
+                           <i class="fa fa-inr"></i> ${e.value} 
                         </div>
                     </div>
-                    <div class="mt-2 mb-2 d-sm-flex flex-sm-row product-info">
+                    <div class="d-inline-flex flex-column d-md-flex flex-md-row product-info">
                         <label style="width: 104px;display: table;" class="align-middle font-weight-bold">Quantity In Box</label>
-                        <div class="pl-3 pr-1 text-justify">
+                        <div class="pl-md-3 pr-md-1 text-justify">
                             ${piecesPerSet}
                         </div>
                     </div>`;

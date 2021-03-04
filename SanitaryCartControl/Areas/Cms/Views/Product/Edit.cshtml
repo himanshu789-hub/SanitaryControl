@@ -10,7 +10,7 @@
                 }
 }
 
-@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { @enctype = "multipart/form-data",@id="form-edit" }))
 {
     @Html.HiddenFor(e=>e.Product.Id)
     @Html.HiddenFor(e=>e.Product.Type)
@@ -214,8 +214,8 @@
     </div>
     </div>
     <div class="float-right w-75 d-flex justify-content-around mt-5 mb-5">
-            @Html.ActionLink("Cancel", null, null, null, new { @href = "#" ,@onclick="history.go(-1);",@class="btn btn-outline-danger p-2 w-50 mr-2" })
-            <button type="submit" class="btn btn-success w-25 p-2">Update</button>
+            @Html.ActionLink("Cancel", null, null, null, new { @href = "#" ,@onclick="history.go(-1);",@class="btn btn-outline-danger p-2 w-50 mr-2 cancel" })
+            <button type="button" class="submit btn btn-success w-25 p-2">Update</button>
     </div> 
 }
 
@@ -325,8 +325,10 @@ $(".input-number").keydown(function (e) {
         dateField:'#Product_DateAdded',
         uploadButtonLabel:'#uploadButton',
         dateUpdated:'#Product_DateUpdated',
-            fileHolder:'#fileHolder'
-    
+        fileHolder:'#fileHolder',
+        form:'#form-edit',
+        submitButton:'#form-edit .submit',
+        cancelButton:'#form-edit .cancel'
     };
     var inputNames = {
         fileInput:'Images'
@@ -429,7 +431,7 @@ $(".input-number").keydown(function (e) {
 
     const itemNameandProperties = {
         'ModelName': "Attributes",
-        'AttributeIdProperty': "AttributeId",
+        'AttributeIdProperty': "Type",
         'ValueProperty': "Value",
         'PiecesPerSetProperty': "PiecesPerSet",
         'PriceProperty': "Price",
@@ -469,7 +471,7 @@ $(".input-number").keydown(function (e) {
             .removeData("validator") /* added by the raw jquery.validate plugin */
             .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
 
-        $.validator.unobtrusive.parse($('form'));
+        $.validator.unobtrusive.parse($(elements.form));
     }
     function getNameByProperty(index, propertyName) {
         let result = itemNameandProperties.ModelName + `[${index}]` + '.';
@@ -616,10 +618,23 @@ $(".input-number").keydown(function (e) {
 <script type="text/javascript">
     $(elements.dateField).removeAttr('data-val-required')
     $(elements.dateUpdated).removeAttr('data-val-required')
-    $('[type="submit"]').click(function(e){
+    $(elements.submitButton).click(function(e){
     $(elements.dateUpdated).val(new Date().toISOString());
-    $(this).submit();
+    if($(elements.form).valid())
+    {
+      $(this).html(`Processing <i class="fa fa-spinner fa-spin"></i>`);
+      $(this).attr('disabled',true)
+      $(this).addClass('success')
+      $(elements.cancelButton).attr('disabled',true)
+      $(elements.form)[0].submit();
+    }
     });
+
+    document.addEventListener("keyup", function(event) {
+   if (event.key === 'Enter') {
+      $(elements.submitButton).click();
+   }
+});
 </script>
 
 

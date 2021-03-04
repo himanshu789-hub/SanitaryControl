@@ -166,7 +166,10 @@ int Page = 1;
        function deleteProduct(id){
             if(id)
             {
-          const Id = Number.parseInt(id);
+          const answer = confirm("Product Will Be Deleted.\nAre You Sure You Want To Delete")
+           if(answer)
+          {
+            const Id = Number.parseInt(id);
             $.ajax({url:@Json.Serialize(Url.Action("Delete")),async:false,type:'POST',data:{
                 Id,
                 @Json.Serialize(formFieldName):@Json.Serialize(token)
@@ -174,8 +177,9 @@ int Page = 1;
             success:function(){successDelete()},
             error:function(){failedDelete()}
             });
-            }
-            else
-            failedDelete()
+          }
         }
+            else
+            failedDelete();
+       }
     </script>
