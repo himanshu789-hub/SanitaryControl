@@ -190,6 +190,7 @@ namespace SanitaryCartControl.Areas.Controllers
         public IActionResult Add(ProductViewModel productViewModel)
         {
             ModelState.RemoveIfPresent("Product.Id");
+            
             for (int i = 0; i < productViewModel.Attributes.Count(); i++)
             {
                 ModelState.RemoveIfPresent($"Attributes[{i}].Id");

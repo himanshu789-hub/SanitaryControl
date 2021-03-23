@@ -155,6 +155,7 @@ namespace SanitaryCartControl.Core.Services
                     {
                         AtributeType = item.AttributeId,
                         Price = item.Price,
+                        IsPriceVisible=true,
                         PiecesPerSet = item.PeicesPerSet,
                         Value = item.AttributeId == ((byte)Enums.ProductType.NoneVariable) ? null : item.Value,
                         IsActive = true

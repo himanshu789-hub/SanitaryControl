@@ -182,7 +182,7 @@ export function buildSlider(sliderIdentifier, sliderWrapper, automatic) {
 		if (automatic == true) slider.intervalId = activateAutomateSlider();
 	}
 	function applyAnimaton() {
-		$(sliderIdentifier).css('transition', 'all 0.8s ease-in-out');
+		$(sliderIdentifier).css('transition', 'all 0.4s ease-in-out');
 	}
 	function activateAutomateSlider() {
 		return setInterval(() => {

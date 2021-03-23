@@ -19,6 +19,7 @@ namespace SanitaryCartControl.DTOModels
         [MaxLength(800,ErrorMessage="Maximum Length Exceed")]
         public string Description { get; set; }
         [Required(ErrorMessage="Please Select A Category")]
+        [Range(1,Int32.MaxValue,ErrorMessage="Please, Select A Category")]
         public int Category_Id_FK { get; set; }
         [Required(ErrorMessage = "Please Select A Brand")]
         public byte Brand_Id_FK { get; set; }

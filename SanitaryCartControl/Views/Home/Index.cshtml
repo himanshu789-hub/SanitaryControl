@@ -38,7 +38,8 @@
                 @foreach (var item in Model.BaseCategories)
                 {
                 <div class="category">
-                    <a href="@Utilities.GetActionLinkForCategoryOrProduct(item.Id,!item.HoldChildren,false)" class="category-content" style="--background-image:url('@item.ImagePath')">
+                    <a href="@Utilities.GetActionLinkForCategoryOrProduct(item.Id,!item.HoldChildren,false)" 
+                    class="category-content category-bg-img" data-img-src="@item.ImagePath">
                         <span class="text">
                             <p class="name">@item.Title</p>
                             <p class="link">View Products &#187;</p>
@@ -54,13 +55,13 @@
     <section class="mt-1 pt-1" id="home-brands">
         <h3 class="head text-center"><span class="border-line">Brands</span></h3>
         <div class="brand-wrapper-holder">
-            <ul class="brand-wrapper">
+            <ul class="brand-wrapper lazy-wrapper">
                 
                 @if (Model.Brands != null && Model.Brands.Count() > 0)
                 {
                     foreach (var item in Model.Brands)
                     {
-                        <li><img src="@item.Value" alt="@item.Key" /></li>
+                        <li><img data-src="@item.Value" class="lazy" alt="@item.Key" /></li>
                     }
                 }
               
@@ -68,7 +69,18 @@
         </div>
     </section>
 </section>
-
+<script>
+    $(    function(){   
+            function requestCategoryBackgroundImage(){
+                 $('.category-bg-img').each(function(index,element){
+                     var imgUrl =  $(element).data('img-src');
+                     $(element).attr('style',"--background-image:url("+imgUrl+")");
+                 });
+             };
+            requestCategoryBackgroundImage();
+            window.lazyLoadActivation();
+    });
+</script>
     @if (IsImagesAvalaible)
     {
      @section BodyInvokeScripts
@@ -99,4 +111,3 @@
           <script>removeControls();</script>
         }
     }
-

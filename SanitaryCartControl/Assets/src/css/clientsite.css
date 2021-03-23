@@ -1706,6 +1706,7 @@ span.text {
 }
 ol.breadcrumb{
 	margin:0;
+	border-radius:0;
 }
 .breadcrumb-item {
 	font-size: 0.7rem;

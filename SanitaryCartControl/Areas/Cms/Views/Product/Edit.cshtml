@@ -210,11 +210,13 @@
     </div>
     
     </div>
-
     </div>
     </div>
     <div class="float-right w-75 d-flex justify-content-around mt-5 mb-5">
-            @Html.ActionLink("Cancel", null, null, null, new { @href = "#" ,@onclick="history.go(-1);",@class="btn btn-outline-danger p-2 w-50 mr-2 cancel" })
+            
+
+            @Html.ActionLink("Cancel", "Search","Product",null, new {  @class="btn btn-outline-danger p-2 w-50 mr-2 cancel" })
+            
             <button type="button" class="submit btn btn-success w-25 p-2">Update</button>
     </div> 
 }
@@ -540,13 +542,13 @@ $(".input-number").keydown(function (e) {
         dropdownWrapper.append([label, dropdown, dropdownErrorMsg]);
 
         let quantityWrapper = $('<div class="col-2 form-group"><label>Pieces Per Set : </label></div>');
-        const quantityName = getNameByProperty(index, itemNameandProperties.QunatityProperty);
+        const quantityName = getNameByProperty(index, itemNameandProperties.PiecesPerSetProperty);
         const quantityValidator = $('<span data-valmsg-replace="true">')
             .attr("data-valmsg-for", quantityName).addClass("small text-danger");
         let quantity = $('<input type="text" class="form-control" data-val="true"/>')
-            .val(data[index][itemNameandProperties.QunatityProperty])
+            .val(data[index][itemNameandProperties.PiecesPerSetProperty])
             .attr("name", quantityName)
-            .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.QunatityProperty}`)
+            .attr("id", `${itemNameandProperties.ModelName}[${index}]_${itemNameandProperties.PiecesPerSetProperty}`)
             .attr("data-val-required", validationMesage.PiecesPerSet.Required)
             .attr("data-rule-digits", validationMesage.PiecesPerSet.Digits)
             .attr("data-msg-digits", validationMesage.PiecesPerSet.Digits)
@@ -555,7 +557,7 @@ $(".input-number").keydown(function (e) {
             .attr("data-rule-min", 1)
             .attr("data-rule-max", 255)
             .focusout(function () {
-                data[index][itemNameandProperties.QunatityProperty] = $(quantity).val();
+                data[index][itemNameandProperties.PiecesPerSetProperty] = $(quantity).val();
             }.bind(index));
         quantityWrapper.append([quantity, quantityValidator]);
 

@@ -8,6 +8,10 @@ a.navbar-brand {
 	text-align: center;
 	word-break: break-all;
 }
+.opacity-0
+{
+	opacity: 0;
+}
 
 /* Provide sufficient contrast against white background */
 .btn-primary {
