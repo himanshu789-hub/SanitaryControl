@@ -17,7 +17,7 @@ namespace SanitaryCartControl.ViewModels
         public string LastName{get;set;}
 
         [Required(ErrorMessage = "Please Specify A User Name")]
-        [RegularExpression(@"[A-Za-z@0-9\.]*", ErrorMessage = @"A Username cannot contain any special character except @")]
+        [RegularExpression(@"^[^ ][A-Za-_z@0-9\.]*$", ErrorMessage = @"A Username cannot contain any special character except @")]
         [MinLength(6,ErrorMessage="Please Enter Minimum Six Character Username")]
         public string UserName{get;set;}
         [MinLength(6,ErrorMessage="Password Must Be Atleast 6 Character Long")]

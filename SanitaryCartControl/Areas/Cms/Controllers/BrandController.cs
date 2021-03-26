@@ -17,12 +17,12 @@ namespace SanitaryCartControl.Areas.Controllers
 {
 
     [Area("Cms")]
-    [Authorize(Roles=ApplicationRoles.Both)]
-    public class BrandController :  BaseController
+    [Authorize(Roles = ApplicationRoles.Both)]
+    public class BrandController : BaseController
     {
         IBrandService _brandService;
         ILogger _logger;
-        public BrandController(IBrandService brandService, ILogger<BrandController> logger, IHostEnvironment host):base(host)
+        public BrandController(IBrandService brandService, ILogger<BrandController> logger, IHostEnvironment host) : base(host)
         {
             _brandService = brandService;
             _logger = logger;
@@ -48,21 +48,21 @@ namespace SanitaryCartControl.Areas.Controllers
         {
             if (ModelState.ContainsKey("logo"))
                 ModelState.Remove("logo");
-            if(brandView.Brand?.Name!=null)
+            if (brandView.Brand?.Name != null)
             {
-               string name = brandView.Brand.Name;
-               BrandBLL brandBLL = _brandService.GetById(brandView.Brand.Id);
-               if(_brandService.IsNameExists(name,brandBLL.Id))
-               {
-                   ModelState.AddModelError("Duplicate Entry","Name Already Exists");
-               } 
+                string name = brandView.Brand.Name;
+                BrandBLL brandBLL = _brandService.GetById(brandView.Brand.Id);
+                if (_brandService.IsNameExists(name, brandBLL.Id))
+                {
+                    ModelState.AddModelError("Duplicate Entry", "Name Already Exists");
+                }
             }
             if (ModelState.IsValid)
             {
                 if (brandView.Logo != null)
                 {
                     this.DeleteImage(brandView.Brand.ImagePath);
-                    string path = this.AddImage(brandView.Logo,brandPath);
+                    string path = this.AddImage(brandView.Logo, brandPath);
                     brandView.Brand.ImagePath = path;
                 }
                 _brandService.Update(new BrandBLL() { Id = brandView.Brand.Id, ImagePath = brandView.Brand.ImagePath, Name = brandView.Brand.Name });
@@ -82,19 +82,9 @@ namespace SanitaryCartControl.Areas.Controllers
             return View(Result);
         }
 
-        public JsonResult ThrowError()
-        {
-            throw new System.Exception();
-        }
-        
-        [HttpGet]
-        public JsonResult CheckName(string name)
-        {
-            var result = _brandService.IsNameExists(name);
-            return Json(!result);
-        }
 
-        
+
+
         [HttpGet]
         public IActionResult Add()
         {
@@ -107,12 +97,12 @@ namespace SanitaryCartControl.Areas.Controllers
             ModelState.RemoveIfPresent("Brand.ImagePath");
             if (brandView.Logo == null)
                 ModelState.AddModelError("Logo", "Logo Required");
-            if(brandView.Brand?.Name!=null && _brandService.IsNameExists(brandView.Brand.Name))
-            ModelState.AddModelError("Duplicate Entry","Name Already Exists");
+            if (brandView.Brand?.Name != null && _brandService.IsNameExists(brandView.Brand.Name))
+                ModelState.AddModelError("Duplicate Entry", "Name Already Exists");
             if (ModelState.IsValid)
             {
-                
-                string path = this.AddImage(brandView.Logo,brandPath);
+
+                string path = this.AddImage(brandView.Logo, brandPath);
                 _brandService.Create(new BrandBLL() { ImagePath = path, Name = brandView.Brand.Name });
                 return Redirect(@"\Cms\Brand\GetAll");
             }

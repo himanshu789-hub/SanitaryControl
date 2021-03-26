@@ -189,6 +189,9 @@
         if (!value)
             return;
         $(elements.menuId).empty();
+        $(elements.typeFields).val('');
+        $(elements.categoryTextBox).val('')
+        state.typeSelected= null;
         init();
         $('.loading').removeClass("d-none")
         $.ajax({
@@ -238,9 +241,10 @@
                     $(elements.textBoxId).val(item.id);
                     state.categoryId = item.id;
                     state.IsSelected = false;
+                  $('.loading').removeClass("d-none");
                     $.ajax({
                         method: 'GET',
-                        async: false,
+                        async: true,
                         url: '/Cms/Product/GetProductType?CategoryId=' + state.categoryId,
                         success: function (data) {
                             if(!data || data==-1)
@@ -251,15 +255,16 @@
                             if (Number.isInteger(data))
                                 state.typeSelected = data;
                             $(elements.typeFields).val(data); 
-                        },
-                    error:onError
-                    });
                     data = new Array();
                     init();
                     $(elements.categoryTextBox).val(state.categoryId);
                     buildAttribute(state.typeSelected, state.categoryId, 0)
+                    $('.loading').addClass("d-none")                    
                     ResetFormValidation();
                     e.preventDefault();
+                        },
+                    error:onError
+                    });
                 });
         });
     }
@@ -454,6 +459,7 @@
             .addClass("small text-danger");
         
         if (!state.IsSelected)
+        {
             $.ajax({
                 method: 'GET',
                 async: false,
@@ -462,9 +468,12 @@
                     state.IsSelected = true;
                     state.remoteValues = data;
                     setValues(state.remoteValues);
+                   
                 },
                 error:onError
             });
+        }
+            
         else {
             setValues(state.remoteValues);
         }

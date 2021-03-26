@@ -33,6 +33,7 @@ namespace SanitaryCartControl
 
             services.AddDbContext<SanitaryCartIdentityContext>(oo =>
               oo.UseSqlServer(Configuration.GetConnectionString("IdentitySQLConnection")));
+          
             services.AddCoreExtensions();
             services.AddServicesExtensionsWithIConfiguration(Configuration);
             services.AddAntiforgery(options =>
@@ -65,7 +66,7 @@ namespace SanitaryCartControl
 
             if (env.IsDevelopment())
             {
-                //ApplicationExtensionsMethods.SeedRolesAndAdmin(serviceProvider,Configuration);
+            //    ApplicationAdminCeationExtensions.SeedRolesAndAdmin(serviceProvider,Configuration);
                 app.UseDeveloperExceptionPage();
                 //                app.UseCustomExceptionHandler();
 
@@ -77,7 +78,7 @@ namespace SanitaryCartControl
             }
             app.UseStaticFiles();
 
-            //  app.UseHttpsRedirection();
+             app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseRouting();

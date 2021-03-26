@@ -81,6 +81,7 @@ namespace SanitaryCartControl.Areas.Controllers
                 FirstName = registerViewModel.FirstName,
                 LastName = registerViewModel.LastName,
                 UserName = registerViewModel.UserName,
+                ImagePath=@"images/site/manager.svg"
             };
             if (ModelState.IsValid)
             {
